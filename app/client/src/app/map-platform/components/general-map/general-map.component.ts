@@ -53,7 +53,6 @@ import { DescriptorGroup, DescriptorLayer } from '@core/interfaces';
 import {
   DownloadService,
   MapAPIService,
-  GalleryService,
 } from '../../../@core/services';
 import { RegionFilterService, DEFAULT_REGION } from '../../../@core/services';
 import { GoogleAnalyticsService } from '../../../@core/services';
@@ -407,25 +406,14 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
     }),
   };
 
-  public displayGallery: boolean = false;
-  public gallery: any = [];
-
-  public galleryResponsiveOptions: any[] = [
-    {
-      breakpoint: '1024px',
-      numVisible: 5,
-    },
-    {
-      breakpoint: '768px',
-      numVisible: 3,
-    },
-    {
-      breakpoint: '560px',
-      numVisible: 1,
-    },
-  ];
+  public displayFilters: boolean = false;
 
   public otherLayerFromFilters: any = {
+    layer: null,
+    strokeColor: '#363230',
+  };
+
+  public swipeOptions: any = {
     layer: null,
     strokeColor: '#363230',
   };
@@ -438,7 +426,6 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
   public emailValid: boolean = true;
 
   constructor(
-    private galleryService: GalleryService,
     private layerService: LayerService,
     private mapService: MapService,
     private descriptorService: DescriptorService,
@@ -1229,7 +1216,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
   }
 
   // TODO: Não esta mostrando info do ponto quando clicado, apenas do municipio.
-  private onDisplayFeatureInfo(event: any): void {
+  public onDisplayFeatureInfo(event: any): void {
     if (this.drawing) return;
 
     let map = this.mapService.map;
@@ -1327,90 +1314,6 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
               featureCollection.features
             );
             featureCollection['expanded'] = true;
-
-            if (featureCollection.layerType.hasOwnProperty('gallery')) {
-              let params: string[] = [];
-
-              params.push(
-                'id=' +
-                  featureCollection.features[0].properties[
-                    featureCollection.layerType.gallery.id_column
-                  ]
-              );
-              params.push(
-                'tablename=' + featureCollection.layerType.gallery.tableName
-              );
-              let textParam = params.join('&');
-
-              this.galleryService.getGalleryListById(textParam).subscribe(
-                (files: any) => {
-                  let filesToDisplay = {};
-                  let arrKeys = Object.keys(files);
-                  arrKeys.sort();
-
-                  arrKeys.forEach((key) => {
-                    filesToDisplay[key] = [];
-
-                    if (files[key].length > 0) {
-                      files[key].forEach((element) => {
-                        let params = {
-                          category: key,
-                          tablename:
-                            featureCollection.layerType.gallery.tableName,
-                          id: featureCollection.features[0].properties[
-                            featureCollection.layerType.gallery.id_column
-                          ],
-                          filename: element,
-                        };
-
-                        filesToDisplay[key].push(
-                          '/service/gallery' +
-                            '/field/' +
-                            params.category +
-                            '/' +
-                            params.tablename +
-                            '/' +
-                            params.id +
-                            '/' +
-                            params.filename
-                        ); // vetor com os endereços gerados pelo service abaixo. ALTERAR
-                      });
-                    }
-                  });
-
-                  let index = 0;
-
-                  this.gallery = [];
-                  for (let [key, value] of Object.entries(filesToDisplay)) {
-                    // @ts-ignore
-                    if (value.length > 0) {
-                      // @ts-ignore
-                      const items = value.map((url) => {
-                        return {
-                          type: key === 'videos_drone' ? 'video' : 'image',
-                          url: environment.production
-                            ? url
-                            : environment.APP_URL + url,
-                        };
-                      });
-                      this.gallery.push({
-                        title: this.localizationService.translate(
-                          'gallery.' + key
-                        ),
-                        key: key,
-                        items: items,
-                        activeIndex: 0,
-                        show: true,
-                      });
-                      index++;
-                    }
-                  }
-                },
-                (error) => {
-                  console.error(error);
-                }
-              );
-            }
 
             this.featureCollections.push(featureCollection);
           }

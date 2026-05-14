@@ -105,7 +105,14 @@ module.exports = function (app) {
 
   Internal.getGroupsOrder = function () {
     return [
+      "pasture",
+      "campo",
+      "inspecao_visual",
+      "agropecuaria",
       "areas_declaradas",
+      "infraestrutura",
+      "areas_especiais",
+      "imagens",
     ];
   };
 

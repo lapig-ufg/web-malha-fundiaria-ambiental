@@ -441,18 +441,6 @@ table tr{
   font-size: 13px;
 }
 
-.p-galleria {
-  max-width: 100%;
-}
-
-.p-galleria{
-  .p-galleria-item-nav {
-    transition: unset;
-    background: rgba($primary, 0.40);
-    z-index: 1000;
-  }
-}
-
 .ol-viewport {
   .ol-fixedoverlay {
     all: inherit;

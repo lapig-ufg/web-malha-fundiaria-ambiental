@@ -4,9 +4,9 @@
     "display": "standalone",
     "scope": "/",
     "start_url": "/",
-    "name": "Malha Fundiaria",
-    "short_name": "Malha Fundiaria",
-    "description": "Plataforma de visualização da Malha Fundiaria.",
+    "name": "Atlas das Pastagens Brasileiras ",
+    "short_name": "Atlas das Pastagens",
+    "description": "O Atlas das Pastagens, p\u00fablico e gratuito, foi desenvolvido pelo Laborat\u00f3rio de Processamento de Imagens e Geoprocessamento da Universidade Federal de Goi\u00e1s (Lapig/UFG), para tornar acess\u00edvel os resultados e produtos, gerados no \u00e2mbito da iniciativa MapBiomas, referentes \u00e0s pastagens brasileiras.",
     "icons": [
         {
             "src": "assets/icons/icon-192x192.png",

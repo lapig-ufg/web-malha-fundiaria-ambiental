@@ -49,7 +49,7 @@
               "file-saver",
               "xml-utils/get-attribute.js"
            ],
-            "outputPath": "dist/atlas-pastagens",
+            "outputPath": "dist/malha-fundiaria-ambiental",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [

@@ -74,6 +74,7 @@ import { DragScrollComponent } from 'ngx-drag-scroll';
 import { TranslateModule } from '@ngx-translate/core';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { OptionsSidebarComponent } from './components/options-sidebar/options-sidebar.component';
+import { StatisticsSidebarComponent } from './components/statistics-sidebar/statistics-sidebar.component';
 import { AreaSidebarComponent } from './components/area-sidebar/area-sidebar.component';
 import { LoadingSpinnerComponent } from '../@core/components/loading_spinner/loading_spinner.component';
 import { UserInfoComponent } from '../@core/components/user-info-dialog/user-info-dialog.component';
@@ -85,6 +86,7 @@ registerLocaleData(localePt);
   declarations: [
     MainComponent,
     LayersSidebarComponent,
+    StatisticsSidebarComponent,
     OptionsSidebarComponent,
     AreaSidebarComponent,
     GeneralMapComponent,
@@ -144,7 +146,7 @@ registerLocaleData(localePt);
     HttpClientModule,
     RippleModule,
     TableModule,
-    GalleriaModule
+    ComponentsRoutingModule,
   ],
   exports: [],
   providers: [

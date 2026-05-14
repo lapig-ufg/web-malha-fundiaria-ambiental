@@ -4,6 +4,11 @@ import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
+    loadChildren: () => import('./hotsite/hotsite.module')
+      .then(module => module.HotsiteModule,)
+  },
+  {
+    path: 'map',
     loadChildren: () => import('./map-platform/components.module')
       .then(module => module.ComponentsModule),
   },

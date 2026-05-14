@@ -1,0 +1,70 @@
+<app-site-base>
+  <!-- inner banner -->
+  <section class="metodos-banner">
+    <div class="w3l-breadcrumb py-5">
+      <div class="container py-xl-5 py-md-4 mt-5">
+        <h4 class="inner-text-title font-weight-bold mb-sm-2">
+          {{ "hotsite.methods.page_title" | translate }}
+        </h4>
+        <ul class="breadcrumbs-custom-path">
+          <li><a href="/">Home</a></li>
+          <li class="active">
+            <i class="bx bx-chevron-right"></i>{{ "hotsite.base.header.menu.methods" | translate }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- //inner banner -->
+
+  <div class="methodology-container py-5">
+    <div class="container py-md-5 py-4">
+      <div class="header-section text-center mb-5">
+        <h3 class="title-style-2 mb-3">{{ "hotsite.methods.title" | translate }}</h3>
+        <p class="subtitle">
+          {{ lang === 'pt' ? 'Conheça o rigor técnico e os processos fundamentais que sustentam a Malha Fundiária Ambiental.' : 'Learn about the technical rigor and fundamental processes that underpin Malha Fundiária Ambiental.' }}
+        </p>
+      </div>
+
+      <!-- Static Beautiful Cards -->
+      <div class="row">
+        <div *ngFor="let item of staticMethodologies; let i = index" 
+             class="col-lg-4 col-md-6 mb-4" 
+             [style.animation-delay]="i * 0.1 + 's'">
+          <div class="method-card h-100 p-4">
+            <div class="icon-wrapper mb-3">
+              <i class="bx" [ngClass]="item.icon"></i>
+            </div>
+            <h4 class="card-title mb-3">
+              {{ lang === 'pt' ? item.title_pt : item.title_en }}
+            </h4>
+            <p class="card-text">
+              {{ lang === 'pt' ? item.desc_pt : item.desc_en }}
+            </p>
+            <div class="card-footer-glow"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dynamic methodologies (if any) -->
+      <div class="row mt-5" *ngIf="methodologies.length > 0">
+        <div class="col-12 text-center mb-4">
+           <h3 class="title-style-2">{{ lang === 'pt' ? 'Documentos Técnicos' : 'Technical Documents' }}</h3>
+        </div>
+        <div *ngFor="let methodology of methodologies" class="col-lg-4 col-md-6 item mb-4">
+          <div class="card dynamic-card h-100">
+            <a target="_blank" [href]="methodology.file">
+              <div class="card-header p-0 position-relative border-0">
+                <img class="d-block img-responsive" [src]="methodology.image" [alt]="methodology.title">
+              </div>
+              <div class="card-body service-details">
+                <div class="card-title"> {{ methodology.title }} </div>
+                <p [innerHTML]="methodology.description"></p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-site-base>

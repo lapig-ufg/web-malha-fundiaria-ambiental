@@ -1,7 +1,7 @@
 {
-    "name": "atlas-pastagens",
+    "name": "malha-fundiaria-ambiental",
     "version": "0.1.0",
-    "description": "Atlas das Pastagens Brasileiras",
+    "description": "Malha Fundiária Ambiental - Built on Atlas das Pastagens base",
     "main": "app.js",
     "dependencies": {
         "@mapbox/geojson-area": "^0.2.2",

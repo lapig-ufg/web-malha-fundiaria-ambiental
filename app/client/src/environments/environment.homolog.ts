@@ -10,7 +10,7 @@ let commitId = ''
 }*/
 
 export const environment = {
-  APP_NAME: 'Atlas das Pastagens',
+  APP_NAME: 'Malha Fundiária Ambiental',
   production: true,
   GTAG: '',
   OWS_API: 'https://ows.lapig.iesa.ufg.br/api',

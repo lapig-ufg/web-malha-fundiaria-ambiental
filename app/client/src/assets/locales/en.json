@@ -538,15 +538,112 @@
     "warn_message": "Warning",
     "has_not_info_message": "No information was found for the selected region."
   },
-  "gallery": {
-    "btn": "View Gallery",
-    "dialog_title": "Gallery of Images and Videos of the visited points",
-    "fotos_camera": "Camara Photos",
-    "fotos_drone": "Drone Photos",
-    "videos_drone": "Drone Videos"
+  "hotsite": {
+    "lang_label": "Language",
+    "base": {
+      "header": {
+        "menu": {
+          "home": "Home",
+          "about": "About",
+          "methods": "Methodology",
+          "articles": "Articles",
+          "help": "Help"
+        }
+      },
+      "footer": {
+        "contact": "Contact us",
+        "copyright": "Malha Fundiária Ambiental. All rights reserved."
+      }
+    },
+    "home": {
+      "banner": {
+        "text": "Malha Fundiária Ambiental consolidates an integrated geospatial infrastructure for the organization and qualification of the Brazilian territorial structure. We connect complex land and environmental data to drive governance, technical analysis, and sustainable territory management nationwide.",
+        "btn": "Access the Platform"
+      },
+      "abstract": {
+        "title": "Malha Fundiária Ambiental",
+        "text": "The platform provides integrated territorial databases, allowing for the analysis of the land structure alongside environmental indicators. The system offers tools for visualizing rural perimeters, protected area overlaps, and land-use dynamics, promoting transparency and precision in Brazilian territorial management."
+      },
+      "news": {
+        "title": "News"
+      },
+      "emphasis": {
+        "title": "Highlights"
+      },
+      "differential": {
+        "title": "Key Features",
+        "p1": "The platform provides integrated visualization of land and environmental data, facilitating compliance analysis and territorial management.",
+        "p2": "Users can compare different databases and extract precise information about the structure of the Brazilian territory.",
+        "p3": "All data are available for download, promoting transparency and free access to geospatial information."
+      }
+    },
+    "about": {
+      "page_title": "Malha Fundiária Ambiental",
+      "abstract": {
+        "title": "About",
+        "p1": "Malha Fundiária Ambiental was developed by the Image Processing and Geoprocessing Laboratory of the Federal University of Goiás (Lapig/UFG) as an evolution of territorial monitoring tools, aiming to integrate land registry and environmental data into a single integrated geospatial base.",
+        "p2": "Currently, the platform enables the visualization and analysis of rural perimeters, protected areas, and the environmental compliance of properties, utilizing cutting-edge technology for geographic data processing and remote sensing."
+      },
+      "team": {
+        "title": "Team"
+      }
+    },
+    "methods": {
+      "page_title": "Methodological procedures",
+      "title": "Methodology"
+    },
+    "articles": {
+      "page_title": "Related articles",
+      "title": "Articles",
+      "authors": "Authors:",
+      "search": {
+        "title": "Search Articles",
+        "placeholder": "Title, Abstract and Authors"
+      }
+    },
+    "error": {
+      "msg": "Page not found",
+      "btn_back_to_home": "Back to home"
+    },
+    "help": {
+      "faq": {
+        "title": "FAQ"
+      },
+      "form": {
+        "title": "Get in touch",
+        "sub-title": "Write Message",
+        "button": "Submit Form",
+        "user": {
+          "name": "Your Name",
+          "email": "Your Email",
+          "subject": "Subject",
+          "institution": "Institution",
+          "message": "Write Message"
+        },
+        "validation": {
+          "email": {
+            "required": "Email is required.",
+            "invalid": "Email is not valid."
+          },
+          "name": "Name is required.",
+          "subject": "Subject is required.",
+          "institution": "Institution is required",
+          "message": "Message is required."
+        },
+        "submit": {
+          "success": "Your message has been sent successfully ",
+          "fail": "Your submition has been failed"
+        }
+      }
+    }
   },
   "atlasinformation": {
     "title": "Clarification Note",
-    "text": "<p>We'd like to inform you that we recently identified an error in our area estimates. We have already solved this issue to ensure precise information on pasture areas.</p><p>Your trust is highly important to us. Should you have any questions, please don't hesitate to reach out to us at <strong>atlasdaspastagens.lapig@ufg.br</strong>.</p></p>Thank you for your understanding.</p><p>Best regards,</p><p>Malha Fundiaria Team</p>"
+    "text": "<p>We'd like to inform you that we recently identified an error in our area estimates. We have already solved this issue to ensure precise information on pasture areas.</p><p>Your trust is highly important to us. Should you have any questions, please don't hesitate to reach out to us at <strong>atlasdaspastagens.lapig@ufg.br</strong>.</p></p>Thank you for your understanding.</p><p>Best regards,</p><p>Atlas of Pastures Team</p>"
+  }
+}
+sinformation": {
+    "title": "Information Note",
+    "text": "<p>Malha Fundiária Ambiental integrates various databases to provide a qualified view of the Brazilian territory. For questions or suggestions, please contact our technical team.</p><p>Malha Fundiária Ambiental Team</p>"
   }
 }

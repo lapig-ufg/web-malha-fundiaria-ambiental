@@ -15,7 +15,7 @@ console.debug = function() {};
 }*/
 
 export const environment = {
-  APP_NAME: 'Atlas das Pastagens',
+  APP_NAME: 'Malha Fundiária Ambiental',
   production: false,
   GTAG: '',
   OWS_API: 'https://ows.lapig.iesa.ufg.br/api',

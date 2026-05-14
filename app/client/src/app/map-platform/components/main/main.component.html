@@ -3,7 +3,7 @@
     <div class="menu-sidebar">
       <div class="logo-menu-header">
         <a class="nav-link" href="/">
-          <span class="app-title">Malha Fundiaria</span>
+          <img src="../../../assets/logos/atlas_icon.png" />
         </a>
       </div>
 
@@ -36,14 +36,14 @@
     [modal]="false"
     (onHide)="onLeftSidebarClose()"
     [transitionOptions]="'2ms cubic-bezier(0, 0, 0.2, 1)'"
-    [visible]="menus[0].show || menus[1].show || menus[2].show"
+    [visible]="menus[0].show || menus[2].show || menus[3].show"
   >
     <ng-template pTemplate="header">
       <img class="logo" src="../../../assets/logos/atlas_logo_01.png" />
     </ng-template>
 
     <div *ngFor="let menu of menus">
-      <div *ngIf="menu.show">
+      <div *ngIf="menu.key !== 'statistics' && menu.show">
         <app-layers-sidebar
           *ngIf="menu.key == 'layers' && menu.show"
         ></app-layers-sidebar>
@@ -66,5 +66,16 @@
     </ng-template>
   </p-sidebar>
 
-  <app-general-map class='{{ (menus[0].show || menus[1].show || menus[2].show ? "left-sidebar-open " : "" ) }}'></app-general-map>
+  <!-- Right Sidebar-->
+  <p-sidebar
+    position="right"
+    [modal]="false"
+    [visible]="isRightSidebarToggle()"
+    (onHide)="onRightSidebarClose()"
+    [transitionOptions]="'2ms cubic-bezier(0, 0, 0.2, 1)'"
+  >
+    <app-statistics-sidebar></app-statistics-sidebar>
+  </p-sidebar>
+
+  <app-general-map class='{{ (menus[0].show || menus[2].show || menus[3].show ? "left-sidebar-open " : "" ) + (menus[1].show ? "right-sidebar-open" : "") }}'></app-general-map>
 </section>

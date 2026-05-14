@@ -24,6 +24,11 @@ export class MainComponent {
       show: false,
     },
     {
+      key: 'statistics',
+      icon: 'bx bx-bar-chart-alt',
+      show: false,
+    },
+    {
       key: 'area',
       icon: 'fg-polygon-hole-pt',
       show: false,
@@ -43,10 +48,17 @@ export class MainComponent {
   public onMenuClick(menu: Menu): void {
     menu.show = !menu.show;
 
+    if (menu.key === 'statistics') return;
+
     this.menus.forEach((element: Menu) => {
+      if (element.key === 'statistics') return;
       if (element.key === menu.key) return;
       element.show = false;
     });
+  }
+
+  public onRightSidebarClose(): void {
+    this.menus[1].show = false;
   }
 
   /**
@@ -55,14 +67,21 @@ export class MainComponent {
    */
   public onLeftSidebarClose(): void {
     this.menus[0].show = false;
-    this.menus[1].show = false;
     this.menus[2].show = false;
+    this.menus[3].show = false;
   }
 
   public isLeftSidebarToggle(): boolean {
     return !this.menus.every((element: Menu) => {
+      if (element.key === 'statistics') return true;
       return !element.show;
     });
+  }
+
+  public isRightSidebarToggle(): boolean {
+    return this.menus.find((element: Menu) => {
+      return element.key === 'statistics';
+    })!.show;
   }
 
   /**

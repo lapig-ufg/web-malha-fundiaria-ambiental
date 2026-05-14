@@ -555,15 +555,107 @@
     "warn_message": "Atenção",
     "has_not_info_message": "Não foi encontrado informações para a região selecionada."
   },
-  "gallery": {
-    "btn": "Visualizar Galeria",
-    "dialog_title": "Galeria de Imagens e vídeos do ponto visitado",
-    "fotos_camera": "Fotos de Câmara",
-    "fotos_drone": "Fotos de Drone",
-    "videos_drone": "Vídeos de Drone"
+  "hotsite": {
+    "lang_label": "Idioma",
+    "base": {
+      "header": {
+        "menu": {
+          "home": "Home",
+          "about": "Sobre",
+          "methods": "Métodos",
+          "articles": "Artigos",
+          "help": "Ajuda"
+        }
+      },
+      "footer": {
+        "contact": "Entre em contato",
+        "copyright": "Malha Fundiária Ambiental. Todos os direitos reservados."
+      }
+    },
+    "home": {
+      "banner": {
+        "text": "A Malha Fundiária Ambiental consolida uma infraestrutura geoespacial integrada para a organização e qualificação da estrutura territorial brasileira. Conectamos dados fundiários e ambientais complexos para impulsionar a governança, a análise técnica e a gestão sustentável do território nacional.",
+        "btn": "Acesse a Plataforma"
+      },
+      "abstract": {
+        "title": "Malha Fundiária Ambiental",
+        "text": "A plataforma disponibiliza, atualmente, seis bases de dados: (1) mapeamento das áreas ocupadas por pastagens no Brasil; (2) mapeamento da qualidade dessas áreas, estimativas do estoque de carbono nas pastagens do bioma Cerrado; (3) informações do rebanho bovino brasileiro analisadas a partir dos dados da pesquisa pecuária municipal (IBGE); (4) séries temporais de classificação de uso e cobertura da terra por inspeção visual de dados dos satélites Landsat; (5) avaliação da condição das pastagens em campanhas de campo realizadas por equipes do laboratório."
+      },
+      "news": {
+        "title": "Notícias"
+      },
+      "emphasis": {
+        "title": "Dados em destaque"
+      },
+      "differential": {
+        "title": "Diferencial",
+        "p1": "A plataforma permite a visualização integrada de dados fundiários e ambientais, facilitando a análise de conformidade e a gestão territorial.",
+        "p2": "O usuário pode comparar diferentes bases de dados e extrair informações precisas sobre a estrutura do território brasileiro.",
+        "p3": "Todos os dados estão disponíveis para download, promovendo a transparência e o livre acesso à informação geoespacial."
+      }
+    },
+    "about": {
+      "page_title": "Malha Fundiária Ambiental",
+      "abstract": {
+        "title": "Sobre",
+        "p1": "A Malha Fundiária Ambiental foi desenvolvida pelo Laboratório de Processamento de Imagens e Geoprocessamento da Universidade Federal de Goiás (Lapig/UFG) como uma evolução das ferramentas de monitoramento territorial, visando integrar dados fundiários e ambientais em uma única base geoespacial integrada.",
+        "p2": "Atualmente, a plataforma permite a visualização e análise de perímetros rurais, áreas protegidas, e a conformidade ambiental de imóveis, utilizando tecnologia de ponta para processamento de dados geográficos e sensoriamento remoto."
+      },
+      "team": {
+        "title": "Equipe"
+      }
+    },
+    "methods": {
+      "page_title": "Procedimentos Metodológicos",
+      "title": "Métodos"
+    },
+    "articles": {
+      "page_title": "Artigos Relacionados",
+      "title": "Artigos",
+      "authors": "Autores:",
+      "search": {
+        "title": "Buscar Artigos",
+        "placeholder": "Título, Resumo ou Autores"
+      }
+    },
+    "error": {
+      "msg": "Página não encontrada",
+      "btn_back_to_home": "Voltar para home"
+    },
+    "help": {
+      "faq": {
+        "title": "FAQ"
+      },
+      "form": {
+        "title": "Entre em Contato",
+        "sub-title": "Mande Mensgem",
+        "button": "Submeter",
+        "user": {
+          "name": "Seu Nome",
+          "email": "Seu Email",
+          "subject": "Assunto",
+          "institution": "Instituição",
+          "message": "Escreve uma Mensagem"
+        },
+        "validation": {
+          "email": {
+            "required": "Email é requerido.",
+            "invalid": "Email é inválido."
+          },
+          "name": "Nome é requerido.",
+          "subject": "Assunto é requerido.",
+          "institution": "Instituição é requerido",
+          "message": "Mensagem é requerido."
+        },
+        "submit": {
+          "success": "Sua mensagem foi enviada com sucesso",
+          "fail": "Seu envio falhou"
+        }
+      }
+    }
   },
   "atlasinformation": {
-    "title": "Nota de Esclarecimento",
-    "text": "<p>Gostaríamos de informar que identificamos recentemente um erro em nossas estimativas de área de pastagem. Nossa equipe já solucionou essa questão, assegurando informações precisas.</p><p>Sua confiança é muito importante para nós. Caso tenha alguma dúvida, não hesite em nos contatar pelo e-mail <strong>atlasdaspastagens.lapig@ufg.br</strong>.</p></p>Obrigado pela sua compreensão.</p><p>Atenciosamente,</p><p>Equipe Malha Fundiaria</p>"
+    "title": "Nota Informativa",
+    "text": "<p>A Malha Fundiária Ambiental integra diversas bases de dados para fornecer uma visão qualificada do território brasileiro. Em caso de dúvidas ou sugestões, entre em contato com nossa equipe técnica.</p><p>Equipe Malha Fundiária Ambiental</p>"
   }
-}
+  }

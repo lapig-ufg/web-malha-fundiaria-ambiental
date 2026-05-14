@@ -14,11 +14,6 @@ export { ChartService } from './statistics.service';
 export { DownloadService } from './download.service';
 
 /**
- * GalleryService exports.
- */
-export { GalleryService } from './gallery.service';
-
-/**
  * GoogleAnalyticsService exports.
  */
 export { GoogleAnalyticsService } from './google-analytics.service';
