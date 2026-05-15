@@ -1,7 +1,7 @@
 <section id="hotsite">
   <!--header-->
 
-  <header id="site-header" class="fixed-top">
+  <header id="site-header">
     <div class="container">
       <nav class="navbar navbar-expand-lg stroke">
         <a class="navbar-brand" href="/">
@@ -71,28 +71,37 @@
         </div>
       </div>
     </div>
-    <!-- copyright -->
-    <div class="copyright-container">
-      <a href="https://lapig.iesa.ufg.br/" target="_blank">
-        <img
-          src="../../../../assets/hotsite/images/logos/partners/lapig.png"
-          alt="Logo Lapig"
-          title="Lapig"
-        />
-      </a>
-      <a href="https://www.ufg.br/" target="_blank">
-        <img
-          src="../../../../assets/hotsite/images/logos/partners/ufg.png"
-          alt="Logo UFG"
-          title="Lapig"
-        />
-      </a>
+    <!-- partners -->
+    <div class="partners-section py-4">
+      <div class="container">
+        <h5 class="partners-title mb-4">{{ lang === 'pt' ? 'Realização' : 'Partners' }}</h5>
+        <div class="partners-logos">
+          <a href="https://lapig.iesa.ufg.br/" target="_blank" class="partner-item">
+            <img
+              src="../../../../assets/hotsite/images/logos/partners/lapig.png"
+              alt="Logo Lapig"
+              title="Lapig"
+            />
+          </a>
+          <a href="https://www.ufg.br/" target="_blank" class="partner-item">
+            <img
+              src="../../../../assets/hotsite/images/logos/partners/ufg.png"
+              alt="Logo UFG"
+              title="UFG"
+            />
+          </a>
+        </div>
+      </div>
     </div>
-    <div class="text-center">
-      © {{ year }} {{ "hotsite.base.footer.copyright" | translate }}
-      {{ COMMIT_ID }}
+    <div class="footer-bottom py-3">
+      <div class="container text-center">
+        <p class="copyright-text">
+          © {{ year }} {{ "hotsite.base.footer.copyright" | translate }}
+          <span class="commit-id">{{ COMMIT_ID }}</span>
+        </p>
+      </div>
     </div>
-    <!-- //copyright -->
+    <!-- //partners -->
   </footer>
   <!-- //footer -->
 

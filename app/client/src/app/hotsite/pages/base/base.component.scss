@@ -1,17 +1,45 @@
+#site-header {
+  position: relative;
+  width: 100%;
+  background-color: #1d3430 !important; // Fully opaque dark green
+  z-index: 1000;
+  transition: none !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+
+  .navbar {
+    padding: 15px 0;
+  }
+
+  .navbar-brand img {
+    height: 2em !important;
+    filter: brightness(0) invert(1); // Make logo white for dark header
+  }
+
+  .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-weight: 500;
+    
+    &:hover, &.active {
+      color: #ffffff !important;
+    }
+  }
+}
+
+.lang {
+  background-color: #1d3430 !important; // Fully opaque to match header
+  opacity: 1 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .copyright-footer img {
   border-radius: 15px;
   margin: 15px;
   max-width: 70%;
-  background: #ffffff26;;
+  background: #ffffff26;
   padding: 20px;
-  /*filter: grayscale(100%);*/
 }
 
-.navbar-brand img {
-  height: 2em;
-}
-
-.diferencial{
+.diferencial {
   max-width: calc(100% - 16%);
   padding: 40px;
   background: rgb(255 255 255 / 10%);
@@ -20,24 +48,63 @@
   margin: 0 auto;
 }
 
-.copyright-container {
-  border-radius: 10px;
-  background-color: #ffffff;
-  margin: auto;
+.partners-section {
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   text-align: center;
-  padding: 10px;
-  width: 45%;
+  padding: 2rem 0;
+
+  .partners-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 600;
+  }
+
+  .partners-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    flex-wrap: wrap;
+
+    .partner-item {
+      img {
+        height: 60px;
+        width: auto;
+        filter: grayscale(100%) brightness(0) invert(1); // Default: grayscale + white
+        opacity: 0.6;
+        transition: all 0.4s ease;
+      }
+
+      &:hover img {
+        filter: grayscale(0%) brightness(0) invert(1);
+        opacity: 1;
+        transform: scale(1.1);
+      }
+    }
+  }
 }
 
-.copyright-container img {
-  filter: contrast(200%);
-  filter: brightness(120%);
-  filter: saturate(200%);
-  height: 70px;
-  padding: 10px;
+.footer-bottom {
+  background: rgba(0, 0, 0, 0.1);
+  
+  .copyright-text {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+
+    .commit-id {
+      font-size: 0.75rem;
+      opacity: 0.5;
+      margin-left: 10px;
+      font-family: monospace;
+    }
+  }
 }
 
 .text-center {
   text-align: center;
-  padding: 15px;
 }
