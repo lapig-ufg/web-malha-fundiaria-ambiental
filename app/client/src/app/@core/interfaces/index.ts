@@ -81,7 +81,6 @@ export { News } from './news';
 export { Team } from './team';
 export { Article } from './article';
 export { Highlight } from './highlight';
-export { Method } from './method';
 
 /**
  * Exportação do Contact

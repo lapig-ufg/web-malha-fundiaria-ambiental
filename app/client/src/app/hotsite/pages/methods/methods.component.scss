@@ -78,24 +78,6 @@
   }
 }
 
-.dynamic-card {
-  border-radius: 16px;
-  overflow: hidden;
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: scale(1.02);
-  }
-
-  .service-details {
-    padding: 1.5rem;
-    .card-title {
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-  }
-}
-
 @keyframes slideUpFade {
   to {
     opacity: 1;

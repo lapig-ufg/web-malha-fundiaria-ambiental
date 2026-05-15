@@ -1,10 +1,6 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { LocalizationService } from "../../../@core/internationalization/localization.service";
 import { LangChangeEvent } from "@ngx-translate/core";
-import { environment } from 'src/environments/environment';
-import { ContentHub } from '../../services/content-hub.service';
-
-import { Method } from '@core/interfaces';
 
 @Component({
   standalone: false,
@@ -13,16 +9,13 @@ import { Method } from '@core/interfaces';
   styleUrls: ['./methods.component.scss']
 })
 export class MethodsComponent implements OnInit {
-  public methodologies: Method[] = [];
   public staticMethodologies: any[] = [];
   public lang: string;
 
   constructor(
     private localizationService: LocalizationService,
-    private contentHub: ContentHub,
     private el: ElementRef) {
     this.initStaticData();
-    this.fetchMethodologies();
 
     this.lang = this.localizationService.currentLang();
   }
@@ -98,7 +91,7 @@ export class MethodsComponent implements OnInit {
         title_pt: 'Análise de sobreposição',
         title_en: 'Análise de sobreposição',
         desc_pt: 'Os conflitos entre camadas são resolvidos mantendo, em cada pixel, a classe fundiária de maior prioridade. Em seguida, os vetores originais são recuperados para compor a malha final',
-        desc_en: 'Os conflitos entre camadas são resolvidos mantendo, em cada pixel, a classe fundiária de maior prioridade. Em seguida, os vetores originais são recuperados para compor a malha final'
+        desc_en: 'Os conflitos entre camadas são resolvidos mantendo, em cada pixel, a classe fundiária de maior prioridade. Em seguida, os vetores originais foram recuperados para compor a malha final'
       },
       {
         number: '06.',
@@ -112,26 +105,7 @@ export class MethodsComponent implements OnInit {
 
   ngOnInit() {
     this.localizationService.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {
-      this.fetchMethodologies();
       this.lang = langChangeEvent.lang;
     });
-  }
-
-  private fetchMethodologies(): void {
-    this.contentHub.getMethodologies().subscribe(values => {
-      this.methodologies = [];
-
-      values.forEach((element: any) => {
-        let fileUrl = JSON.parse(element.file as string)[0].download_link;
-
-        this.methodologies.push(
-          {
-            title: element.title,
-            image: environment.S3 + element.image,
-            description: element.description,
-            file: environment.S3 + fileUrl,
-          });
-      });
-    })
   }
 }

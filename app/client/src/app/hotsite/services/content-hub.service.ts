@@ -99,18 +99,6 @@ class ContentService {
   }
 
   /**
-   * Acessa os dados da tabela ***Methodologies*** do Content-Hub.
-   *
-   * @returns {Observable<Array>} Observavel contendo uma lista de registros da tabela ***Methodologie***.
-   */
-  getMethodologies(): Observable<any> {
-    return this.httpClient.get<any>(
-      this.apiURL + `/methodologies/${this.lang}`,
-      this.httpOptions
-    );
-  }
-
-  /**
    * Acessa os dados da tabela ***FAQ*** do Content-Hub.
    *
    * @returns {Observable<Array>} Observavel contendo uma lista de registros da tabela ***FAQ***.

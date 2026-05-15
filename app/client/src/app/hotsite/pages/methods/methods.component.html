@@ -69,26 +69,6 @@
           <i class="bx bx-link-external ml-2"></i>
         </a>
       </div>
-
-      <!-- Dynamic methodologies (if any) -->
-      <div class="row mt-5" *ngIf="methodologies.length > 0">
-        <div class="col-12 text-center mb-4">
-           <h3 class="title-style-2">{{ lang === 'pt' ? 'Documentos Técnicos' : 'Technical Documents' }}</h3>
-        </div>
-        <div *ngFor="let methodology of methodologies" class="col-lg-4 col-md-6 item mb-4">
-          <div class="card dynamic-card h-100">
-            <a target="_blank" [href]="methodology.file">
-              <div class="card-header p-0 position-relative border-0">
-                <img class="d-block img-responsive" [src]="methodology.image" [alt]="methodology.title">
-              </div>
-              <div class="card-body service-details">
-                <div class="card-title"> {{ methodology.title }} </div>
-                <p [innerHTML]="methodology.description"></p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </app-site-base>
