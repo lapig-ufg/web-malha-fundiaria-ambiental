@@ -3,6 +3,7 @@ import { ContentHub } from '../../services/content-hub.service';
 import { LocalizationService } from 'src/app/@core/internationalization/localization.service';
 
 @Component({
+  standalone: false,
   selector: 'app-about',
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],

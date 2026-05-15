@@ -15,6 +15,7 @@ import { Highlight, News } from '@core/interfaces';
 import { catchError, ObservableInput } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.css'],

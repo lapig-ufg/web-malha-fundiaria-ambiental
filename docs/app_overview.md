@@ -13,9 +13,9 @@ This project is a comprehensive geospatial platform for visualizing and analyzin
 ## Core Technologies
 
 ### Frontend (Client)
-- **Framework**: Angular 16
-- **Map Engine**: OpenLayers (`ol`, `ol-ext`)
-- **UI Components**: PrimeNG, Angular Material
+- **Framework**: Angular 20
+- **Map Engine**: OpenLayers v10 (`ol`, `ol-ext`)
+- **UI Components**: PrimeNG v17, Angular Material v20
 - **Geospatial Analysis**: Turf.js
 - **Charts**: Chart.js
 - **Internationalization**: ngx-translate

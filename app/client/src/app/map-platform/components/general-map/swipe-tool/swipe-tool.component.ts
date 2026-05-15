@@ -39,6 +39,7 @@ import BaseLayer from 'ol/layer/Base';
 import { LayerService } from '@core/services';
 
 @Component({
+  standalone: false,
   selector: 'app-swipe',
   templateUrl: './swipe-tool.component.html',
   styleUrls: ['./swipe-tool.component.scss'],

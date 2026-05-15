@@ -111,3 +111,51 @@
     background-size: cover;
   }
 }
+
+.methodology-diagram-wrapper {
+  height: 400vh; // More scroll room for a potentially very wide image
+  position: relative;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  overflow: clip; // Better than overflow: hidden for sticky
+
+  .scroll-container {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column; // Stack progress bar and image
+    align-items: flex-start;
+    justify-content: center; // Center image vertically in viewport
+    overflow: hidden;
+
+    .progress-bar-container {
+      width: 100vw;
+      height: 8px;
+      background: rgba(0, 0, 0, 0.05);
+      z-index: 10;
+      margin-bottom: 20px; // Gap between bar and image
+
+      .progress-bar-fill {
+        height: 100%;
+        width: 0%;
+        background: $primary;
+        transition: width 0.1s linear;
+      }
+    }
+
+    .diagram-content {
+      width: 100%;
+      display: block;
+      padding: 0;
+
+      .diagram-image {
+        height: 70vh; // Take up most of the screen height
+        width: auto; // Let it be wider than the screen
+        max-width: none;
+        display: block;
+        will-change: transform;
+      }
+    }
+  }
+}

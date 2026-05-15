@@ -150,7 +150,7 @@
       {{ dialogData.text }}
     </p>
     <div class="chart">
-      <p-chart *ngIf="dialogData.type" [responsive]="true" [type]="dialogData.type"
+      <p-chart *ngIf="dialogData.type" [responsive]="true" [type]="$any(dialogData.type)"
         [data]="dialogData.data" [options]="dialogData.options">
       </p-chart>
     </div>

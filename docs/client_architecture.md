@@ -1,6 +1,6 @@
 # Client Architecture (Malha Fundiária Ambiental)
 
-The frontend is a single-page application (SPA) built with Angular 16. It is designed to be a high-performance map platform for visualizing and analyzing pasture data.
+The frontend is a single-page application (SPA) built with Angular 20. It is designed to be a high-performance map platform for visualizing and analyzing pasture data.
 
 ## Module Structure
 

@@ -10,6 +10,7 @@ import { LangChangeEvent } from '@ngx-translate/core';
 import { FAQ } from '@core/interfaces';
 
 @Component({
+  standalone: false,
   selector: 'app-help',
   templateUrl: './help.component.html',
   styleUrls: ['./help.component.scss'],

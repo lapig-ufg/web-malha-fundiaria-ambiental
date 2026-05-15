@@ -12,6 +12,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { UserInfoComponent } from '@core/components/user-info-dialog/user-info-dialog.component';
 
 @Component({
+  standalone: false,
   selector: 'app-area-sidebar',
   templateUrl: './area-sidebar.component.html',
   styleUrls: ['./area-sidebar.component.scss'],

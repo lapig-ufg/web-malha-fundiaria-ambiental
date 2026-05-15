@@ -28,6 +28,7 @@ import { MapEvent, Overlay } from 'ol';
 import { Interaction, Modify, Snap } from 'ol/interaction';
 import { BingMaps, XYZ } from 'ol/source';
 import { GeoJSON } from 'ol/format';
+import { Extent } from 'ol/extent';
 import { Fill, Stroke, Style } from 'ol/style';
 import { transform, transformExtent } from 'ol/proj';
 import { Pixel } from 'ol/pixel';
@@ -118,6 +119,7 @@ const PRIMARY_COLOR = window
  * @component
  */
 @Component({
+  standalone: false,
   selector: 'app-general-map',
   templateUrl: './general-map.component.html',
   styleUrls: [
@@ -1085,7 +1087,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
 
     // @ts-ignore
     dd.content.push({
-      qr: 'https://atlasdaspastagens.ufg.br/map/' + token.toString(),
+      qr: 'https://malhafundiaria.lapig.iesa.ufg.br/map/' + token.toString(),
       fit: '200',
       alignment: 'center',
     });
@@ -1264,7 +1266,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
     });
 
     const bbox = transformExtent(
-      bufferSource.getExtent(),
+      bufferSource.getExtent() as Extent,
       'EPSG:3857',
       'EPSG:4326'
     );

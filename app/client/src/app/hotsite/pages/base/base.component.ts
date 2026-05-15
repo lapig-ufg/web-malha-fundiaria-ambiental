@@ -7,6 +7,7 @@ import { LocalizationService } from '../../../@core/internationalization/localiz
 import { environment } from '../../../../environments/environment';
 
 @Component({
+  standalone: false,
   selector: 'app-site-base',
   templateUrl: './base.component.html',
   styleUrls: ['./base.component.scss'],

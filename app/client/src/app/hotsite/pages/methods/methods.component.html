@@ -29,23 +29,33 @@
       <!-- Static Beautiful Cards -->
       <div class="row">
         <div *ngFor="let item of staticMethodologies; let i = index" 
-             class="col-lg-4 col-md-6 mb-4" 
-             [style.animation-delay]="i * 0.1 + 's'">
-          <div class="method-card h-100 p-4">
-            <div class="icon-wrapper mb-3">
-              <i class="bx" [ngClass]="item.icon"></i>
-            </div>
-            <h4 class="card-title mb-3">
+             class="col-lg-4 col-md-6 col-sm-12 mb-4">
+          <div class="method-card h-100 p-3" style="background-color: #d4edda; border-radius: 15px;">
+            <div class="number mb-2 font-weight-bold" style="font-size: 1.5rem;">{{ item.number }}</div>
+            <h4 class="card-title mb-2 font-weight-bold">
               {{ lang === 'pt' ? item.title_pt : item.title_en }}
             </h4>
-            <p class="card-text">
+            <p class="card-text" style="font-size: 0.9rem;">
               {{ lang === 'pt' ? item.desc_pt : item.desc_en }}
             </p>
-            <div class="card-footer-glow"></div>
           </div>
         </div>
       </div>
+    </div>
 
+    <!-- Methodology Diagram - Full Width -->
+    <div class="methodology-diagram-wrapper my-5">
+      <div class="scroll-container">
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill"></div>
+        </div>
+        <div class="diagram-content">
+          <img src="assets/hotsite/images/methodology_diagram.svg" alt="Methodology Diagram" class="diagram-image">
+        </div>
+      </div>
+    </div>
+
+    <div class="container py-md-5 py-4">
       <!-- Dynamic methodologies (if any) -->
       <div class="row mt-5" *ngIf="methodologies.length > 0">
         <div class="col-12 text-center mb-4">

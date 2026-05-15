@@ -17,6 +17,7 @@ import { MessageService } from 'primeng/api';
 import { LocalizationService } from '@core/internationalization/localization.service';
 
 @Component({
+  standalone: false,
   selector: 'app-layers-sidebar',
   templateUrl: './layers-sidebar.component.html',
   styleUrls: ['./layers-sidebar.component.scss'],

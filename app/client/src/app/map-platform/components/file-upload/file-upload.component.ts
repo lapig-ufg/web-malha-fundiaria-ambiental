@@ -10,6 +10,7 @@ import { UserInfo } from '@core/interfaces/user_info';
 import { DialogMessageComponent } from '@core/components/dialog-message/dialog-message.component';
 
 @Component({
+  standalone: false,
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss'],

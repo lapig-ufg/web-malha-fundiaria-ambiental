@@ -40,6 +40,7 @@ import {
 } from 'primeng/accordion';
 
 @Component({
+  standalone: false,
   selector: 'app-statistics-sidebar',
   templateUrl: './statistics-sidebar.component.html',
   styleUrls: ['./statistics-sidebar.component.scss'],

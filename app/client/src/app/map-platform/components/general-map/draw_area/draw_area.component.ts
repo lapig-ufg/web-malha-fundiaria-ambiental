@@ -42,6 +42,7 @@ const PRIMARY_COLOR = window
 // TODO: Remover marcação com area da região quando a mesma for removida.
 
 @Component({
+  standalone: false,
   selector: 'app-draw-area',
   templateUrl: './draw_area.component.html',
   styleUrls: ['./draw_area.component.scss'],

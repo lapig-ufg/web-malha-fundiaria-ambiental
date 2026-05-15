@@ -19,6 +19,7 @@ import * as Proj from 'ol/proj';
 // Tokn de teste: 390c7d96-d6ca-4308-bfaa-d4f6c7049510
 
 @Component({
+  standalone: false,
   selector: 'app-analysis',
   templateUrl: './analysis.component.html',
   styleUrls: ['./analysis.component.scss'],
@@ -127,10 +128,12 @@ export class AnalysisComponent implements OnInit, AfterViewInit {
     this.map.once('postrender', () => {
       const extent = vectorSource.getExtent();
 
-      this.map.getView().fit(extent, {
-        size: this.map.getSize(),
-        padding: [50, 50, 50, 50],
-      });
+      if (extent) {
+        this.map.getView().fit(extent, {
+          size: this.map.getSize(),
+          padding: [50, 50, 50, 50],
+        });
+      }
     });
   }
 

@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { Article } from '@core/interfaces';
 
 @Component({
+  standalone: false,
   selector: 'app-articles',
   templateUrl: './articles.component.html',
   styleUrls: ['./articles.component.scss']

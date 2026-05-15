@@ -43,6 +43,7 @@ const PRIMARY_COLOR = window
   .trim();
 
 @Component({
+  standalone: false,
   selector: 'app-filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
