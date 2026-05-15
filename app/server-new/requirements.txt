@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+asyncpg
+motor
+pydantic
+pydantic-settings
+httpx
+python-dotenv
+python-multipart
+aiocache
