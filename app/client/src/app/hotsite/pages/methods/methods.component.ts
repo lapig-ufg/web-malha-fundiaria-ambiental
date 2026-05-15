@@ -42,9 +42,10 @@ export class MethodsComponent implements OnInit {
       const progress = scrollPos / containerHeight;
       
       // Horizontal reveal: move the image left as the user scrolls down
+      // account for 40px padding on each side (80px total gap needed in calculation)
       const imgWidth = img.clientWidth;
       const viewportWidth = window.innerWidth;
-      const maxTranslateX = Math.max(0, imgWidth - viewportWidth);
+      const maxTranslateX = Math.max(0, imgWidth + 80 - viewportWidth);
       
       img.style.transform = `translateX(-${progress * maxTranslateX}px)`;
       
@@ -56,7 +57,7 @@ export class MethodsComponent implements OnInit {
     } else if (scrollPos > containerHeight) {
       const imgWidth = img.clientWidth;
       const viewportWidth = window.innerWidth;
-      const maxTranslateX = Math.max(0, imgWidth - viewportWidth);
+      const maxTranslateX = Math.max(0, imgWidth + 80 - viewportWidth);
       img.style.transform = `translateX(-${maxTranslateX}px)`;
       progressBar.style.width = '100%';
     }

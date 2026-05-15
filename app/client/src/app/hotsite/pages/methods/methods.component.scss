@@ -134,7 +134,7 @@
       height: 8px;
       background: rgba(0, 0, 0, 0.05);
       z-index: 10;
-      margin-bottom: 20px; // Gap between bar and image
+      margin-top: 20px; // Gap between image and bar below
 
       .progress-bar-fill {
         height: 100%;
@@ -147,11 +147,11 @@
     .diagram-content {
       width: 100%;
       display: block;
-      padding: 0;
+      padding: 0 40px; // Add tiny gap on the sides
 
       .diagram-image {
-        height: 70vh; // Take up most of the screen height
-        width: auto; // Let it be wider than the screen
+        height: 70vh;
+        width: auto;
         max-width: none;
         display: block;
         will-change: transform;
