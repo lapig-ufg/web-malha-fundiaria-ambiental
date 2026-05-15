@@ -55,7 +55,21 @@
       </div>
     </div>
 
+    <!-- Call to Action Section -->
     <div class="container py-md-5 py-4">
+      <div class="cta-section text-center p-5 mb-5" style="background: #e9ecef; border-radius: 20px;">
+        <h3 class="title-style-2 mb-3">
+          {{ lang === 'pt' ? 'Explore a Metodologia Completa' : 'Explore the Full Methodology' }}
+        </h3>
+        <p class="subtitle mb-4">
+          {{ lang === 'pt' ? 'Para uma análise detalhada dos critérios técnicos, fontes de dados e processos de validação, acesse nossa documentação técnica completa.' : 'For a detailed analysis of technical criteria, data sources, and validation processes, access our full technical documentation.' }}
+        </p>
+        <a href="https://boliveirageo.github.io/malhafundiariaambiental/" target="_blank" class="btn btn-primary btn-lg">
+          {{ lang === 'pt' ? 'Acesse a Metodologia' : 'Access Methodology' }}
+          <i class="bx bx-link-external ml-2"></i>
+        </a>
+      </div>
+
       <!-- Dynamic methodologies (if any) -->
       <div class="row mt-5" *ngIf="methodologies.length > 0">
         <div class="col-12 text-center mb-4">
