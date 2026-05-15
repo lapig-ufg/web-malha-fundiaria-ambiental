@@ -13582,7 +13582,7 @@ h5.text-blog-e {
   top: 50%;
   margin-left: -40px;
   margin-top: -40px;
-  background: url(./images/owl.video.play.png) no-repeat;
+  /* background: url(./images/owl.video.play.png) no-repeat; */
   cursor: pointer;
   z-index: 1;
   -webkit-backface-visibility: hidden;
