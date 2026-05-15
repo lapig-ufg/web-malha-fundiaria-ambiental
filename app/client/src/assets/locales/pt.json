@@ -172,7 +172,12 @@
     },
     "articles": {
       "page_title": "Artigos",
-      "title": "Artigos"
+      "title": "Artigos",
+      "authors": "Autores",
+      "search": {
+        "title": "Pesquisar Artigos",
+        "placeholder": "Digite palavras-chave..."
+      }
     },
     "help": {
       "page_title": "Ajuda",

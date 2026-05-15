@@ -172,7 +172,12 @@
     },
     "articles": {
       "page_title": "Articles",
-      "title": "Articles"
+      "title": "Articles",
+      "authors": "Authors",
+      "search": {
+        "title": "Search Articles",
+        "placeholder": "Type keywords..."
+      }
     },
     "help": {
       "page_title": "Help",

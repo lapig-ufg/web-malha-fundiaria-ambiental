@@ -29,31 +29,31 @@
           </div>
         </div>
       </div>
-      <div class="cards-artigos" >
-        <div class="row m-3" *ngFor="let article of articles | filter:search">
-          <div class="col-lg-12">
+      <div class="cards-artigos">
+        <div class="row">
+          <div *ngFor="let article of articles | filter:search" class="col-lg-12 mb-4">
             <div class="bg-clr-white hover-box">
-              <div class="row">
-                <div class="col-sm-4 pl-5 pt-4 position-relative">
+              <div class="row align-items-center">
+                <div class="col-md-4 px-4 pt-4 pt-md-0">
                   <a [href]="article.doi" target="_blank">
                     <img class="img-fluid d-block artigo-img"
                          [src]="article.image"
-                         [alt]="article.doi">
+                         [alt]="article.title">
                   </a>
                 </div>
-                <div class="col-sm-8">
-                  <div [id]="article.id" class="card-body blog-details align-self pl-sm-0">
+                <div class="col-md-8">
+                  <div class="card-body blog-details">
                     <a [href]="article.doi" target="_blank" class="blog-desc">
                       {{article.title}}
                     </a>
-                    <p [innerHTML]="article.abstract">
-                     
-                    </p>
-                    <div class="d-flex align-items-center justify-content-between mt-lg-4 mt-5">
-                      <h5 class="text-blog-e">{{'hotsite.articles.authors' | translate}} {{article.authors}}</h5>
+                    <p [innerHTML]="article.abstract"></p>
+                    <div class="d-flex align-items-center justify-content-between mt-4">
+                      <h5 class="text-blog-e">
+                        <strong>{{'hotsite.articles.authors' | translate}}:</strong> {{article.authors}}
+                      </h5>
                       <a [href]="article.doi" target="_blank" class="blog-icon-e">
-                        <img class="img-fluid d-block doi" src="../../../../assets/hotsite/images/doi.svg"
-                             [alt]="article.doi">
+                        <img class="doi" src="../../../../assets/hotsite/images/doi.svg"
+                             alt="DOI">
                       </a>
                     </div>
                   </div>
