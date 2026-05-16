@@ -455,7 +455,7 @@ module.exports = function (app) {
                     { idOfQuery: 'municipios', labelOfQuery: (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsCities"]) ? Internal.languageOb["area_table_card"]["pastureRankingsCities"].labelOfQuery['municipios'] : 'municipios' },
                 ],
                 "title": (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsCities"]) ? Internal.languageOb["area_table_card"]["pastureRankingsCities"].title : 'Cities',
-                "columnsTitle": (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsCities"]) ? Internal.languageOb["area_table_card"]["pastureRankingsCities"].columnsTitle : [],
+                "columnsTitle": (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsCities"]) ? Internal.languageOb["area_table_card"]["pastureRankingsCities"].columnsTitle : '#?City?UF?Value',
                 "getText": function (chart) {
                     if (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsCities"]) {
                         const text = Internal.replacementStrings(Internal.languageOb["area_table_card"]["pastureRankingsCities"].text, replacements)
@@ -471,7 +471,7 @@ module.exports = function (app) {
                     { idOfQuery: 'estados', labelOfQuery: (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsStates"]) ? Internal.languageOb["area_table_card"]["pastureRankingsStates"].labelOfQuery['estados'] : 'estados' },
                 ],
                 "title": (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsStates"]) ? Internal.languageOb["area_table_card"]["pastureRankingsStates"].title : 'States',
-                "columnsTitle": (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsStates"]) ? Internal.languageOb["area_table_card"]["pastureRankingsStates"].columnsTitle : [],
+                "columnsTitle": (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsStates"]) ? Internal.languageOb["area_table_card"]["pastureRankingsStates"].columnsTitle : '#?State?Value',
                 "getText": function (chart) {
                     if (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsStates"]) {
                         const text = Internal.replacementStrings(Internal.languageOb["area_table_card"]["pastureRankingsStates"].text, replacements)
@@ -487,7 +487,7 @@ module.exports = function (app) {
                     { idOfQuery: 'biomas', labelOfQuery: (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsBiomes"]) ? Internal.languageOb["area_table_card"]["pastureRankingsBiomes"].labelOfQuery['biomas'] : 'biomas' },
                 ],
                 "title": (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsBiomes"]) ? Internal.languageOb["area_table_card"]["pastureRankingsBiomes"].title : 'Biomes',
-                "columnsTitle": (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsBiomes"]) ? Internal.languageOb["area_table_card"]["pastureRankingsBiomes"].columnsTitle : [],
+                "columnsTitle": (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsBiomes"]) ? Internal.languageOb["area_table_card"]["pastureRankingsBiomes"].columnsTitle : '#?Biome?Value',
                 "getText": function (chart) {
                     if (Internal.languageOb["area_table_card"] && Internal.languageOb["area_table_card"]["pastureRankingsBiomes"]) {
                         const text = Internal.replacementStrings(Internal.languageOb["area_table_card"]["pastureRankingsBiomes"].text, replacements)

@@ -128,6 +128,32 @@
       "biome": "Biome",
       "fronteira": "Frontier"
     },
+    "area_table_card": {
+      "pastureRankingsCities": {
+        "title": "City Ranking",
+        "columnsTitle": "#?City?UF?Area (ha)",
+        "labelOfQuery": {
+          "municipios": "Cities"
+        },
+        "text": "Ranking of cities with the largest pasture area in the {{textRegionTranslate}} region."
+      },
+      "pastureRankingsStates": {
+        "title": "State Ranking",
+        "columnsTitle": "#?State?Area (ha)",
+        "labelOfQuery": {
+          "estados": "States"
+        },
+        "text": "Ranking of states with the largest pasture area in the {{textRegionTranslate}} region."
+      },
+      "pastureRankingsBiomes": {
+        "title": "Biome Ranking",
+        "columnsTitle": "#?Biome?Area (ha)",
+        "labelOfQuery": {
+          "biomas": "Biomes"
+        },
+        "text": "Ranking of biomes with the largest pasture area in the {{textRegionTranslate}} region."
+      }
+    },
     "tabs": {
       "area": "Area",
       "charts": "Charts"

@@ -128,6 +128,32 @@
       "biome": "Bioma",
       "fronteira": "Fronteira"
     },
+    "area_table_card": {
+      "pastureRankingsCities": {
+        "title": "Ranking de Municípios",
+        "columnsTitle": "#?Município?UF?Área (ha)",
+        "labelOfQuery": {
+          "municipios": "Municípios"
+        },
+        "text": "Ranking dos municípios com maior área de pastagem na região {{textRegionTranslate}}."
+      },
+      "pastureRankingsStates": {
+        "title": "Ranking de Estados",
+        "columnsTitle": "#?Estado?Área (ha)",
+        "labelOfQuery": {
+          "estados": "Estados"
+        },
+        "text": "Ranking dos estados com maior área de pastagem na região {{textRegionTranslate}}."
+      },
+      "pastureRankingsBiomes": {
+        "title": "Ranking de Biomas",
+        "columnsTitle": "#?Bioma?Área (ha)",
+        "labelOfQuery": {
+          "biomas": "Biomas"
+        },
+        "text": "Ranking dos biomas com maior área de pastagem na região {{textRegionTranslate}}."
+      }
+    },
     "tabs": {
       "area": "Área",
       "charts": "Gráficos"
