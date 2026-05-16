@@ -135,7 +135,7 @@
         "labelOfQuery": {
           "municipios": "Cities"
         },
-        "text": "Ranking of cities with the largest pasture area in the {{textRegionTranslate}} region."
+        "text": "Ranking of cities with the largest pasture area in the #textRegionTranslate# region."
       },
       "pastureRankingsStates": {
         "title": "State Ranking",
@@ -143,7 +143,7 @@
         "labelOfQuery": {
           "estados": "States"
         },
-        "text": "Ranking of states with the largest pasture area in the {{textRegionTranslate}} region."
+        "text": "Ranking of states with the largest pasture area in the #textRegionTranslate# region."
       },
       "pastureRankingsBiomes": {
         "title": "Biome Ranking",
@@ -151,7 +151,49 @@
         "labelOfQuery": {
           "biomas": "Biomes"
         },
-        "text": "Ranking of biomes with the largest pasture area in the {{textRegionTranslate}} region."
+        "text": "Ranking of biomes with the largest pasture area in the #textRegionTranslate# region."
+      }
+    },
+    "pastureGraph_card": {
+      "pastureAndLotacaoBovina": {
+        "title": "Pasture Evolution and Cattle Stocking",
+        "labelOfQuery": {
+          "pasture": "Pasture Area (ha)",
+          "lotacao_bovina_regions": "Cattle Stocking (UA/ha)"
+        },
+        "text": "Temporal evolution of pasture area and cattle stocking in the #textRegionTranslate# region."
+      },
+      "pastureQuality": {
+        "title": "Pasture Quality",
+        "labelOfQuery": {
+          "pasture_quality": "Quality"
+        },
+        "text": "Distribution of pasture quality over time in the #textRegionTranslate# region."
+      },
+      "carbon": {
+        "title": "Soil Organic Carbon",
+        "labelOfQuery": {
+          "carbon": "Carbon (t/ha)"
+        },
+        "text": "Estimation of soil organic carbon stock under pastures in the #textRegionTranslate# region."
+      }
+    },
+    "area2_card": {
+      "pastureQualityPerYear": {
+        "title": "Pasture Quality in #yearTranslate#",
+        "labelOfQuery": {
+          "pasture_quality": "Quality"
+        },
+        "text": "In #yearTranslate#, the #textRegionTranslate# region had a total pasture area of #areaPasture# ha, distributed according to the vigor classes above."
+      }
+    },
+    "area3_card": {
+      "pastureRankingStates": {
+        "title": "State Ranking by Pasture Area",
+        "labelOfQuery": {
+          "estados": "Area (ha)"
+        },
+        "text": "Comparison of pasture area among states in the #textRegionTranslate# region."
       }
     },
     "tabs": {

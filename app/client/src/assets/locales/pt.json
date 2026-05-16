@@ -135,7 +135,7 @@
         "labelOfQuery": {
           "municipios": "Municípios"
         },
-        "text": "Ranking dos municípios com maior área de pastagem na região {{textRegionTranslate}}."
+        "text": "Ranking dos municípios com maior área de pastagem na região #textRegionTranslate#."
       },
       "pastureRankingsStates": {
         "title": "Ranking de Estados",
@@ -143,7 +143,7 @@
         "labelOfQuery": {
           "estados": "Estados"
         },
-        "text": "Ranking dos estados com maior área de pastagem na região {{textRegionTranslate}}."
+        "text": "Ranking dos estados com maior área de pastagem na região #textRegionTranslate#."
       },
       "pastureRankingsBiomes": {
         "title": "Ranking de Biomas",
@@ -151,7 +151,49 @@
         "labelOfQuery": {
           "biomas": "Biomas"
         },
-        "text": "Ranking dos biomas com maior área de pastagem na região {{textRegionTranslate}}."
+        "text": "Ranking dos biomas com maior área de pastagem na região #textRegionTranslate#."
+      }
+    },
+    "pastureGraph_card": {
+      "pastureAndLotacaoBovina": {
+        "title": "Evolução da Pastagem e Lotação Bovina",
+        "labelOfQuery": {
+          "pasture": "Área de Pastagem (ha)",
+          "lotacao_bovina_regions": "Lotação Bovina (UA/ha)"
+        },
+        "text": "Evolução temporal da área de pastagem e da lotação bovina na região #textRegionTranslate#."
+      },
+      "pastureQuality": {
+        "title": "Qualidade da Pastagem",
+        "labelOfQuery": {
+          "pasture_quality": "Qualidade"
+        },
+        "text": "Distribuição da qualidade da pastagem ao longo do tempo na região #textRegionTranslate#."
+      },
+      "carbon": {
+        "title": "Carbono Orgânico do Solo",
+        "labelOfQuery": {
+          "carbon": "Carbono (t/ha)"
+        },
+        "text": "Estimativa do estoque de carbono orgânico do solo sob pastagens na região #textRegionTranslate#."
+      }
+    },
+    "area2_card": {
+      "pastureQualityPerYear": {
+        "title": "Qualidade da Pastagem em #yearTranslate#",
+        "labelOfQuery": {
+          "pasture_quality": "Qualidade"
+        },
+        "text": "Em #yearTranslate#, a região #textRegionTranslate# possuía uma área total de pastagem de #areaPasture# ha, distribuída conforme as classes de vigor acima."
+      }
+    },
+    "area3_card": {
+      "pastureRankingStates": {
+        "title": "Ranking de Estados por Área de Pastagem",
+        "labelOfQuery": {
+          "estados": "Área (ha)"
+        },
+        "text": "Comparativo da área de pastagem entre os estados na região #textRegionTranslate#."
       }
     },
     "tabs": {

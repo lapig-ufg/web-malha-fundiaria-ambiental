@@ -29,6 +29,7 @@ class Settings(BaseSettings):
     PG_DEBUG: bool = True
     
     PORT: int = 3000
+    OWS: str = ""
     OWS_HOST: str = ""
     OWS_API: str = ""
     
@@ -37,6 +38,9 @@ class Settings(BaseSettings):
     AUTH_REALM: Optional[str] = None
     AUTH_ID: Optional[str] = None
     AUTH_SECRET: Optional[str] = None
+
+    # Database extra
+    PG_DBNAME: Optional[str] = None
 
     # Security
     RECAPTCHA_KEY: Optional[str] = None
@@ -79,5 +83,6 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env"
+        extra = "allow"
 
 settings = Settings()

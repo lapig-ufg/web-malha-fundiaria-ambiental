@@ -9,11 +9,102 @@ def number_format(numero):
         return "0,00"
     return "{:,.2f}".format(numero).replace(",", "X").replace(".", ",").replace("X", ".")
 
+def replacement_strings(template, replacements):
+    import re
+    if not template:
+        return ""
+    # Matching JS: .replace(/#([^#]+)#/g, ...)
+    return re.sub(r'#([^#]+)#', lambda m: str(replacements.get(m.group(1), "")), template)
+
+def build_graph_result(all_queries_result, chart_description):
+    try:
+        array_labels = []
+        array_data = []
+        
+        for query in chart_description['idsOfQueriesExecuted']:
+            query_ind = all_queries_result.get(query['idOfQuery'], [])
+            
+            for item in query_ind:
+                label = item.get('label')
+                array_labels.append(int(label) if isinstance(label, (int, float)) else str(label))
+                
+            if chart_description['type'] == 'line':
+                if isinstance(query['labelOfQuery'], str):
+                    array_data.append({
+                        "label": query['labelOfQuery'],
+                        "data": [float(a['value']) for a in query_ind],
+                        "fill": False,
+                        "borderColor": list(dict.fromkeys([a['color'] for a in query_ind])),
+                        "tension": 0.4
+                    })
+                else:
+                    # Handle dict labelOfQuery (classes)
+                    labels_map = {
+                        'class_1': 'Ausente',
+                        'class_2': 'Intermediário',
+                        'class_3': 'Severa'
+                    }
+                    for key_label_query, value_label_query in query['labelOfQuery'].items():
+                        key_label = labels_map.get(key_label_query)
+                        filtered = [a for a in query_ind if a.get('classe') == key_label]
+                        array_data.append({
+                            "label": value_label_query,
+                            "data": [float(a['value']) for a in filtered],
+                            "fill": False,
+                            "borderColor": list(dict.fromkeys([a['color'] for a in filtered])),
+                            "tension": 0.4
+                        })
+            elif chart_description['type'] in ('pie', 'doughnut'):
+                label = query['labelOfQuery'] if isinstance(query['labelOfQuery'], str) else query['idOfQuery']
+                array_data.append({
+                    "label": label,
+                    "data": [float(a['value']) for a in query_ind],
+                    "backgroundColor": list(dict.fromkeys([a['color'] for a in query_ind])),
+                    "hoverBackgroundColor": list(dict.fromkeys([a['color'] for a in query_ind])),
+                })
+            elif chart_description['type'] in ('bar', 'horizontalBar'):
+                if isinstance(query['labelOfQuery'], str):
+                    array_data.append({
+                        "label": query['labelOfQuery'],
+                        "data": [float(a['value']) for a in query_ind],
+                        "backgroundColor": list(dict.fromkeys([a['color'] for a in query_ind])),
+                    })
+                else:
+                    for key_label_query, value_label_query in query['labelOfQuery'].items():
+                        filtered = [a for a in query_ind if a.get('classe') == key_label_query]
+                        array_data.append({
+                            "label": value_label_query,
+                            "data": [float(a['value']) for a in filtered],
+                            "backgroundColor": list(dict.fromkeys([a.get('color') for a in filtered])),
+                        })
+                        
+        return {
+            "labels": list(dict.fromkeys(array_labels)),
+            "datasets": array_data
+        }
+    except Exception as e:
+        print(f"Build Graph Error: {e}")
+        return None
+
+def build_table_data(all_queries_result, chart_description):
+    try:
+        data_info = []
+        for query in chart_description['idsOfQueriesExecuted']:
+            query_ind = all_queries_result.get(query['idOfQuery'], [])
+            for i, item in enumerate(query_ind):
+                val = float(item['value'])
+                item['originalValue'] = val
+                item['index'] = f"{i + 1}º"
+                item['value'] = f"{number_format(val)} ha"
+            data_info = query_ind # Matching JS: dataInfo = [...queryInd]
+        return data_info
+    except Exception as e:
+        print(f"Build Table Error: {e}")
+        return None
+
 @router.get("/resumo", dependencies=[Depends(data_injector)])
-async def handle_resumo(request: Request, lang: str = 'pt-br', card_resume: str = ''):
+async def handle_resumo(request: Request, lang: str = 'pt', card_resume: str = ''):
     query_result = request.state.query_result
-    
-    # language_ob = lang_util.get_lang(lang).get('right_sidebar', {})
     
     if card_resume == 'region':
         area = query_result['region'][0]['area_region'] if query_result.get('region') else 0
@@ -39,7 +130,227 @@ async def handle_resumo(request: Request, lang: str = 'pt-br', card_resume: str 
         return {"data": "Invalid argument"}
 
 @router.get("/pastureGraph", dependencies=[Depends(data_injector)])
-async def handle_pasture_graph(request: Request, lang: str = 'pt-br'):
-    # This involves complex graph building logic from charts.js
-    # For now return the raw query results or a simplified version
-    return request.state.query_result
+async def handle_pasture_graph(request: Request, lang: str = 'pt', typeRegion: str = '', textRegion: str = ''):
+    lang_data = lang_util.get_lang(lang)
+    language_ob = lang_data.get('right_sidebar', {}) if lang_data else {}
+    
+    replacements = {
+        "typeRegionTranslate": language_ob.get('region_types', {}).get(typeRegion, typeRegion),
+        "textRegionTranslate": textRegion,
+    }
+    
+    pasture_card = language_ob.get("pastureGraph_card", {})
+    p_and_l = pasture_card.get("pastureAndLotacaoBovina", {})
+    p_qual = pasture_card.get("pastureQuality", {})
+    p_carb = pasture_card.get("carbon", {})
+
+    chart_result = [
+        {
+            "id": "pasture",
+            "idsOfQueriesExecuted": [
+                { "idOfQuery": 'pasture', "labelOfQuery": p_and_l.get('labelOfQuery', {}).get('pasture', 'pasture') },
+                { "idOfQuery": 'lotacao_bovina_regions', "labelOfQuery": p_and_l.get('labelOfQuery', {}).get('lotacao_bovina_regions', 'lotacao_bovina_regions') },
+            ],
+            "title": p_and_l.get('title', 'Pasture'),
+            "getText": lambda chart: replacement_strings(p_and_l.get('text', ''), replacements),
+            "type": 'line',
+            "options": { "legend": { "display": False } }
+        },
+        {
+            "id": "pasture_quality",
+            "idsOfQueriesExecuted": [
+                { "idOfQuery": 'pasture_quality', "labelOfQuery": p_qual.get('labelOfQuery', {}).get('pasture_quality', 'pasture_quality') },
+            ],
+            "title": p_qual.get('title', 'Quality'),
+            "getText": lambda res, q: replacement_strings(p_qual.get('text', ''), replacements),
+            "type": 'line',
+            "options": { "legend": { "display": False } }
+        },
+        {
+            "id": "carbono",
+            "idsOfQueriesExecuted": [
+                { "idOfQuery": 'pasture_carbon', "labelOfQuery": p_carb.get('labelOfQuery', {}).get('carbon', 'carbon') },
+            ],
+            "title": p_carb.get('title', 'Carbon'),
+            "getText": lambda chart: replacement_strings(p_carb.get('text', ''), replacements),
+            "type": 'line',
+            "options": { "legend": { "display": False } }
+        },
+    ]
+    
+    chart_final = []
+    for chart in chart_result:
+        chart['data'] = build_graph_result(request.state.query_result, chart)
+        if chart['data']:
+            chart['show'] = True
+            if chart['id'] == 'pasture_quality':
+                chart['text'] = chart['getText'](request.state.query_result, chart['idsOfQueriesExecuted'])
+            else:
+                chart['text'] = chart['getText'](chart)
+        else:
+            chart['data'] = {}
+            chart['show'] = False
+            chart['text'] = "erro."
+        
+        # Remove lambda before sending
+        chart.pop('getText', None)
+        chart_final.append(chart)
+        
+    return chart_final
+
+@router.get("/area2", dependencies=[Depends(data_injector)])
+async def handle_area2_data(request: Request, lang: str = 'pt', typeRegion: str = '', textRegion: str = '', year: int = 2021):
+    lang_data = lang_util.get_lang(lang)
+    language_ob = lang_data.get('right_sidebar', {}) if lang_data else {}
+    
+    replacements = {
+        "typeRegionTranslate": language_ob.get('region_types', {}).get(typeRegion, typeRegion),
+        "textRegionTranslate": textRegion,
+    }
+    
+    area2_card = language_ob.get("area2_card", {}).get("pastureQualityPerYear", {})
+
+    chart_result = [
+        {
+            "id": "pastureQualityPerYear",
+            "idsOfQueriesExecuted": [
+                { "idOfQuery": 'pasture_quality', "labelOfQuery": area2_card.get('labelOfQuery', {}).get('pasture_quality', 'pasture_quality') },
+            ],
+            "title": area2_card.get('title', 'Quality per Year'),
+            "getText": lambda res, q: self_get_text(res, q, area2_card, replacements, year),
+            "type": 'pie',
+            "options": { "plugins": { "legend": { "labels": { "color": '#495057' } } } }
+        }
+    ]
+    
+    def self_get_text(queries_result, query, card, reps, yr):
+        q_id = query[0]['idOfQuery']
+        area_pasture = sum(float(x['value']) for x in queries_result.get(q_id, []))
+        reps['areaPasture'] = number_format(area_pasture)
+        reps['yearTranslate'] = yr
+        return replacement_strings(card.get('text', ''), reps)
+
+    chart_final = []
+    for chart in chart_result:
+        chart['data'] = build_graph_result(request.state.query_result, chart)
+        if chart['data']:
+            chart['show'] = True
+            chart['text'] = self_get_text(request.state.query_result, chart['idsOfQueriesExecuted'], area2_card, replacements, year)
+        else:
+            chart['data'] = {}
+            chart['show'] = False
+            chart['text'] = "erro."
+        
+        chart.pop('getText', None)
+        chart_final.append(chart)
+        
+    return chart_final
+
+@router.get("/area3", dependencies=[Depends(data_injector)])
+async def handle_area3_data(request: Request, lang: str = 'pt', typeRegion: str = '', textRegion: str = ''):
+    lang_data = lang_util.get_lang(lang)
+    language_ob = lang_data.get('right_sidebar', {}) if lang_data else {}
+    
+    replacements = {
+        "typeRegionTranslate": language_ob.get('region_types', {}).get(typeRegion, typeRegion),
+        "textRegionTranslate": textRegion,
+    }
+    
+    area3_card = language_ob.get("area3_card", {}).get("pastureRankingStates", {})
+
+    chart_result = [
+        {
+            "id": "pastureRankings",
+            "idsOfQueriesExecuted": [
+                { "idOfQuery": 'estados', "labelOfQuery": area3_card.get('labelOfQuery', {}).get('estados', 'estados') },
+            ],
+            "title": area3_card.get('title', 'Rankings'),
+            "getText": lambda chart: replacement_strings(area3_card.get('text', ''), replacements),
+            "type": 'bar',
+            "options": { "indexAxis": 'y', "plugins": { "legend": { "labels": { "color": '#495057' } } }, "scales": { "x": { "ticks": { "color": '#495057' }, "grid": { "color": '#ebedef' } }, "y": { "ticks": { "color": '#495057' }, "grid": { "color": '#ebedef' } } } }
+        }
+    ]
+    
+    chart_final = []
+    for chart in chart_result:
+        chart['data'] = build_graph_result(request.state.query_result, chart)
+        if chart['data']:
+            chart['show'] = True
+            chart['text'] = replacement_strings(area3_card.get('text', ''), replacements)
+        else:
+            chart['data'] = {}
+            chart['show'] = False
+            chart['text'] = "erro."
+        
+        chart.pop('getText', None)
+        chart_final.append(chart)
+        
+    return chart_final
+
+@router.get("/areatable", dependencies=[Depends(data_injector)])
+async def handle_table_rankings(request: Request, lang: str = 'pt', typeRegion: str = '', valueRegion: str = '', textRegion: str = ''):
+    lang_data = lang_util.get_lang(lang)
+    language_ob = lang_data.get('right_sidebar', {}) if lang_data else {}
+    
+    replacements = {
+        "typeRegionTranslate": language_ob.get('region_types', {}).get(typeRegion, typeRegion),
+        "textRegionTranslate": textRegion,
+    }
+    
+    area_table_card = language_ob.get("area_table_card", {})
+    
+    def get_fallback(card_id, default_title, default_cols):
+        card = area_table_card.get(card_id, {})
+        return {
+            "title": card.get("title", default_title),
+            "columnsTitle": card.get("columnsTitle", default_cols),
+            "labelOfQuery": card.get("labelOfQuery", {}),
+            "text": card.get("text", "")
+        }
+
+    c_city = get_fallback("pastureRankingsCities", "Cities", "#?City?UF?Value")
+    c_state = get_fallback("pastureRankingsStates", "States", "#?State?Value")
+    c_biome = get_fallback("pastureRankingsBiomes", "Biomes", "#?Biome?Value")
+
+    tables_descriptor = [
+        {
+            "id": "pastureRankingsCities",
+            "idsOfQueriesExecuted": [ { "idOfQuery": 'municipios', "labelOfQuery": c_city['labelOfQuery'].get('municipios', 'municipios') } ],
+            "title": c_city['title'],
+            "columnsTitle": c_city['columnsTitle'],
+            "getText": lambda chart: replacement_strings(c_city['text'], replacements),
+            "rows_labels": "index?city?uf?value",
+        },
+        {
+            "id": "pastureRankingsStates",
+            "idsOfQueriesExecuted": [ { "idOfQuery": 'estados', "labelOfQuery": c_state['labelOfQuery'].get('estados', 'estados') } ],
+            "title": c_state['title'],
+            "columnsTitle": c_state['columnsTitle'],
+            "getText": lambda chart: replacement_strings(c_state['text'], replacements),
+            "rows_labels": "index?uf?value",
+        },
+        {
+            "id": "pastureRankingsBiomes",
+            "idsOfQueriesExecuted": [ { "idOfQuery": 'biomas', "labelOfQuery": c_biome['labelOfQuery'].get('biomas', 'biomas') } ],
+            "title": c_biome['title'],
+            "columnsTitle": c_biome['columnsTitle'],
+            "getText": lambda chart: replacement_strings(c_biome['text'], replacements),
+            "rows_labels": "index?biome?value",
+        }
+    ]
+    
+    result_final = []
+    for res in tables_descriptor:
+        res['data'] = build_table_data(request.state.query_result, res)
+        if res['data']:
+            res['show'] = True
+            res['text'] = replacement_strings(area_table_card.get(res['id'], {}).get('text', ''), replacements)
+        else:
+            res['data'] = {}
+            res['show'] = False
+            res['text'] = "erro."
+            
+        res.pop('getText', None)
+        result_final.append(res)
+        
+    return result_final

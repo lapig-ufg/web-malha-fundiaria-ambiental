@@ -6,9 +6,26 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from core.config import settings
 
+from db.session import db
 from api.routes import charts, map, proxy, contact, http
 
 app = FastAPI(title=settings.APP_NAME)
+
+@app.on_event("startup")
+async def startup():
+    await db.connect()
+
+@app.on_event("shutdown")
+async def shutdown():
+    await db.disconnect()
+
+@app.middleware("http")
+async def add_process_time_header(request, call_next):
+    # Initialize state to avoid AttributeErrors if dependencies fail
+    if not hasattr(request.state, "query_result"):
+        request.state.query_result = {}
+    response = await call_next(request)
+    return response
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,17 +36,17 @@ app.add_middleware(
 )
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
-app.include_router(map.router)
-app.include_router(charts.router)
-app.include_router(proxy.router)
-app.include_router(contact.router)
-app.include_router(http.router)
+app.include_router(map.router, prefix="/service/map")
+app.include_router(charts.router, prefix="/service/charts")
+app.include_router(proxy.router, prefix="/service/proxy")
+app.include_router(contact.router, prefix="/service/contact")
+app.include_router(http.router, prefix="/service/http")
 
 # Import upload and download, but catch if they aren't fully implemented
 try:
     from api.routes import upload, download
-    app.include_router(upload.router)
-    app.include_router(download.router)
+    app.include_router(upload.router, prefix="/service/upload")
+    app.include_router(download.router, prefix="/service/download")
 except ImportError:
     pass
 
