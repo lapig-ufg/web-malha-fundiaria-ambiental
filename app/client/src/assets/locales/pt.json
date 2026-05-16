@@ -78,6 +78,26 @@
       "s3_file_not_found": "Por favor tente mais tarde, estamos processando este arquivo."
     }
   },
+  "descriptor_labels": {
+    "basemaps": {
+      "labelLayer": "Mapas de Fundo"
+    },
+    "limits": {
+      "labelLayer": "Limites Territoriais"
+    },
+    "groups": {
+      "pasture_general": { "labelGroup": "Pastagem" },
+      "mapa_referecia": { "labelGroup": "Mapa de Referência" },
+      "pasture_carbon_general": { "labelGroup": "Carbono em Pastagens" },
+      "campo": { "labelGroup": "Campo" },
+      "inspecao_visual": { "labelGroup": "Inspeção Visual" },
+      "agropecuaria": { "labelGroup": "Agropecuária" },
+      "areas_declaradas": { "labelGroup": "Áreas Declaradas" },
+      "infraestrutura": { "labelGroup": "Infraestrutura" },
+      "areas_especiais": { "labelGroup": "Áreas Especiais" },
+      "imagens": { "labelGroup": "Imagens" }
+    }
+  },
   "map": {
     "coordinates": "Coordenadas",
     "find_point": "Localizar ponto",
@@ -100,6 +120,14 @@
   },
   "right_sidebar": {
     "title": "Região",
+    "region_types": {
+      "country": "Brasil",
+      "city": "Município",
+      "state": "Estado",
+      "region": "Região",
+      "biome": "Bioma",
+      "fronteira": "Fronteira"
+    },
     "tabs": {
       "area": "Área",
       "charts": "Gráficos"

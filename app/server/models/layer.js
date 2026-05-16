@@ -25,14 +25,22 @@ module.exports = class Layer {
         }
 
         if (this.idLayer == 'limits' || this.idLayer == 'basemaps') {
-            this.labelLayer = this.languageOb.descriptor_labels[this.idLayer].labelLayer;
+            try {
+                this.labelLayer = this.languageOb.descriptor_labels[this.idLayer].labelLayer;
+            } catch (e) {
+                this.labelLayer = params.labelLayer || this.idLayer;
+            }
         }
         else {
-            if (params.labelLayer.toLowerCase() == "translate".toLowerCase()) {
-                this.labelLayer = this.languageOb.descriptor_labels.groups[this.idGroup].layers[this.idLayer].labelLayer;
+            if (params.labelLayer && params.labelLayer.toLowerCase() == "translate".toLowerCase()) {
+                try {
+                    this.labelLayer = this.languageOb.descriptor_labels.groups[this.idGroup].layers[this.idLayer].labelLayer;
+                } catch (e) {
+                    this.labelLayer = this.idLayer;
+                }
             }
             else {
-                this.labelLayer = params.labelLayer
+                this.labelLayer = params.labelLayer || this.idLayer;
             }
         }
         this.visible = params.hasOwnProperty('visible') ? params.visible : false;

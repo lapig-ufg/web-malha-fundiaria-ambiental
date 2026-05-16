@@ -1,6 +1,6 @@
 {
-    "/service/*": {
-        "target": "http://localhost:3000",
+    "/service": {
+        "target": "http://127.0.0.1:3000",
         "secure": false,
         "logLevel": "debug",
         "changeOrigin": true

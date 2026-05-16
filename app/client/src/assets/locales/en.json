@@ -78,6 +78,26 @@
       "s3_file_not_found": "Please try again later, we are processing this file."
     }
   },
+  "descriptor_labels": {
+    "basemaps": {
+      "labelLayer": "Base Maps"
+    },
+    "limits": {
+      "labelLayer": "Territorial Limits"
+    },
+    "groups": {
+      "pasture_general": { "labelGroup": "Pasture" },
+      "mapa_referecia": { "labelGroup": "Reference Map" },
+      "pasture_carbon_general": { "labelGroup": "Pasture Carbon" },
+      "campo": { "labelGroup": "Campo" },
+      "inspecao_visual": { "labelGroup": "Visual Inspection" },
+      "agropecuaria": { "labelGroup": "Agriculture" },
+      "areas_declaradas": { "labelGroup": "Declared Areas" },
+      "infraestrutura": { "labelGroup": "Infrastructure" },
+      "areas_especiais": { "labelGroup": "Special Areas" },
+      "imagens": { "labelGroup": "Images" }
+    }
+  },
   "map": {
     "coordinates": "Coordinates",
     "find_point": "Locate point",
@@ -100,6 +120,14 @@
   },
   "right_sidebar": {
     "title": "Region",
+    "region_types": {
+      "country": "Brazil",
+      "city": "Municipality",
+      "state": "State",
+      "region": "Region",
+      "biome": "Biome",
+      "fronteira": "Frontier"
+    },
     "tabs": {
       "area": "Area",
       "charts": "Charts"

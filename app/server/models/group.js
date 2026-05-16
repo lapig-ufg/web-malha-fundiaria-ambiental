@@ -16,7 +16,15 @@ module.exports = class Group {
         try {   
             this.idGroup = params.idGroup ? params.idGroup : null
 
-            this.labelGroup = params.labelGroup == "translate" ? this.languageOb.descriptor_labels.groups[this.idGroup].labelGroup : params.labelGroup;
+            if (params.labelGroup == "translate") {
+                try {
+                    this.labelGroup = this.languageOb.descriptor_labels.groups[this.idGroup].labelGroup;
+                } catch (e) {
+                    this.labelGroup = this.idGroup;
+                }
+            } else {
+                this.labelGroup = params.labelGroup;
+            }
 
             this.groupExpanded = params.hasOwnProperty('groupExpanded') ? params.groupExpanded : false;
 

@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     APP_NAME: str = "Malha Fundiária Ambiental"
     NODE_ENV: str = "dev"
     
-    CLIENT_DIR: str = "/../client/dist/plataform-base/"
+    CLIENT_DIR: str = "../client/dist/malha-fundiaria-ambiental/"
     LANGUAGE_DIR: str = "../client/src/assets/locales/"
     LANG_DIR: str = "/lang"
     LOG_DIR: str = "/log/"
@@ -31,6 +31,15 @@ class Settings(BaseSettings):
     PORT: int = 3000
     OWS_HOST: str = ""
     OWS_API: str = ""
+    
+    # Auth (Keycloak)
+    AUTH_URL: Optional[str] = None
+    AUTH_REALM: Optional[str] = None
+    AUTH_ID: Optional[str] = None
+    AUTH_SECRET: Optional[str] = None
+
+    # Security
+    RECAPTCHA_KEY: Optional[str] = None
     
     APP_PRODUCAO: str = ""
     

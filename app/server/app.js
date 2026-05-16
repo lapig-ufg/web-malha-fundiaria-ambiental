@@ -21,18 +21,16 @@ load('config.js', { 'verbose': false })
     .into(app);
 
 app.database.client.init(function () {
-    app.use(cookie);
 
-    app.use((req, res, next) => {
-        const options = {
-            "origin": "*",
-            "methods": "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-            "preflightContinue": false,
-            "optionsSuccessStatus": 204
-        }
-        app.use(cors(options));
-        next();
-    });
+    const corsOptions = {
+        "origin": "*",
+        "methods": "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+        "preflightContinue": false,
+        "optionsSuccessStatus": 204
+    }
+    app.use(cors(corsOptions));
+
+    app.use(cookie);
 
     app.use(compression());
     app.use(express.static(app.config.clientDir));

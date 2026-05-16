@@ -34,7 +34,7 @@ except ImportError:
     pass
 
 # Mount angular client static files
-client_dir = os.path.join(settings.app_root, "../client/dist/malha-fundiaria-ambiental")
+client_dir = os.path.join(settings.app_root, settings.CLIENT_DIR)
 
 if os.path.exists(client_dir):
     app.mount("/assets", StaticFiles(directory=os.path.join(client_dir, "assets")), name="assets")
