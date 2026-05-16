@@ -61,6 +61,8 @@ app.database.client.init(function () {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json({ limit: '1gb' }));
 
+    app.use(app.middleware.logger);
+
     app.use(function (error, request, response, next) {
         console.log('ServerError: ', error.stack);
         next();
