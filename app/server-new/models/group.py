@@ -1,32 +1,35 @@
-from utils.language import language as lang_util
 from models.layer import Layer
 from utils.auxiliar import remove_null_properties
 
 class Group:
-    def __init__(self, language: str, params: dict, layertypes: dict):
-        self.language_ob = lang_util.get_lang(language)
+    def __init__(self, language_ob: dict, params: dict, layertypes: dict):
+        self.language_ob = language_ob
         self.id_group = params.get('idGroup')
         
         try:
-            if params.get('labelGroup') == "translate":
+            label_group_param = params.get('labelGroup')
+            if label_group_param == "translate":
+                # Path: descriptor_labels.groups.[id_group].labelGroup
                 self.label_group = self.language_ob.get('descriptor_labels', {}).get('groups', {}).get(self.id_group, {}).get('labelGroup')
+                
+                # Fallback to idGroup if translation is missing
                 if not self.label_group:
                     self.label_group = self.id_group
             else:
-                self.label_group = params.get('labelGroup')
+                self.label_group = label_group_param if label_group_param else self.id_group
                 
             self.group_expanded = params.get('groupExpanded', False)
             self.layers = []
             if 'layers' in params:
-                self.layers = self.get_layers_array(language, params['layers'], layertypes)
+                self.layers = self.get_layers_array(params['layers'], layertypes)
         except Exception as e:
             print(f"Error in Group ID {self.id_group}: {e}")
 
-    def get_layers_array(self, language, layers, layertypes):
+    def get_layers_array(self, layers, layertypes):
         arr = []
         try:
             for layer_params in layers:
-                layer_instance = Layer(language, layer_params, self.id_group, layertypes)
+                layer_instance = Layer(self.language_ob, layer_params, self.id_group, layertypes)
                 arr.append(layer_instance.get_layer_instance())
         except Exception as e:
             print(f"Error while creating group object: {e}")
