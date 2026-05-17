@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 class HttpGetRequest(BaseModel):
     url: str
 
-@router.post("/service/http/get")
+@router.post("/get")
 async def http_get(request: HttpGetRequest):
     try:
         async with httpx.AsyncClient() as client:

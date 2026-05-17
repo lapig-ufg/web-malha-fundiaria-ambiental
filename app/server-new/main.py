@@ -38,7 +38,7 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 app.include_router(map.router, prefix="/service/map")
 app.include_router(charts.router, prefix="/service/charts")
-app.include_router(proxy.router, prefix="/service/proxy")
+app.include_router(proxy.router)
 app.include_router(contact.router, prefix="/service/contact")
 app.include_router(http.router, prefix="/service/http")
 

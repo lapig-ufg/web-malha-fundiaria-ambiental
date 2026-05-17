@@ -5,7 +5,7 @@ from typing import Dict
 from core.config import settings
 from api.dependencies import get_keycloak_token, verify_recaptcha
 
-router = APIRouter(prefix="/service/upload", tags=["upload"])
+router = APIRouter(tags=["upload"])
 
 @router.post("/savegeom", dependencies=[Depends(verify_recaptcha)])
 async def save_drawed_geom(

@@ -9,7 +9,7 @@ from typing import Dict, Any, Optional
 
 from core.config import settings
 
-router = APIRouter(prefix="/service", tags=["download"])
+router = APIRouter(tags=["download"])
 
 class DownloadRequest(BaseModel):
     layer: Dict[str, Any]
@@ -48,7 +48,7 @@ async def request_file_from_mapserver(url: str, path_file: str, layer_name: str,
                 os.remove(f"{path_file}.tmp")
             raise Exception(f"Error fetching from mapserver: {e}")
 
-@router.post("/download")
+@router.post("/")
 async def download_geo_file(request: DownloadRequest, background_tasks: BackgroundTasks):
     layer = request.layer
     region = request.region

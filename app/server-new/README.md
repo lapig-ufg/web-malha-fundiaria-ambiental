@@ -57,10 +57,10 @@ The server will be available at `http://localhost:3000` (or the port defined in 
 ## Project Structure
 
 - `main.py`: Application entry point and route registration.
-- `api/routes/`: Modularized API endpoints (map, charts, upload, download, etc.).
+- `api/routes/`: Modularized API endpoints. See [api/routes/README.md](api/routes/README.md) for routing architecture and parity guidelines.
 - `core/`: Core configurations and settings management.
 - `db/`: Database connection logic and SQL query templates.
-- `models/`: Pydantic models and data structures.
+- `models/`: Pydantic models and data structures. See [models/README.md](models/README.md) for OWS API schemas and descriptor documentation.
 - `utils/`: Utility functions and helper classes.
 
 ## Features

@@ -63,6 +63,6 @@ async def get_search(request: Request):
             
     return {"search": result}
 
-@router.get("/host")
+@router.get("/getowsdomain")
 async def get_host():
     return [f"{settings.OWS_HOST}/ows"]
