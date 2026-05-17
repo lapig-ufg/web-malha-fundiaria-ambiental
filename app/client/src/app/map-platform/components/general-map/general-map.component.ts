@@ -1373,6 +1373,11 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
         this.wfsCard.nativeElement.style.left = '-50px';
 
         const container = document.getElementById('popup');
+
+        if (this.popupOverlay) {
+          map.removeOverlay(this.popupOverlay);
+        }
+
         // @ts-ignore
         this.popupOverlay = new Overlay({
           id: 'popup-info',

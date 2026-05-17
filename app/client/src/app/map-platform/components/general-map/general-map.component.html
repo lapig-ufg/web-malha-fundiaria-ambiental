@@ -1,20 +1,54 @@
 <section id="map-platform">
   <div class="map-container">
-    <app-ol-map
-      (onMapClick)="onDisplayFeatureInfo($event)"
-    >
-      <div #wfsCard class="ol-popup wfs-card">
-        <div class="popup-content">
-          <div *ngIf="featureCollections.length > 0">
-            <div *ngFor="let featureCollection of featureCollections">
-              <div class="title-container">
-                <span class="title">
-                  {{ featureCollection.layerType.labelLayer }}
-                </span>
-                <span class="close-btn" (click)="closePopup()">
+    <app-ol-map>
+      <div
+        [hidden]="popupRegion.coordinate.length == 0"
+        #wfsCard
+        id="popup"
+        class="ol-popup wfs-card"
+      >
+        <div class="popup-header">
+          <h5>{{ "popup-info.title" | translate | uppercase }}</h5>
+          <i
+            id="popup-closer"
+            pTooltip="{{ 'popup-info.close' | translate }}"
+            (click)="closePopup()"
+            class="bx bx-x bx-lg"
+          ></i>
+        </div>
+        <div class="popup-body" *ngIf="featureCollections.length > 0">
+          <div
+            *ngFor="let featureCollection of featureCollections"
+            [class]="
+              featureCollection.expanded
+                ? 'legend-card legend-card-active'
+                : 'legend-card'
+            "
+          >
+            <div class="legend-card-content">
+              <div
+                (click)="
+                  featureCollection.expanded = !featureCollection.expanded;
+                  $event.stopPropagation()
+                "
+                class="abstract"
+              >
+                <span>
+                  <div class="legend-label">
+                    {{ featureCollection.layerType.viewValueType }}
+                  </div>
                   <i
-                    class="bx bx-x"
-                    style="cursor: pointer; font-size: x-large"
+                    tooltipPosition="left"
+                    [pTooltip]="
+                      featureCollection.expanded
+                        ? ('minimize' | translate)
+                        : ('maximize' | translate)
+                    "
+                    [class]="
+                      featureCollection.expanded
+                        ? 'bx bxs-up-arrow-circle'
+                        : 'bx bxs-down-arrow-circle'
+                    "
                   ></i>
                 </span>
               </div>
