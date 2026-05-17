@@ -21,20 +21,33 @@ def build_graph_result(all_queries_result, chart_description):
         array_labels = []
         array_data = []
         
+        # Collect all unique labels first to ensure consistent X-axis
+        all_labels = set()
+        for query in chart_description['idsOfQueriesExecuted']:
+            query_ind = all_queries_result.get(query['idOfQuery'], [])
+            for item in query_ind:
+                label = item.get('label')
+                if label is not None:
+                    all_labels.add(int(label) if isinstance(label, (int, float)) else str(label))
+        
+        sorted_labels = sorted(list(all_labels))
+        
         for query in chart_description['idsOfQueriesExecuted']:
             query_ind = all_queries_result.get(query['idOfQuery'], [])
             
-            for item in query_ind:
-                label = item.get('label')
-                array_labels.append(int(label) if isinstance(label, (int, float)) else str(label))
-                
             if chart_description['type'] == 'line':
                 if isinstance(query['labelOfQuery'], str):
+                    # Align data with sorted_labels
+                    data_map = { (int(i['label']) if isinstance(i['label'], (int, float)) else str(i['label'])): float(i['value']) for i in query_ind if i.get('label') is not None }
+                    data_points = [data_map.get(label, 0) for label in sorted_labels]
+                    
+                    color = query_ind[0].get('color', '#000') if query_ind else '#000'
+                    
                     array_data.append({
                         "label": query['labelOfQuery'],
-                        "data": [float(a['value']) for a in query_ind],
+                        "data": data_points,
                         "fill": False,
-                        "borderColor": list(dict.fromkeys([a['color'] for a in query_ind])),
+                        "borderColor": color,
                         "tension": 0.4
                     })
                 else:
@@ -47,42 +60,74 @@ def build_graph_result(all_queries_result, chart_description):
                     for key_label_query, value_label_query in query['labelOfQuery'].items():
                         key_label = labels_map.get(key_label_query)
                         filtered = [a for a in query_ind if a.get('classe') == key_label]
+                        
+                        data_map = { (int(i['label']) if isinstance(i['label'], (int, float)) else str(i['label'])): float(i['value']) for i in filtered if i.get('label') is not None }
+                        data_points = [data_map.get(label, 0) for label in sorted_labels]
+                        
+                        color = filtered[0].get('color', '#000') if filtered else '#000'
+                        
                         array_data.append({
                             "label": value_label_query,
-                            "data": [float(a['value']) for a in filtered],
+                            "data": data_points,
                             "fill": False,
-                            "borderColor": list(dict.fromkeys([a['color'] for a in filtered])),
+                            "borderColor": color,
                             "tension": 0.4
                         })
             elif chart_description['type'] in ('pie', 'doughnut'):
                 label = query['labelOfQuery'] if isinstance(query['labelOfQuery'], str) else query['idOfQuery']
-                array_data.append({
-                    "label": label,
-                    "data": [float(a['value']) for a in query_ind],
-                    "backgroundColor": list(dict.fromkeys([a['color'] for a in query_ind])),
-                    "hoverBackgroundColor": list(dict.fromkeys([a['color'] for a in query_ind])),
-                })
+                
+                # For pie charts, labels come from the query items themselves
+                pie_labels = []
+                pie_data = []
+                pie_colors = []
+                
+                for item in query_ind:
+                    pie_labels.append(item.get('label'))
+                    pie_data.append(float(item.get('value', 0)))
+                    pie_colors.append(item.get('color', '#000'))
+                
+                # If this is the only query, we can return early or set up for multiple (unlikely for pie)
+                if len(chart_description['idsOfQueriesExecuted']) == 1:
+                    return {
+                        "labels": pie_labels,
+                        "datasets": [{
+                            "label": label,
+                            "data": pie_data,
+                            "backgroundColor": pie_colors,
+                            "hoverBackgroundColor": pie_colors
+                        }]
+                    }
             elif chart_description['type'] in ('bar', 'horizontalBar'):
                 if isinstance(query['labelOfQuery'], str):
+                    data_map = { (int(i['label']) if isinstance(i['label'], (int, float)) else str(i['label'])): float(i['value']) for i in query_ind if i.get('label') is not None }
+                    data_points = [data_map.get(label, 0) for label in sorted_labels]
+                    color = query_ind[0].get('color', '#000') if query_ind else '#000'
+
                     array_data.append({
                         "label": query['labelOfQuery'],
-                        "data": [float(a['value']) for a in query_ind],
-                        "backgroundColor": list(dict.fromkeys([a['color'] for a in query_ind])),
+                        "data": data_points,
+                        "backgroundColor": color,
                     })
                 else:
                     for key_label_query, value_label_query in query['labelOfQuery'].items():
                         filtered = [a for a in query_ind if a.get('classe') == key_label_query]
+                        data_map = { (int(i['label']) if isinstance(i['label'], (int, float)) else str(i['label'])): float(i['value']) for i in filtered if i.get('label') is not None }
+                        data_points = [data_map.get(label, 0) for label in sorted_labels]
+                        color = filtered[0].get('color', '#000') if filtered else '#000'
+
                         array_data.append({
                             "label": value_label_query,
-                            "data": [float(a['value']) for a in filtered],
-                            "backgroundColor": list(dict.fromkeys([a.get('color') for a in filtered])),
+                            "data": data_points,
+                            "backgroundColor": color,
                         })
                         
         return {
-            "labels": list(dict.fromkeys(array_labels)),
+            "labels": sorted_labels,
             "datasets": array_data
         }
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         print(f"Build Graph Error: {e}")
         return None
 
