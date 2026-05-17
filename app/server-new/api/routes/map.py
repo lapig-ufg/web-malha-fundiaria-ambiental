@@ -27,6 +27,45 @@ async def get_descriptor(lang: str = 'pt-br'):
     basemaps_types = await fetch_layer_types(lang, 'basemaps')
     limits_types = await fetch_layer_types(lang, 'limits')
     
+    # Hardcode new COG layer type
+    cog_layer = {
+        "valueType": "malha_fundiaria_cog",
+        "type": "layertype",
+        "origin": {
+            "sourceService": "internal",
+            "typeOfTMS": "cog",
+            "url": "https://s3.lapig.iesa.ufg.br/malha-fundiaria/brasil_malhafundiaria_ambiental_10m_v2_cog.tif",
+            "epsg": "ESRI:102033"
+        },
+        "typeLayer": "raster",
+        "viewValueType": "Malha Fundiária Ambiental",
+        "typeLabel": "COG",
+        "wfsMapCard": {
+            "show": False,
+            "attributes": []
+        },
+        "download": {
+            "csv": False,
+            "shp": False,
+            "gpkg": False,
+            "raster": True,
+            "layerTypeName": "malha_fundiaria_cog"
+        },
+        "regionFilter": False,
+        "visible": True,
+        "opacity": 1.0,
+        "metadata": [
+            {
+                "title": "Metadados",
+                "description": "Malha Fundiária Ambiental consolidada (COG 10m)."
+            }
+        ]
+    }
+    
+    # layertypes is a dict organized by thematic keys. Let's add ours.
+    if isinstance(layertypes, dict):
+        layertypes['malha_fundiaria'] = [cog_layer]
+    
     result = {
         "groups": descriptor_builder.get_layers(lang, layertypes),
         "basemaps": descriptor_builder.get_basemaps(lang, basemaps_types),

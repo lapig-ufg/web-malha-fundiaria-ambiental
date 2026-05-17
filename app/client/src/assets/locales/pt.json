@@ -225,6 +225,14 @@
             "labelLayer": "Mapbiomas Classes Raras (2019)"
           }
         }
+      },
+      "malha_fundiaria": {
+        "labelGroup": "Malha Fundiária",
+        "layers": {
+          "malha_fundiaria_cog": {
+            "labelLayer": "Malha Fundiária Ambiental"
+          }
+        }
       }
     }
   },

@@ -3,10 +3,18 @@ import { Injectable } from '@angular/core';
 import OlMap from 'ol/Map';
 import { Graticule, MapEvent, View } from 'ol';
 import * as Proj from 'ol/proj';
+import { register } from 'ol/proj/proj4';
+import proj4 from 'proj4';
 import { defaults as defaultInteractions, Interaction } from 'ol/interaction';
 import { Control, defaults as defaultControls } from 'ol/control';
 import BaseLayer from 'ol/layer/Base';
 import { Types } from 'ol/MapEventType';
+
+// Register Brazilian projections
+proj4.defs('EPSG:4618', '+proj=longlat +ellps=aust_SA +towgs84=-66.87,4.37,-38.52,0,0,0,0 +no_defs');
+proj4.defs('EPSG:4674', '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs');
+proj4.defs('ESRI:102033', '+proj=aea +lat_1=-5 +lat_2=-42 +lat_0=-32 +lon_0=-60 +x_0=0 +y_0=0 +ellps=aust_SA +units=m +no_defs');
+register(proj4);
 
 const ZOOM_LIMIT: number = 9;
 const ZOOM_DEFAULT: number = 4.6;

@@ -10,6 +10,7 @@ class DescriptorBuilder:
 
     def get_groups_order(self):
         return [
+            "malha_fundiaria",
             "pasture",
             "campo",
             "inspecao_visual",

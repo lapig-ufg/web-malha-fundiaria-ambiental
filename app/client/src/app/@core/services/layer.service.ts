@@ -13,7 +13,10 @@ import { DescriptorType } from '@core/interfaces';
  * OpenLayers imports.
  */
 import { WMTS, XYZ } from 'ol/source';
+import GeoTIFF from 'ol/source/GeoTIFF';
 import TileLayer from 'ol/layer/Tile';
+import WebGLTileLayer from 'ol/layer/WebGLTile';
+import BaseLayer from 'ol/layer/Base';
 
 import { MapService, ZOOM_LIMIT } from './map.service';
 import { environment } from 'src/environments/environment';
@@ -40,15 +43,87 @@ class LayerService {
     private regionFilterService: RegionFilterService
   ) {}
 
-  public createLayer(descriptorType: DescriptorType): Promise<TileLayer<any>> | null {
+  public createLayer(descriptorType: DescriptorType): Promise<BaseLayer> | null {
     switch (descriptorType.origin.typeOfTMS) {
       case 'wmts':
         return this.createTileLayerWMTS(descriptorType);
       case 'xyz':
         return this.createTileLayerXYZ(descriptorType);
+      case 'cog':
+        return this.createWebGLTileLayerCOG(descriptorType);
       default:
         throw new Error(`Unsupported TMS type: ${descriptorType.origin.typeOfTMS}`);
     }
+  }
+
+  private createWebGLTileLayerCOG(descriptorType: DescriptorType): Promise<WebGLTileLayer> {
+    const properties = {
+      key: descriptorType.valueType,
+      label: descriptorType.viewValueType,
+      descriptorType: descriptorType,
+      type: descriptorType.type,
+      visible: descriptorType.visible,
+    };
+
+    const source = new GeoTIFF({
+      normalize: false,
+      interpolate: false,
+      loadMissingProjection: true,
+      wrapX: true,
+      sources: [
+        {
+          url: descriptorType.origin.url!,
+        },
+      ],
+    });
+
+    source.on('change', () => {
+      if (source.getState() === 'error') {
+        console.error(`GeoTIFF source error for ${descriptorType.valueType}:`, source.getError());
+      }
+    });
+
+    // We use the verified case + palette style from our isolation test.
+    const layer = new WebGLTileLayer({
+      properties: properties,
+      source: source,
+      visible: descriptorType.visible,
+      opacity: descriptorType.opacity,
+      style: {
+        color: [
+          'case',
+          ['==', ['band', 1], 0], [0, 0, 0, 0], // Transparent for value 0
+          ['palette', ['band', 1], [
+            [0, 0, 0, 0],       // Index 0
+            [0, 0, 205],       // 1: Massa d'água
+            [108, 116, 126],   // 2: Malha Urbana
+            [131, 61, 201],    // 3: TI Homologada
+            [100, 239, 239],   // 4: UC Proteção Integral
+            [205, 115, 160],   // 5: Área Militar
+            [253, 174, 97],    // 6: Imóvel Privado
+            [168, 225, 110],   // 7: Assentamento
+            [23, 175, 5],      // 8: Glebas Públicas - FPND
+            [239, 239, 77],    // 9: UC Uso Sustentável
+            [220, 16, 16],     // 10: Glebas Públicas
+            [69, 135, 202],    // 11: Quilombola Declarado
+            [51, 51, 230],     // 12: TI Não Homologada
+            [68, 206, 68],     // 13: Quilombola Não Declarado
+            [207, 60, 207],    // 14: CAR sem sobreposição
+            [255, 99, 106],    // 15: CAR com sobreposição
+            [0, 0, 0, 0],      // 16
+            [0, 0, 0, 0],      // 17
+            [0, 0, 0, 0],      // 18
+            [0, 0, 0, 0],      // 19
+            [230, 233, 180],   // 20: Área de Preservação Permanente
+            [30, 87, 13]       // 21: Reserva Legal
+          ]]
+        ]
+      }
+    });
+
+    return new Promise<WebGLTileLayer>((resolve) => {
+      resolve(layer);
+    });
   }
 
   // TODO: Implement this method.

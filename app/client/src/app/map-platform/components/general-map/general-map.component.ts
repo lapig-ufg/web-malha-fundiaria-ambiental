@@ -19,6 +19,7 @@ import { PrimeNGConfig, SelectItem } from 'primeng/api';
  * OpenLayers imports.
  */
 import Map from 'ol/Map';
+import BaseLayer from 'ol/layer/Base';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
 import CircleStyle from 'ol/style/Circle';
@@ -93,7 +94,6 @@ import { Subscription } from 'rxjs';
  */
 import { OlMapComponent } from '@core/components/ol-map/ol-map.component';
 import { LayerService } from '@core/services/layer.service';
-import BaseLayer from 'ol/layer/Base';
 import { UserInfoComponent } from '@core/components/user-info-dialog/user-info-dialog.component';
 import { SwipeToolComponent } from './swipe-tool/swipe-tool.component';
 import { DrawAreaComponent } from './draw_area/draw_area.component';
@@ -552,7 +552,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
         layer.types.forEach((type: DescriptorType) => {
           this.layerService
             .createLayer(type)
-            ?.then((tileLayer: TileLayer<any>) => {
+            ?.then((tileLayer: BaseLayer) => {
               this.mapService.addLayer(tileLayer);
             });
         });
@@ -565,7 +565,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
       limit.types.forEach((type: DescriptorType) => {
         this.layerService
           .createLayer(type)
-          ?.then((tileLayer: TileLayer<any>) => {
+          ?.then((tileLayer: BaseLayer) => {
             this.mapService.addLayer(tileLayer);
           });
       });
