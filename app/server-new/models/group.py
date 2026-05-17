@@ -10,6 +10,8 @@ class Group:
         try:
             if params.get('labelGroup') == "translate":
                 self.label_group = self.language_ob.get('descriptor_labels', {}).get('groups', {}).get(self.id_group, {}).get('labelGroup')
+                if not self.label_group:
+                    self.label_group = self.id_group
             else:
                 self.label_group = params.get('labelGroup')
                 

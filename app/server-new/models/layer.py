@@ -13,12 +13,24 @@ class Layer:
             self.layer_types = self.get_layer_types_array(params['types'], all_layers_t)
             
         if self.id_layer in ['limits', 'basemaps']:
-            self.label_layer = self.language_ob.get('descriptor_labels', {}).get(self.id_layer, {}).get('labelLayer')
+            try:
+                self.label_layer = self.language_ob.get('descriptor_labels', {}).get(self.id_layer, {}).get('labelLayer')
+            except Exception:
+                self.label_layer = params.get('labelLayer')
+            
+            if not self.label_layer or self.label_layer == 'translate':
+                self.label_layer = self.id_layer
         else:
             if params.get('labelLayer', '').lower() == "translate":
-                self.label_layer = self.language_ob.get('descriptor_labels', {}).get('groups', {}).get(self.id_group, {}).get('layers', {}).get(self.id_layer, {}).get('labelLayer')
+                try:
+                    self.label_layer = self.language_ob.get('descriptor_labels', {}).get('groups', {}).get(self.id_group, {}).get('layers', {}).get(self.id_layer, {}).get('labelLayer')
+                except Exception:
+                    self.label_layer = self.id_layer
+                
+                if not self.label_layer:
+                    self.label_layer = self.id_layer
             else:
-                self.label_layer = params.get('labelLayer')
+                self.label_layer = params.get('labelLayer', self.id_layer)
         
         self.visible = params.get('visible', False)
         self.selected_type = params.get('selectedType')

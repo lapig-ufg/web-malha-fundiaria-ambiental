@@ -16,7 +16,7 @@ class DescriptorBuilder:
             "areas_declaradas",
             "infraestrutura",
             "areas_especiais",
-            "images",
+            "imagens",
         ]
 
     def get_layers(self, language, layertypes):
