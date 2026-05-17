@@ -1,0 +1,16 @@
+[
+  {
+    "idGroup": "malha_fundiaria",
+    "labelGroup": "translate",
+    "groupExpanded": true,
+    "layers": [
+      {
+        "idLayer": "malha_fundiaria_cog",
+        "labelLayer": "translate",
+        "visible": true,
+        "selectedType": "malha_fundiaria_cog",
+        "types": ["malha_fundiaria_cog"]
+      }
+    ]
+  }
+]

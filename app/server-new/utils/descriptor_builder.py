@@ -6,7 +6,7 @@ from models.layer import Layer
 
 class DescriptorBuilder:
     def __init__(self, app_path: str):
-        self.descriptor_path = os.path.join(app_path, "../server/descriptor")
+        self.descriptor_path = os.path.join(app_path, "descriptor")
 
     def get_groups_order(self):
         return [

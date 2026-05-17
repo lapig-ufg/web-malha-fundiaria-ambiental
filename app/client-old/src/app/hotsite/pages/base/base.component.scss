@@ -1,0 +1,43 @@
+.copyright-footer img {
+  border-radius: 15px;
+  margin: 15px;
+  max-width: 70%;
+  background: #ffffff26;;
+  padding: 20px;
+  /*filter: grayscale(100%);*/
+}
+
+.navbar-brand img {
+  height: 2em;
+}
+
+.diferencial{
+  max-width: calc(100% - 16%);
+  padding: 40px;
+  background: rgb(255 255 255 / 10%);
+  border-radius: 15px;
+  display: block;
+  margin: 0 auto;
+}
+
+.copyright-container {
+  border-radius: 10px;
+  background-color: #ffffff;
+  margin: auto;
+  text-align: center;
+  padding: 10px;
+  width: 45%;
+}
+
+.copyright-container img {
+  filter: contrast(200%);
+  filter: brightness(120%);
+  filter: saturate(200%);
+  height: 70px;
+  padding: 10px;
+}
+
+.text-center {
+  text-align: center;
+  padding: 15px;
+}

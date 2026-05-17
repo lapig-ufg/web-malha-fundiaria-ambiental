@@ -1,0 +1,39 @@
+<app-site-base>
+  <!-- inner banner -->
+  <section class="metodos-banner">
+    <div class="w3l-breadcrumb py-5">
+      <div class="container py-xl-5 py-md-4 mt-5">
+        <h4 class="inner-text-title font-weight-bold mb-sm-2">{{'hotsite.methods.page_title' | translate}} </h4>
+        <ul class="breadcrumbs-custom-path">
+          <li><a href="/">Home</a></li>
+          <li class="active"><i class='bx bx-chevron-right'></i>{{'hotsite.base.header.menu.methods' | translate}}</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- //inner banner -->
+  <div class="service-section py-5">
+    <div class="container py-md-5 py-4">
+      <div class="row align-items-center mb-5">
+        <div class="col-md-6 section-heading">
+          <h3 class="title-style-2">{{'hotsite.methods.title' | translate}}</h3>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div *ngFor="let methodology of methodologies" class="col-lg-4 col-md-6 item">
+          <div class="card">
+            <a target="_blank" [href]="methodology.file">
+              <div class="card-header p-0 position-relative border-0">
+                <img class="d-block img-responsive" [src]="methodology.image" [alt]="methodology.title">
+              </div>
+              <div class="card-body service-details">
+                <div class="card-title"> {{ methodology.title }} </div>
+                <p [innerHTML]="methodology.description"></p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-site-base>
