@@ -34,6 +34,7 @@ class Layer:
         
         self.visible = params.get('visible', False)
         self.selected_type = params.get('selectedType')
+        self.min_zoom = params.get('minZoom')
         if not self.selected_type and self.layer_types:
             self.selected_type = self.layer_types[0].get('valueType')
 
@@ -52,6 +53,7 @@ class Layer:
             "labelLayer": self.label_layer,
             "visible": self.visible,
             "selectedType": self.selected_type,
+            "minZoom": self.min_zoom,
             "types": self.layer_types
         }
         return remove_null_properties(ob)

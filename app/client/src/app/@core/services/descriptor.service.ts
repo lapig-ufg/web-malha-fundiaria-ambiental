@@ -50,6 +50,10 @@ class DescriptorService {
     return this.descriptor$;
   }
 
+  public getDescriptorValue(): Descriptor | null {
+    return this.descriptor;
+  }
+
   private fetchDescriptor(lang: string): void {
     this.httpClient.get<any>(`${HTTP_URL}/descriptor?lang=${lang}`).subscribe({
       next: (descriptor: any) => {

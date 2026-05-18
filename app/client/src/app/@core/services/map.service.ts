@@ -125,10 +125,15 @@ class MapService {
   }
 
   public updateLayerSource(key: string, value: string[]): void {
-    let baseLayer = this.layers.find((baseLayer: BaseLayer) => baseLayer.get('key') === key);
+    let baseLayer: any = this.layers.find(
+      (baseLayer: BaseLayer) => baseLayer.get('key') === key
+    );
 
-    baseLayer?.get('source').setUrls(value);
-    baseLayer?.get('source').refresh();
+    const source = baseLayer?.getSource();
+    if (source && typeof source.setUrls === 'function') {
+      source.setUrls(value);
+      source.refresh();
+    }
   }
 
   public updateLayerZIndex(key: string, value: number): void {

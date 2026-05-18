@@ -95,6 +95,7 @@ export interface DescriptorLayer {
   labelLayer: string;
   visible: boolean;
   opacity?: number;
+  minZoom?: number;
   types: DescriptorType[];
   selectedType: string;
   selectedTypeObject?: DescriptorType;

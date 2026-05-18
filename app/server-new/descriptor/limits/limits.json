@@ -4,6 +4,7 @@
         "labelLayer": "translate",
         "visible": true,
         "selectedType": "estados",
+        "minZoom": 8,
         "types": [
             "estados",
             "municipios",

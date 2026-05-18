@@ -522,6 +522,23 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
 
       this.refreshLayersSource();
     }
+
+    this.refreshLayersVisibilityByZoom(zoom);
+  }
+
+  private refreshLayersVisibilityByZoom(zoom: number): void {
+    const descriptor = this.descriptorService.getDescriptorValue();
+    if (!descriptor) return;
+
+    descriptor.basemaps.forEach((basemap) =>
+      this.updateBasemapVisibility(basemap, zoom)
+    );
+    descriptor.groups.forEach((group) =>
+      group.layers.forEach((layer) => this.updateLayerVisibility(layer, zoom))
+    );
+    descriptor.limits.forEach((limit) =>
+      this.updateLimitVisibility(limit, zoom)
+    );
   }
 
   private initDescriptor(descriptor: Descriptor) {
@@ -532,6 +549,10 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
     this.initLayersSelected(descriptor.groups);
 
     this.action = this.updateDescriptor;
+
+    this.refreshLayersVisibilityByZoom(
+      this.mapService.map.getView().getZoom() || 0
+    );
   }
 
   private initBasemaps(basemaps: DescriptorLayer[]): void {
@@ -539,6 +560,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
       basemap.types.forEach((type: DescriptorType) => {
         this.bmaps.forEach((bmap: any) => {
           if (type.valueType === bmap.layer.get('key')) {
+            bmap.layer.set('descriptorType', type);
             this.mapService.addLayer(bmap.layer);
           }
         });
@@ -554,6 +576,10 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
             .createLayer(type)
             ?.then((tileLayer: BaseLayer) => {
               this.mapService.addLayer(tileLayer);
+              this.updateLayerVisibility(
+                layer,
+                this.mapService.map.getView().getZoom() || 0
+              );
             });
         });
       });
@@ -567,6 +593,10 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
           .createLayer(type)
           ?.then((tileLayer: BaseLayer) => {
             this.mapService.addLayer(tileLayer);
+            this.updateLimitVisibility(
+              limit,
+              this.mapService.map.getView().getZoom() || 0
+            );
           });
       });
     });
@@ -596,9 +626,9 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
 
     switch (dirty) {
       case DirtyType.VISIBILITY:
-        this.mapService.updateLayerVisibility(
-          descriptorLayer.selectedType,
-          descriptorLayer.visible
+        this.updateLayerVisibility(
+          descriptorLayer,
+          this.mapService.map.getView().getZoom() || 0
         );
 
         this.handleLayerSelected(descriptorLayer.selectedTypeObject!);
@@ -622,20 +652,45 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
           this.mapService.updateLayerVisibility(type.valueType, false);
         });
 
-        this.mapService.updateLayerVisibility(
-          descriptorLayer.selectedType,
-          true
+        this.updateLayerVisibility(
+          descriptorLayer,
+          this.mapService.map.getView().getZoom() || 0
         );
 
         break;
     }
   }
 
+  public updateLayerVisibility(
+    descriptorLayer: DescriptorLayer,
+    zoom: number
+  ): void {
+    let visible = descriptorLayer.visible;
+
+    if (
+      descriptorLayer.minZoom !== undefined &&
+      zoom < descriptorLayer.minZoom
+    ) {
+      visible = false;
+    }
+
+    this.mapService.updateLayerVisibility(
+      descriptorLayer.selectedType,
+      visible
+    );
+  }
+
   // TODO: Deveria ter uma propriedade no descriptor com a resolução da layer.
   private refreshLayersSource(): void {
     this.mapService.layers.forEach((layer: BaseLayer) => {
       if (layer.get('type') === 'layertype')
-        this.mapService.updateLayerSource(layer.get('key'), this.layerService.parseURLs(layer.get('descriptorType'), this.isLayerHighResolution));
+        this.mapService.updateLayerSource(
+          layer.get('key'),
+          this.layerService.parseURLs(
+            layer.get('descriptorType'),
+            this.isLayerHighResolution
+          )
+        );
     });
   }
 
@@ -645,13 +700,26 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
 
     switch (dirty) {
       case DirtyType.VISIBILITY:
-        this.updateBasemapVisibility(basemap);
+        this.updateBasemapVisibility(
+          basemap,
+          this.mapService.map.getView().getZoom() || 0
+        );
         break;
     }
   }
 
-  public updateBasemapVisibility(descriptorLayer: DescriptorLayer): void {
+  public updateBasemapVisibility(
+    descriptorLayer: DescriptorLayer,
+    zoom: number
+  ): void {
     let visible = descriptorLayer.selectedTypeObject!.visible;
+
+    if (
+      descriptorLayer.minZoom !== undefined &&
+      zoom < descriptorLayer.minZoom
+    ) {
+      visible = false;
+    }
 
     if (visible) {
       descriptorLayer.types.forEach((descriptorType: DescriptorType) => {
@@ -670,13 +738,26 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
 
     switch (dirty) {
       case DirtyType.VISIBILITY:
-        this.updateLimitVisibility(limit);
+        this.updateLimitVisibility(
+          limit,
+          this.mapService.map.getView().getZoom() || 0
+        );
         break;
     }
   }
 
-  public updateLimitVisibility(descriptorLayer: DescriptorLayer): void {
+  public updateLimitVisibility(
+    descriptorLayer: DescriptorLayer,
+    zoom: number
+  ): void {
     let visible = descriptorLayer.selectedTypeObject!.visible;
+
+    if (
+      descriptorLayer.minZoom !== undefined &&
+      zoom < descriptorLayer.minZoom
+    ) {
+      visible = false;
+    }
 
     if (visible) {
       descriptorLayer.types.forEach((descriptorType: DescriptorType) => {
