@@ -1,16 +1,44 @@
 [
     {
-        "idLayer": "basemaps",
-        "labelLayer": "Basemaps",
+        "idLayer": "mapbox",
+        "labelLayer": "Mapbox Light",
         "visible": true,
         "selectedType": "mapbox",
-        "types": [
-            "mapbox",
-            "mapbox-dark",
-            "google",
-            "google-hybrid",
-            "roads",
-            "bing"
-        ]
+        "types": ["mapbox"]
+    },
+    {
+        "idLayer": "mapbox-dark",
+        "labelLayer": "Mapbox Dark",
+        "visible": false,
+        "selectedType": "mapbox-dark",
+        "types": ["mapbox-dark"]
+    },
+    {
+        "idLayer": "google",
+        "labelLayer": "Google Maps",
+        "visible": false,
+        "selectedType": "google",
+        "types": ["google"]
+    },
+    {
+        "idLayer": "google-hybrid",
+        "labelLayer": "Google Hybrid",
+        "visible": false,
+        "selectedType": "google-hybrid",
+        "types": ["google-hybrid"]
+    },
+    {
+        "idLayer": "estradas",
+        "labelLayer": "Roads",
+        "visible": false,
+        "selectedType": "estradas",
+        "types": ["estradas"]
+    },
+    {
+        "idLayer": "bing",
+        "labelLayer": "Bing Aerial",
+        "visible": false,
+        "selectedType": "bing",
+        "types": ["bing"]
     }
 ]

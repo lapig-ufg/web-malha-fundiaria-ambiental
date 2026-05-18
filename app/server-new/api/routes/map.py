@@ -26,7 +26,32 @@ async def get_descriptor(lang: str = 'pt-br'):
     layertypes = await fetch_layer_types(lang, 'layers')
     basemaps_types = await fetch_layer_types(lang, 'basemaps')
     limits_types = await fetch_layer_types(lang, 'limits')
-    
+
+    # Ensure standard basemaps are present in basemaps_types for mapping
+    standard_basemaps = [
+        "mapbox", "mapbox-dark", "google", "google-hybrid", 
+        "roads", "estradas", "bing", "relevo"
+    ]
+
+    if not isinstance(basemaps_types, dict):
+        basemaps_types = {}
+
+    if 'basemaps' not in basemaps_types:
+        basemaps_types['basemaps'] = []
+
+    existing_basemap_values = {b.get('valueType') for b in basemaps_types['basemaps']}
+
+    for b_value in standard_basemaps:
+        if b_value not in existing_basemap_values:
+            basemaps_types['basemaps'].append({
+                "valueType": b_value,
+                "type": "basemap",
+                "origin": {"sourceService": "internal", "typeOfTMS": "xyz"},
+                "viewValueType": b_value.capitalize(),
+                "visible": False,
+                "opacity": 1.0
+            })
+
     # Hardcode new COG layer type
     cog_layer = {
         "valueType": "malha_fundiaria_cog",

@@ -695,13 +695,9 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
   }
 
   private handleBasemapUpdate(layerId: string, dirty: DirtyType): void {
-    let basemap: DescriptorLayer =
-      this.descriptorService.getBsemapById(layerId);
-
     switch (dirty) {
       case DirtyType.VISIBILITY:
-        this.updateBasemapVisibility(
-          basemap,
+        this.refreshLayersVisibilityByZoom(
           this.mapService.map.getView().getZoom() || 0
         );
         break;
@@ -712,7 +708,9 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
     descriptorLayer: DescriptorLayer,
     zoom: number
   ): void {
-    let visible = descriptorLayer.selectedTypeObject!.visible;
+    if (!descriptorLayer.selectedTypeObject) return;
+
+    let visible = descriptorLayer.selectedTypeObject.visible;
 
     if (
       descriptorLayer.minZoom !== undefined &&
@@ -750,7 +748,9 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
     descriptorLayer: DescriptorLayer,
     zoom: number
   ): void {
-    let visible = descriptorLayer.selectedTypeObject!.visible;
+    if (!descriptorLayer.selectedTypeObject) return;
+
+    let visible = descriptorLayer.selectedTypeObject.visible;
 
     if (
       descriptorLayer.minZoom !== undefined &&

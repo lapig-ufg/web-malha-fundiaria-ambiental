@@ -83,7 +83,9 @@ class DescriptorService {
         (type: DescriptorType) => type.valueType === basemap.selectedType
       );
 
-      basemap.selectedTypeObject!.visible = basemap.visible;
+      if (basemap.selectedTypeObject) {
+        basemap.selectedTypeObject!.visible = basemap.visible;
+      }
     });
   }
 
@@ -96,7 +98,9 @@ class DescriptorService {
           (type: DescriptorType) => type.valueType === layer.selectedType
         );
 
-        layer.selectedTypeObject!.visible = layer.visible;
+        if (layer.selectedTypeObject) {
+          layer.selectedTypeObject!.visible = layer.visible;
+        }
       });
     });
   }
@@ -107,7 +111,9 @@ class DescriptorService {
         (type: DescriptorType) => type.valueType === limit.selectedType
       );
 
-      limit.selectedTypeObject!.visible = limit.visible;
+      if (limit.selectedTypeObject) {
+        limit.selectedTypeObject!.visible = limit.visible;
+      }
     });
   }
 
@@ -127,16 +133,17 @@ class DescriptorService {
     this.setDirtyBit(DirtyType.VISIBILITY, key, 'basemap');
 
     this.descriptor.basemaps.forEach((basemap: DescriptorLayer) => {
-      basemap.types.forEach((type: DescriptorType) => {
-        if (type.valueType === key) {
-          type.visible = visible;
-
-          basemap.selectedType = type.valueType;
-          basemap.selectedTypeObject = type;
-        } else {
-          type.visible = false;
+      if (basemap.idLayer === key) {
+        basemap.visible = visible;
+        if (basemap.selectedTypeObject) {
+          basemap.selectedTypeObject!.visible = visible;
         }
-      });
+      } else if (visible) {
+        basemap.visible = false;
+        if (basemap.selectedTypeObject) {
+          basemap.selectedTypeObject!.visible = false;
+        }
+      }
     });
 
     this.descriptor$.next(this.descriptor);
@@ -245,17 +252,9 @@ class DescriptorService {
 
   // TODO: Na verdade ele esta retornando a unica layer que existe e trabalhando com suas propriedades;
   public getBsemapById(basemapId: string): DescriptorLayer {
-    let descriptorLayer: DescriptorLayer;
-
-    this.descriptor?.basemaps.forEach((basemap: DescriptorLayer) => {
-      basemap.types.forEach((type: DescriptorType) => {
-        if (type.valueType !== basemapId) return;
-
-        descriptorLayer = basemap;
-      });
-    });
-
-    return descriptorLayer!;
+    return this.descriptor?.basemaps.find(
+      (basemap) => basemap.idLayer === basemapId
+    )!;
   }
 
   public getLayer(layerId: string): DescriptorLayer {

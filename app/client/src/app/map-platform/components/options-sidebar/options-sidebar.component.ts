@@ -24,7 +24,15 @@ import { InputSwitchChangeEvent } from 'primeng/inputswitch';
 import {AccordionTabCloseEvent, AccordionTabOpenEvent} from 'primeng/accordion';
 import { MapService } from '@core/services/map.service';
 
-const bmapKeys: string[] = ['mapbox', 'mapbox-dark', 'google', 'google-hybrid'];
+const bmapKeys: string[] = [
+  'mapbox',
+  'mapbox-dark',
+  'google',
+  'google-hybrid',
+  'bing',
+  'estradas',
+  'relevo',
+];
 
 @Component({
   standalone: false,
