@@ -220,11 +220,10 @@ class DescriptorService {
       limit.types.forEach((type: DescriptorType) => {
         if (type.valueType === key) {
           type.visible = visible;
+          limit.visible = visible;
 
           limit.selectedType = type.valueType;
           limit.selectedTypeObject = type;
-        } else {
-          type.visible = false;
         }
       });
     });
@@ -289,9 +288,8 @@ class DescriptorService {
     return result!;
   }
 
-  // TODO: Na verdade ele esta retornando a unica layer que existe e trabalhando com suas propriedades;
   public getLimit(limitId: string): DescriptorLayer {
-    return this.descriptor?.limits[0]!;
+    return this.descriptor?.limits.find((limit) => limit.idLayer === limitId)!;
   }
 
   // TODO: Não deve exister, resolver problemas associados com reconstrução do descriptor;

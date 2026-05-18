@@ -129,12 +129,6 @@ class OptionsSidebarComponent {
    * @param event
    */
   public onChangeLimit(limit: any, event: InputSwitchChangeEvent): void {
-    this.limits.forEach((element: any) => {
-      if (element.key === limit.key) return;
-
-      element.checked = false;
-    });
-
     this.descriptorService.updateLimitVisibility(limit.key, event.checked);
   }
 
