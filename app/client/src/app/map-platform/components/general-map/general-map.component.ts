@@ -732,12 +732,9 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
   }
 
   private handleLimitUpdate(layerId: string, dirty: DirtyType): void {
-    let limit: DescriptorLayer = this.descriptorService.getLimit(layerId);
-
     switch (dirty) {
       case DirtyType.VISIBILITY:
-        this.updateLimitVisibility(
-          limit,
+        this.refreshLayersVisibilityByZoom(
           this.mapService.map.getView().getZoom() || 0
         );
         break;

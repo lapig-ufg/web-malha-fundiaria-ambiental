@@ -130,22 +130,39 @@ class DescriptorService {
   public updateBasemapVisibility(key: string, visible: boolean): void {
     if (this.descriptor === null) return;
 
-    this.setDirtyBit(DirtyType.VISIBILITY, key, 'basemap');
+    let targetLayerId = key;
 
     this.descriptor.basemaps.forEach((basemap: DescriptorLayer) => {
-      if (basemap.idLayer === key) {
-        basemap.visible = visible;
-        if (basemap.selectedTypeObject) {
-          basemap.selectedTypeObject!.visible = visible;
+      let isTargetLayer = basemap.idLayer === key;
+      let targetType = basemap.types.find(
+        (t: DescriptorType) => t.valueType === key
+      );
+
+      if (isTargetLayer || targetType) {
+        targetLayerId = basemap.idLayer;
+        if (targetType) {
+          basemap.selectedType = key;
+          basemap.selectedTypeObject = targetType;
         }
+
+        basemap.visible = visible;
+
+        basemap.types.forEach((t: DescriptorType) => {
+          if (t.valueType === basemap.selectedType) {
+            t.visible = visible;
+          } else {
+            t.visible = false;
+          }
+        });
       } else if (visible) {
         basemap.visible = false;
-        if (basemap.selectedTypeObject) {
-          basemap.selectedTypeObject!.visible = false;
-        }
+        basemap.types.forEach((t: DescriptorType) => {
+          t.visible = false;
+        });
       }
     });
 
+    this.setDirtyBit(DirtyType.VISIBILITY, targetLayerId, 'basemap');
     this.descriptor$.next(this.descriptor);
   }
 
@@ -221,20 +238,39 @@ class DescriptorService {
   public updateLimitVisibility(key: string, visible: boolean): void {
     if (this.descriptor === null) return;
 
-    this.setDirtyBit(DirtyType.VISIBILITY, key, 'limits');
+    let targetLayerId = key;
 
     this.descriptor.limits.forEach((limit: DescriptorLayer) => {
-      limit.types.forEach((type: DescriptorType) => {
-        if (type.valueType === key) {
-          type.visible = visible;
-          limit.visible = visible;
+      let isTargetLayer = limit.idLayer === key;
+      let targetType = limit.types.find(
+        (t: DescriptorType) => t.valueType === key
+      );
 
-          limit.selectedType = type.valueType;
-          limit.selectedTypeObject = type;
+      if (isTargetLayer || targetType) {
+        targetLayerId = limit.idLayer;
+        if (targetType) {
+          limit.selectedType = key;
+          limit.selectedTypeObject = targetType;
         }
-      });
+
+        limit.visible = visible;
+
+        limit.types.forEach((t: DescriptorType) => {
+          if (t.valueType === limit.selectedType) {
+            t.visible = visible;
+          } else {
+            t.visible = false;
+          }
+        });
+      } else if (visible) {
+        limit.visible = false;
+        limit.types.forEach((t: DescriptorType) => {
+          t.visible = false;
+        });
+      }
     });
 
+    this.setDirtyBit(DirtyType.VISIBILITY, targetLayerId, 'limits');
     this.descriptor$.next(this.descriptor);
   }
 

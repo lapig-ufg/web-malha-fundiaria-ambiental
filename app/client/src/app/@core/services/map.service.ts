@@ -115,7 +115,10 @@ class MapService {
   public updateLayerVisibility(key: string, value: boolean): void {
     let baseLayer = this.layers.find((baseLayer: BaseLayer) => baseLayer.get('key') === key);
 
-    baseLayer?.setVisible(value);
+    if (baseLayer) {
+      baseLayer.setVisible(value);
+      this._map.render();
+    }
   }
 
   public updateLayerOpacity(key: string, value: number): void {

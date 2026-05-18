@@ -133,10 +133,18 @@ class OptionsSidebarComponent {
   /**
    * Atualiza o atributo [checked] do elemento representado pela key para true,
    * enquanto atualiza os outros elementos para false, na lista de limits.
-   * @param key
+   * @param limit
    * @param event
    */
   public onChangeLimit(limit: any, event: InputSwitchChangeEvent): void {
+    if (event.checked) {
+      this.limits.forEach((element: any) => {
+        if (element.key === limit.key) return;
+
+        element.checked = false;
+      });
+    }
+
     this.descriptorService.updateLimitVisibility(limit.key, event.checked);
   }
 
@@ -147,11 +155,13 @@ class OptionsSidebarComponent {
    * @param event
    */
   public onChangeBmap(bmap: any, event: InputSwitchChangeEvent): void {
-    this.bmaps.forEach((element: any) => {
-      if (element.key === bmap.key) return;
+    if (bmap.checked) {
+      this.bmaps.forEach((element: any) => {
+        if (element.key === bmap.key) return;
 
-      element.checked = false;
-    });
+        element.checked = false;
+      });
+    }
 
     this.descriptorService.updateBasemapVisibility(bmap.key, bmap.checked);
   }
