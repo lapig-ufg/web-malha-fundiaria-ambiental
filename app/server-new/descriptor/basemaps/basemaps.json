@@ -4,7 +4,6 @@
         "labelLayer": "Basemaps",
         "visible": true,
         "selectedType": "mapbox",
-        "minZoom": 4,
         "types": [
             "mapbox",
             "mapbox-dark",

@@ -32,7 +32,7 @@
         "labelLayer": "translate",
         "visible": false,
         "selectedType": "malha_fundiaria_consolidada",
-        "minZoom": 6,
+        "minZoom": 8,
         "types": ["malha_fundiaria_consolidada"]
     }
 ]
