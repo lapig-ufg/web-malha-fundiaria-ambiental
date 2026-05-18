@@ -14,8 +14,8 @@ import { DescriptorType } from '@core/interfaces';
  */
 import { WMTS, XYZ } from 'ol/source';
 import GeoTIFF from 'ol/source/GeoTIFF';
-import TileLayer from 'ol/layer/Tile';
-import WebGLTileLayer from 'ol/layer/WebGLTile';
+import CanvasTileLayer from 'ol/layer/Tile';
+import TileLayer from 'ol/layer/WebGLTile';
 import BaseLayer from 'ol/layer/Base';
 
 import { MapService, ZOOM_LIMIT } from './map.service';
@@ -44,6 +44,7 @@ class LayerService {
   ) {}
 
   public createLayer(descriptorType: DescriptorType): Promise<BaseLayer> | null {
+    console.log(`Creating layer for ${descriptorType.valueType} (TMS: ${descriptorType.origin.typeOfTMS})`);
     switch (descriptorType.origin.typeOfTMS) {
       case 'wmts':
         return this.createTileLayerWMTS(descriptorType);
@@ -56,7 +57,7 @@ class LayerService {
     }
   }
 
-  private createWebGLTileLayerCOG(descriptorType: DescriptorType): Promise<WebGLTileLayer> {
+  private createWebGLTileLayerCOG(descriptorType: DescriptorType): Promise<TileLayer> {
     const properties = {
       key: descriptorType.valueType,
       label: descriptorType.viewValueType,
@@ -69,6 +70,7 @@ class LayerService {
       normalize: false,
       interpolate: false,
       loadMissingProjection: true,
+      projection: 'ESRI:102033', // Force correct projection for meter-based coordinates
       wrapX: true,
       sources: [
         {
@@ -77,18 +79,9 @@ class LayerService {
       ],
     });
 
-    source.on('change', () => {
-      if (source.getState() === 'error') {
-        console.error(`GeoTIFF source error for ${descriptorType.valueType}:`, source.getError());
-      }
-    });
-
-    // We use the verified case + palette style from our isolation test.
-    const layer = new WebGLTileLayer({
+    const layer = new TileLayer({
       properties: properties,
       source: source,
-      visible: descriptorType.visible,
-      opacity: descriptorType.opacity,
       style: {
         color: [
           'case',
@@ -118,16 +111,18 @@ class LayerService {
             [30, 87, 13]       // 21: Reserva Legal
           ]]
         ]
-      }
+      },
+      visible: descriptorType.visible,
+      opacity: descriptorType.opacity
     });
 
-    return new Promise<WebGLTileLayer>((resolve) => {
+    return new Promise<TileLayer>((resolve) => {
       resolve(layer);
     });
   }
 
   // TODO: Implement this method.
-  private createTileLayerXYZ(descriptorType: DescriptorType): Promise<TileLayer<XYZ>> {
+  private createTileLayerXYZ(descriptorType: DescriptorType): Promise<CanvasTileLayer<XYZ>> {
     let properties = {
       key: descriptorType.valueType,
       label: descriptorType.viewValueType,
@@ -136,9 +131,9 @@ class LayerService {
       visible: descriptorType.visible,
     };
 
-    return new Promise<TileLayer<XYZ>>((resolve) => {
+    return new Promise<CanvasTileLayer<XYZ>>((resolve) => {
       resolve(
-        new TileLayer<XYZ>({
+        new CanvasTileLayer<XYZ>({
           properties: properties,
           source: new XYZ({ urls: this.parseURLs(descriptorType) }),
           visible: descriptorType.visible,
@@ -150,7 +145,7 @@ class LayerService {
   // TODO: Implement this method.
   private createTileLayerWMTS(
     descriptorType: DescriptorType
-  ): Promise<TileLayer<WMTS>> {
+  ): Promise<CanvasTileLayer<WMTS>> {
     const properties = {
       key: descriptorType!.valueType,
       label: descriptorType!.viewValueType,
@@ -159,7 +154,7 @@ class LayerService {
       visible: descriptorType.visible,
     };
 
-    return new Promise<TileLayer<WMTS>>((resolve, reject) => {
+    return new Promise<CanvasTileLayer<WMTS>>((resolve, reject) => {
       this.wmtsService.getCapabilities(descriptorType.origin.url).subscribe({
         next: (capabilities: any) => {
           const options: Options = optionsFromCapabilities(capabilities, {
@@ -170,7 +165,7 @@ class LayerService {
           this.bufferWmtsCapabilities[descriptorType.valueType] = options;
 
           resolve(
-            new TileLayer({
+            new CanvasTileLayer({
               properties: properties,
               source: new WMTS(options),
               visible: descriptorType.visible,
