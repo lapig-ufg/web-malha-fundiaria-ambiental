@@ -70,8 +70,7 @@
   <p-sidebar
     position="right"
     [modal]="false"
-    [visible]="isRightSidebarToggle()"
-    (onHide)="onRightSidebarClose()"
+    [(visible)]="menus[1].show"
     [transitionOptions]="'2ms cubic-bezier(0, 0, 0.2, 1)'"
   >
     <app-statistics-sidebar></app-statistics-sidebar>

@@ -253,13 +253,6 @@
   }
 }
 
-//alterando posição botão close rightsidebar
-:host ::ng-deep .p-sidebar-close {
-  position: absolute;
-  top: 0px;
-  right: 0;
-}
-
 //tamanho do scroll horizontal da tabela
 :host ::ng-deep ::-webkit-scrollbar {
   height: 8px !important;

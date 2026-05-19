@@ -58,10 +58,6 @@ export class MainComponent {
     });
   }
 
-  public onRightSidebarClose(): void {
-    this.menus[1].show = false;
-  }
-
   /**
    * Executado quando a barra lateral esquerda é fechado. Reponsável por
    * fechar todos os menus alocados na barra lateral esquerda.
@@ -77,12 +73,6 @@ export class MainComponent {
       if (element.key === 'statistics') return true;
       return !element.show;
     });
-  }
-
-  public isRightSidebarToggle(): boolean {
-    return this.menus.find((element: Menu) => {
-      return element.key === 'statistics';
-    })!.show;
   }
 
   /**
