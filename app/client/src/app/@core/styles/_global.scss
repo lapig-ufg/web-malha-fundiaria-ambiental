@@ -56,10 +56,6 @@ html, body {
   color: $primary;
 }
 
-.ol-swipe:before{
-  background: $primary !important;
-}
-
 * {
     box-sizing: border-box;
     font-family: $font-family-sans-serif;
@@ -260,7 +256,7 @@ table tr{
 }
 
 .map .ol-tooltip {
-  position: relative;
+  position: absolute;
   background: rgba(0, 0, 0, 0.5);
   border-radius: 4px;
   color: white;
@@ -270,19 +266,8 @@ table tr{
   font-size: 12px;
 }
 
-.map .ol-tooltip-measure {
-  opacity: 1;
-  font-weight: bold;
-}
-
-.map .ol-tooltip-static {
-  background-color: #ffcc33;
-  color: black;
-  border: 1px solid white;
-}
-
-
 @include media('>=phone', '<=tablet') {
+
   .ol-popup {
     min-width:260px;
   }
@@ -411,23 +396,9 @@ table tr{
     }
   }
 }
-.map .ol-tooltip-measure:before,
-.map .ol-tooltip-static:before {
-  border-top: 6px solid rgba(0, 0, 0, 0.5);
-  border-right: 6px solid transparent;
-  border-left: 6px solid transparent;
-  content: "";
-  position: absolute;
-  bottom: -6px;
-  margin-left: -7px;
-  left: 50%;
-}
 
-.map .ol-tooltip-static:before {
-  border-top-color: #ffcc33;
-}
+.ol-touch .ol-control button {
 
-.p-toast-detail {
   font-size: 13px;
 }
 

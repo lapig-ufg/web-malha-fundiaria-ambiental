@@ -133,12 +133,6 @@
             [pTooltip]="'controls.reset_zoom' | translate"
             (click)="onResetZoom()"
           ></i>
-          <i
-            class="bx bxs-trash"
-            pRipple
-            [pTooltip]="'controls.clear' | translate"
-            (click)="onClearGeometries()"
-          ></i>
         </div>
       </div>
 
@@ -154,15 +148,6 @@
             class="controls-details-card"
           >
             <app-filter />
-          </div>
-          <div *ngIf="controlObjs['swipe'].active" class="controls-details-card">
-            <app-swipe (handleLayersLegend)="handleLayerSelected($event)" />
-          </div>
-          <div
-            *ngIf="controlObjs['drawArea'].active"
-            class="controls-details-card"
-          >
-            <app-draw-area />
           </div>
         </div>
       </div>

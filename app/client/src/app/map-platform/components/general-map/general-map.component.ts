@@ -39,12 +39,11 @@ import * as OlExtent from 'ol/extent.js';
  * Core imports.
  */
 import { LocalizationService } from '@core/internationalization/localization.service';
-import { RulerAreaCtrl, RulerCtrl } from '@core/interactions/ruler';
 
 /**
  * Interfaces imports.
  */
-import { Ruler, Job, RegionFilter } from '@core/interfaces';
+import { Job, RegionFilter } from '@core/interfaces';
 import { DirtyType, LayerLegend } from '@core/interfaces';
 import { Control, Descriptor, DescriptorType } from '@core/interfaces';
 import { DescriptorGroup, DescriptorLayer } from '@core/interfaces';
@@ -95,8 +94,6 @@ import { Subscription } from 'rxjs';
 import { OlMapComponent } from '@core/components/ol-map/ol-map.component';
 import { LayerService } from '@core/services/layer.service';
 import { UserInfoComponent } from '@core/components/user-info-dialog/user-info-dialog.component';
-import { SwipeToolComponent } from './swipe-tool/swipe-tool.component';
-import { DrawAreaComponent } from './draw_area/draw_area.component';
 
 //pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -128,19 +125,15 @@ const PRIMARY_COLOR = window
   ],
   providers: [MessageService],
 })
-export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
+export class GeneralMapComponent implements OnInit, OnDestroy {
   @ViewChild(UserInfoComponent) userInfo!: UserInfoComponent;
 
   @ViewChild('video') video!: ElementRef;
   @ViewChild('wfsCard') wfsCard!: ElementRef;
 
   @ViewChild(OlMapComponent) olMap!: OlMapComponent;
-  @ViewChild(SwipeToolComponent) swipeComponent!: SwipeToolComponent;
-  @ViewChild(DrawAreaComponent) drawAreaComponent!: DrawAreaComponent;
 
   public features: any[] = [];
-
-  private source: VectorSource<any> = new VectorSource();
 
   public mapSubscription: Subscription = new Subscription();
   public descriptorSubscription: Subscription = new Subscription();
@@ -279,10 +272,6 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
 
   public controlKeys: string[] = [
     'filter',
-    'swipe',
-    'drawArea',
-    'measure',
-    'measureArea',
   ];
 
   public controlObjs: { [key: string]: Control } = {
@@ -290,26 +279,6 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
       icon: 'fg-map-search',
       active: false,
       onClick: () => this.onSearch(),
-    },
-    swipe: {
-      icon: 'fg-flip-h',
-      active: false,
-      onClick: () => this.onSwipe(),
-    },
-    drawArea: {
-      icon: 'fg-polygon-pt',
-      active: false,
-      onClick: () => this.onDrawArea(),
-    },
-    measure: {
-      icon: 'fg-measure',
-      active: false,
-      onClick: () => this.onMeasure(),
-    },
-    measureArea: {
-      icon: 'fg-measure-area',
-      active: false,
-      onClick: () => this.onMeasureArea(),
     },
   };
 
@@ -326,14 +295,6 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
 
   public year: any;
   public isShowIformats: boolean = true;
-
-  private interaction!: Interaction;
-
-  private vector: VectorLayer<any> = new VectorLayer();
-  private modify!: Modify;
-  private draw: any;
-  private snap: any;
-  public defaultStyle: Style;
 
   public geoJsonStyles: any = {
     Point: new Style({
@@ -415,11 +376,6 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
     strokeColor: '#363230',
   };
 
-  public swipeOptions: any = {
-    layer: null,
-    strokeColor: '#363230',
-  };
-
   public legendExpanded: boolean = true;
   public isMobile: boolean;
 
@@ -471,27 +427,8 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
       this.isMobile = false;
     }
 
-
-    this.defaultStyle = new Style({
-      fill: new Fill({
-        color: 'rgba(255,255,255,0.52)',
-      }),
-      stroke: new Stroke({
-        color: this.otherLayerFromFilters.strokeColor,
-        width: 6,
-        lineCap: 'round',
-      }),
-      image: new CircleStyle({
-        radius: 5,
-        fill: new Fill({
-          color: PRIMARY_COLOR,
-        }),
-      }),
-    });
-
-    this.initVectorLayerInteraction();
-
     this.mapService.addEvent('moveend', (event: MapEvent) =>
+
       this.onZoom(event)
     );
 
@@ -899,186 +836,20 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
       });
   }
 
-  private initVectorLayerInteraction() {
-    this.vector = new VectorLayer({
-      zIndex: 100000,
-      source: this.source,
-      style: this.defaultStyle,
-    });
-  }
-
   public onSearch() {
     this.controlObjs['filter'].active = !this.controlObjs['filter'].active;
     this.controlOptions = true;
   }
 
-  public onMeasure(): void {
-    this.controlObjs['measure'].active = !this.controlObjs['measure'].active;
-    if (this.controlObjs['measure'].active) {
-      this.addInteraction(new RulerCtrl(this).getDraw());
-      this.googleAnalyticsService.eventEmitter(
-        'Activate',
-        'GeoTools',
-        'RulerLine'
-      );
-    } else {
-      this.unselect();
-    }
-  }
-
-  public onMeasureArea(): void {
-    this.controlObjs['measureArea'].active =
-      !this.controlObjs['measureArea'].active;
-    if (this.controlObjs['measureArea'].active) {
-      this.addInteraction(new RulerAreaCtrl(this).getDraw());
-      this.googleAnalyticsService.eventEmitter(
-        'Activate',
-        'GeoTools',
-        'RulerArea'
-      );
-    } else {
-      this.unselect();
-    }
-  }
-
-  onSwipe() {
-    this.controlOptions = true;
-    this.controlObjs['swipe'].active = !this.controlObjs['swipe'].active;
-    this.googleAnalyticsService.eventEmitter('Activate', 'GeoTools', 'Swipe');
-
-    if (!this.controlObjs['swipe'].active) this.swipeComponent.clean();
-  }
-
-  public onDrawArea(): void {
-    this.controlOptions = true;
-
-    this.controlObjs['drawArea'].active = !this.controlObjs['drawArea'].active;
-
-    this.drawing = this.controlObjs['drawArea'].active;
-
-    if(!this.controlObjs['drawArea'].active) this.drawAreaComponent.unselect();
-  }
-
   getOverlay(overlay: Overlay) {
+
     return overlay;
-  }
-
-  onClearGeometries() {
-    let map = this.mapService.map;
-
-    this.features = [];
-    this.source.clear();
-
-    this.mapService.removeInteraction(this.interaction);
-    this.mapService.removeLayer(this.vector);
-    this.mapService.removeInteraction(this.modify);
-    this.mapService.removeInteraction(this.snap);
-
-    // @ts-ignore
-    this.interaction = null;
-
-    // @ts-ignore
-    this.modify = null;
-    this.snap = null;
-    this.initVectorLayerInteraction();
-
-    map.getOverlays().getArray().slice(0)
-      .forEach((over) => {
-        const properties = over.getOptions();
-        if (properties.hasOwnProperty('id')) {
-          if (properties.id === 'popup-info') over.setPosition(undefined);
-        } else {
-          map.removeOverlay(over);
-        }
-      });
-
-    this.mapService.layers.forEach((layer: BaseLayer) => {
-      if (layer.get('key') === 'points') {
-        this.mapService.removeLayer(layer);
-      }
-    });
-
-    this.lat = 0;
-    this.lon = 0;
-
-    if (this.controlObjs['point']) this.controlObjs['point'].active = false;
-    this.controlObjs['drawArea'].active = false;
-    this.drawing = false;
-  }
-
-  removeInteraction(removeAll: boolean = false): void {
-    this.features = [];
-    if (removeAll) this.source.clear();
-
-    this.mapService.removeInteraction(this.interaction);
-
-    if (removeAll) this.mapService.removeLayer(this.vector);
-
-    this.mapService.removeInteraction(this.modify);
-    this.mapService.removeInteraction(this.snap);
-
-    // @ts-ignore
-    if (removeAll) this.interaction = null;
-
-    // @ts-ignore
-    if (removeAll) this.modify = null;
-    if (removeAll) this.snap = null;
-    this.initVectorLayerInteraction();
-    this.drawing = false;
-  }
-
-  addDrawInteraction(name: any): void {
-    this.drawing = true;
-
-    if (name === 'None') return;
-
-    this.addInteraction(new RulerAreaCtrl(this, true).getDraw(), name, true);
-  }
-
-  addInteraction(interaction: Interaction, type: string = '', removeInteraction: boolean = false): void {
-    if (removeInteraction) this.removeInteraction(true);
-
-    this.vector.setZIndex(1000000);
-
-    this.interaction = interaction;
-    this.drawing = true;
-
-    this.mapService.addLayer(this.vector);
-
-    if (type === 'Polygon') {
-      this.modify = new Modify({ source: this.source });
-      this.mapService.addInteraction(this.modify);
-      this.mapService.addInteraction(this.interaction);
-    } else {
-      this.mapService.addInteraction(this.interaction);
-    }
-
-    this.snap = new Snap({ source: this.source });
-    this.mapService.addInteraction(this.snap);
   }
 
   addOverlay(overlay: Overlay): void {
     let map = this.mapService.map;
 
     map.addOverlay(overlay);
-  }
-
-  getMap(): Map {
-    let map = this.mapService.map;
-
-    return map;
-  }
-
-  // @ts-ignore
-  getSource(): VectorSource {
-    return this.source;
-  }
-
-  unselect(): void {
-    this.drawing = false;
-    this.controlObjs['measureArea'].active = false;
-    this.controlObjs['measure'].active = false;
-    this.removeInteraction();
   }
 
   onExtentBrazil() {

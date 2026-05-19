@@ -22,31 +22,13 @@
   },
   "controls": {
     "filter": "Filtrar",
-    "swipe": "Swipe",
     "search": "Filtros do Mapa",
-    "clear": "Remover Geometrias",
     "reset_zoom": "Voltar ao Zoom Inicial",
-    "drawArea": "Desenhar Área",
-    "measure": "Medir Distância",
-    "measureArea": "Medir Área",
     "point": "Inserir Ponto",
     "print": "Imprimir Mapa",
-    "draw_area": {
-      "title": "Geometrias Desenhadas",
-      "feature": {
-        "point": "Ponto",
-        "polygon": "Polígono",
-        "remove_feature": "Remover Geometria"
-      },
-      "save": "Salvar",
-      "new": "Novo",
-      "cancel": "Cancelar"
-    },
     "details": {
       "title": "Detalhes do Controle",
-      "clear": "Limpar Filtro",
-      "swipe_placeholder": "Escolha uma camada para comparar",
-      "swipe_remove": "Remover Swipe"
+      "clear": "Limpar Filtro"
     },
     "filter_texts": {
       "search_lateral_title": "Procurar por: ",

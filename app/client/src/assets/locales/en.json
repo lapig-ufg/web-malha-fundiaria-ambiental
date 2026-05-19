@@ -22,31 +22,13 @@
   },
   "controls": {
     "filter": "Filter",
-    "swipe": "Swipe",
     "search": "Map Filters",
-    "clear": "Remove Geometries",
     "reset_zoom": "Back to Initial Zoom",
-    "drawArea": "Draw Area",
-    "measure": "Measure Distance",
-    "measureArea": "Measure Area",
     "point": "Insert Point",
     "print": "Print Map",
-    "draw_area": {
-      "title": "Drawn Geometries",
-      "feature": {
-        "point": "Point",
-        "polygon": "Polygon",
-        "remove_feature": "Remove Geometry"
-      },
-      "save": "Save",
-      "new": "New",
-      "cancel": "Cancel"
-    },
     "details": {
       "title": "Control Details",
-      "clear": "Clear Filter",
-      "swipe_placeholder": "Choose a layer to compare",
-      "swipe_remove": "Remove Swipe"
+      "clear": "Clear Filter"
     },
     "filter_texts": {
       "search_lateral_title": "Search for: ",

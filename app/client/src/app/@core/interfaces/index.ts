@@ -1,9 +1,4 @@
 /**
- * Ruler exports.
- */
-export { Ruler } from './ruler';
-
-/**
  * Control exports.
  */
 export { Control } from './control';
@@ -47,11 +42,6 @@ export { Menu } from './menu';
  */
 export { Metadata } from './metadata';
 
-
-/**
- * Swipe exports.
- */
-export { LayerSwipe } from './swipe';
 
 /**
  * TextFilter exports.
