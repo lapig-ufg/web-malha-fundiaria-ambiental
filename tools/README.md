@@ -10,6 +10,8 @@ This directory contains a collection of independent Python scripts used for data
   - `ingest_parquet.py`: Ingests `.parquet` files from the `/data` directory into PostGIS using DuckDB.
 - **`/db-maintenance`**: Scripts for one-time fixes or database adjustments.
   - `fix_gid_column.py`: Ensures the `gid` column exists and is set as a SERIAL PRIMARY KEY in specific tables.
+- **`/data-processing`**: Scripts for transforming and cleaning data files.
+  - `process_environmental_balance.py`: Processes the environmental balance parquet file, translating codes to names and cleaning columns.
 - **`/descriptors`**: Utilities for managing and comparing map configuration descriptors.
   - `compare_servers.py`: Compares map descriptors between old (Node.js) and new (Python) server implementations.
 
