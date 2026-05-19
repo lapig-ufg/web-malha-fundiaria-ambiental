@@ -72,6 +72,7 @@ class LayerService {
       loadMissingProjection: true,
       projection: 'ESRI:102033', // Force correct projection for meter-based coordinates
       wrapX: true,
+      transition: 0,
       sources: [
         {
           url: descriptorType.origin.url!,
