@@ -18,7 +18,6 @@ def replacement_strings(template, replacements):
 
 def build_graph_result(all_queries_result, chart_description):
     try:
-        array_labels = []
         array_data = []
         
         # Collect all unique labels first to ensure consistent X-axis

@@ -1,0 +1,16 @@
+[
+  {
+    "idGroup": "example_group",
+    "labelGroup": "translate",
+    "groupExpanded": false,
+    "layers": [
+      {
+        "idLayer": "example_layer",
+        "labelLayer": "Example Layer Name",
+        "visible": true,
+        "selectedType": "example_layertype_id",
+        "types": ["example_layertype_id"]
+      }
+    ]
+  }
+]
