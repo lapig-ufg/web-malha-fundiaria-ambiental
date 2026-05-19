@@ -22,18 +22,6 @@ import { RegionFilter } from '@core/interfaces';
  */
 import { Subscription } from 'rxjs';
 
-/**
- * PDF imports.
- */
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-
-/**
- * CSV imports.
- */
-import { mkConfig, generateCsv, download } from 'export-to-csv';
-
-import { SortEvent } from 'primeng/api';
 import {
   AccordionTabCloseEvent,
   AccordionTabOpenEvent,
@@ -60,7 +48,6 @@ class StatisticsSidebarComponent implements OnDestroy {
 
   public summaryData: Map<string, any> = new Map<string, any>();
   public graphsData: Array<any> = [];
-  public rankingData: Array<any> = [];
 
   public dialogData = {
     title: '',
@@ -107,7 +94,6 @@ class StatisticsSidebarComponent implements OnDestroy {
 
           this.getAllSummaryData();
           this.getGraphsData();
-          this.getRanking();
         },
       })
     );
@@ -161,7 +147,6 @@ class StatisticsSidebarComponent implements OnDestroy {
           this.layersForStatistics[summaryKey].year = year;
 
           this.getLayerSummaryData(summaryKey);
-          this.getRanking();
           break;
       }
     });
@@ -206,31 +191,6 @@ class StatisticsSidebarComponent implements OnDestroy {
     });
   }
 
-  private getRanking(): void {
-    this.chartService.getRankingTables(this.regionFilter, '2022').subscribe({
-      next: (rankingTables) => {
-        for (let element of rankingTables) {
-          let rows_labels: Array<string> = element.rows_labels.split('?');
-          let columnsTitle: Array<string> = element.columnsTitle.split('?');
-
-          element.exportCols = [];
-
-          for (let i = 0; i < rows_labels.length; i++) {
-            element.exportCols.push({
-              dataKey: rows_labels[i],
-              header: columnsTitle[i],
-            });
-          }
-        }
-
-        this.rankingData = rankingTables;
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
-  }
-
   public onFullscreenMode(graph: any) {
     this.dialogData = {
       title: graph.title,
@@ -251,104 +211,6 @@ class StatisticsSidebarComponent implements OnDestroy {
       options: '',
       visible: false,
     };
-  }
-
-  /**
-   * Export Ranking Table as CSV.
-   */
-  public onExportCSV(table: any): void {
-    // TODO: Optimize it.
-    const csvConfig = mkConfig({
-      fieldSeparator: ';',
-      quoteStrings: true,
-      decimalSeparator: 'locale',
-      showTitle: false,
-      filename: table.id,
-      title: table.text,
-      useTextFile: false,
-      useBom: true,
-      useKeysAsHeaders: true,
-    });
-
-    let sortOrder = {};
-
-    let i = 1;
-
-    for (let el of table.exportCols) {
-      sortOrder[el.dataKey] = i;
-      i++;
-    }
-
-    sortOrder['originalValue'] = i;
-
-    if (table.rows_labels.toLowerCase().includes('city')) {
-      sortOrder['cityCode'] = ++i;
-    }
-
-    const res = table.data.map((o) =>
-      Object.assign(
-        {},
-        ...Object.keys(o)
-          .sort((a, b) => sortOrder[a] - sortOrder[b])
-          .map((x) => {
-            return { [x]: o[x] };
-          })
-      )
-    );
-
-    download(csvConfig)(generateCsv(csvConfig)(res));
-  }
-
-  /**
-   * Export Ranking Table as PDF.
-   */
-  public onExportPDF(table: any): void {
-    const doc = new jsPDF();
-
-    autoTable(doc, {
-      columnStyles: { 3: { halign: 'center' } },
-      columns: table.exportCols,
-      body: table.data,
-    });
-
-    doc.save(table.title + '.pdf');
-  }
-
-  /**
-   * Custom sort for p-table.
-   */
-  public sortRankingTable(event: SortEvent): void {
-    event.data?.sort((value1: any, value2: any) => {
-      let result: number;
-
-      switch (event.field) {
-        case 'index':
-          let indexA: number = parseInt(
-            value1[event.field ? event.field : ''].replace('º', '')
-          );
-          let indexB: number = parseInt(
-            value2[event.field ? event.field : ''].replace('º', '')
-          );
-
-          result = indexA < indexB ? -1 : indexA > indexB ? 1 : 0;
-
-          return Number(event.order) * result;
-        case 'value':
-          let valueA: number = value1['originalValue'];
-          let valueB: number = value2['originalValue'];
-
-          result = valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
-
-          return Number(event.order) * result;
-        default:
-          let stringA: string = value1[event.field ? event.field : ''];
-          let stringB: string = value2[event.field ? event.field : ''];
-
-          result = stringA.localeCompare(stringB);
-
-          return Number(event.order) * result;
-      }
-    });
   }
 }
 

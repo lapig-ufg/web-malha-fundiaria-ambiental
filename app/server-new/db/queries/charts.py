@@ -95,34 +95,6 @@ def get_queries(params: dict = None):
                 'sql': f"SELECT b.name as label, b.color, sum(a.st_area_ha) as value, (SELECT CAST(SUM(pol_ha) as double precision) FROM regions WHERE {region_filter}) as area_mun FROM pasture_vigor_col9 as A INNER JOIN graphic_colors as B on cast(a.classe as varchar) = b.class_number AND b.table_rel = 'pasture_quality' WHERE {region_filter} AND {year_filter} GROUP BY 1,2 ORDER BY 3 DESC",
                 'mantain': True
             },
-        ],
-        'area3': lambda p: [
-            {
-                'source': 'lapig',
-                'id': 'estados',
-                'sql': f" SELECT UPPER(uf) AS label, '#d4a31c' as color, SUM(area_ha) as value FROM pasture_col9 WHERE {region_filter} AND {year_filter} GROUP BY 1, 2 ORDER BY 3 DESC;",
-                'mantain': True
-            }
-        ],
-        'areatable': lambda p: [
-            {
-                'source': 'lapig',
-                'id': 'municipios',
-                'sql': f"SELECT p.municipio as city, p.cd_geocmu as cityCode, UPPER(p.uf) as uf, SUM(p.st_area_ha) as value FROM pasture_col9 p WHERE {region_filter} AND {year_filter} GROUP BY 1, 2, 3 ORDER BY value DESC;",
-                'mantain': True
-            },
-            {
-                'source': 'lapig',
-                'id': 'estados',
-                'sql': f" SELECT UPPER(p.uf) AS uf, SUM(p.st_area_ha) as value FROM pasture_col9 p WHERE {region_filter} AND {year_filter} GROUP BY 1 ORDER BY 2 DESC;",
-                'mantain': True
-            },
-            {
-                'source': 'lapig',
-                'id': 'biomas',
-                'sql': f" SELECT p.bioma AS biome, SUM(p.st_area_ha) as value FROM pasture_col9 p WHERE {region_filter} AND {year_filter} GROUP BY 1 ORDER BY 2 DESC;",
-                'mantain': True
-            }
         ]
     }
     return queries

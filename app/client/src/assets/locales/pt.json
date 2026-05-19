@@ -266,32 +266,6 @@
       "biome": "Bioma",
       "fronteira": "Fronteira"
     },
-    "area_table_card": {
-      "pastureRankingsCities": {
-        "title": "Ranking de Municípios",
-        "columnsTitle": "#?Município?UF?Área (ha)",
-        "labelOfQuery": {
-          "municipios": "Municípios"
-        },
-        "text": "Ranking dos municípios com maior área de pastagem na região #textRegionTranslate#."
-      },
-      "pastureRankingsStates": {
-        "title": "Ranking de Estados",
-        "columnsTitle": "#?Estado?Área (ha)",
-        "labelOfQuery": {
-          "estados": "Estados"
-        },
-        "text": "Ranking dos estados com maior área de pastagem na região #textRegionTranslate#."
-      },
-      "pastureRankingsBiomes": {
-        "title": "Ranking de Biomas",
-        "columnsTitle": "#?Bioma?Área (ha)",
-        "labelOfQuery": {
-          "biomas": "Biomas"
-        },
-        "text": "Ranking dos biomas com maior área de pastagem na região #textRegionTranslate#."
-      }
-    },
     "pastureGraph_card": {
       "pastureAndLotacaoBovina": {
         "title": "Evolução da Pastagem e Lotação Bovina",
@@ -366,31 +340,14 @@
         "Agricultura": "Agricultura"
       }
     },
-    "area3_card": {
-      "pastureRankingStates": {
-        "title": "Ranking de Estados por Área de Pastagem",
-        "labelOfQuery": {
-          "estados": "Área (ha)"
-        },
-        "text": "Comparativo da área de pastagem entre os estados na região #textRegionTranslate#."
-      }
-    },
     "tabs": {
       "area": "Área",
       "charts": "Gráficos"
     },
-    "area_table_card_auxiliar": {
-      "showing": "Mostrando",
-      "of": "de",
-      "to": "até",
-      "entries": "registros"
-    },
     "cards_titles": {
       "resumoTitle": "Informações Gerais",
       "pastureGraphTitle": "Séries Temporais",
-      "area2Title": "Análise de Proporção",
-      "area3Title": "Gráfico Barra",
-      "areaTableTitle": "Rankings de Área de Pastagem"
+      "area2Title": "Análise de Proporção"
     },
     "resumo_card": {
       "area_region": "Área da Região",

@@ -266,32 +266,6 @@
       "biome": "Biome",
       "fronteira": "Frontier"
     },
-    "area_table_card": {
-      "pastureRankingsCities": {
-        "title": "City Ranking",
-        "columnsTitle": "#?City?UF?Area (ha)",
-        "labelOfQuery": {
-          "municipios": "Cities"
-        },
-        "text": "Ranking of cities with the largest pasture area in the #textRegionTranslate# region."
-      },
-      "pastureRankingsStates": {
-        "title": "State Ranking",
-        "columnsTitle": "#?State?Area (ha)",
-        "labelOfQuery": {
-          "estados": "States"
-        },
-        "text": "Ranking of states with the largest pasture area in the #textRegionTranslate# region."
-      },
-      "pastureRankingsBiomes": {
-        "title": "Biome Ranking",
-        "columnsTitle": "#?Biome?Area (ha)",
-        "labelOfQuery": {
-          "biomas": "Biomes"
-        },
-        "text": "Ranking of biomes with the largest pasture area in the #textRegionTranslate# region."
-      }
-    },
     "pastureGraph_card": {
       "pastureAndLotacaoBovina": {
         "title": "Pasture Evolution and Cattle Stocking",
@@ -366,31 +340,14 @@
         "Agricultura": "Agriculture"
       }
     },
-    "area3_card": {
-      "pastureRankingStates": {
-        "title": "State Ranking by Pasture Area",
-        "labelOfQuery": {
-          "estados": "Area (ha)"
-        },
-        "text": "Comparison of pasture area among states in the #textRegionTranslate# region."
-      }
-    },
     "tabs": {
       "area": "Area",
       "charts": "Charts"
     },
-    "area_table_card_auxiliar": {
-      "showing": "Showing",
-      "of": "of",
-      "to": "to",
-      "entries": "entries"
-    },
     "cards_titles": {
       "resumoTitle": "General Informations",
       "pastureGraphTitle": "Timeseries",
-      "area2Title": "Proportional Analysis",
-      "area3Title": "Bar Charts",
-      "areaTableTitle": "Pasture Area Rankings"
+      "area2Title": "Proportional Analysis"
     },
     "resumo_card": {
       "area_region": "Region Area",
