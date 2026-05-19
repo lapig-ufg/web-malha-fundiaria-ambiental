@@ -57,6 +57,12 @@ class LayerService {
     }
   }
 
+  private getLayerZIndex(type: string): number {
+    if (type === 'basemap') return 0;
+    if (type === 'limit') return 1000;
+    return 10;
+  }
+
   private createWebGLTileLayerCOG(descriptorType: DescriptorType): Promise<TileLayer> {
     const properties = {
       key: descriptorType.valueType,
@@ -114,7 +120,8 @@ class LayerService {
         ]
       },
       visible: descriptorType.visible,
-      opacity: descriptorType.opacity
+      opacity: descriptorType.opacity,
+      zIndex: this.getLayerZIndex(descriptorType.type)
     });
 
     return new Promise<TileLayer>((resolve) => {
@@ -138,6 +145,7 @@ class LayerService {
           properties: properties,
           source: new XYZ({ urls: this.parseURLs(descriptorType) }),
           visible: descriptorType.visible,
+          zIndex: this.getLayerZIndex(descriptorType.type)
         })
       );
     });
@@ -170,6 +178,7 @@ class LayerService {
               properties: properties,
               source: new WMTS(options),
               visible: descriptorType.visible,
+              zIndex: this.getLayerZIndex(descriptorType.type)
             })
           );
         },

@@ -853,7 +853,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
 
   private updateZIndex() {
     this.selectedLayers.forEach((valueType: string, index: number) => {
-      this.mapService.updateLayerZIndex(valueType, index + 1);
+      this.mapService.updateLayerZIndex(valueType, index + 10);
     });
   }
 
