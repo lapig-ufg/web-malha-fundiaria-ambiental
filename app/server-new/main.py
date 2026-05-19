@@ -19,14 +19,6 @@ async def startup():
 async def shutdown():
     await db.disconnect()
 
-@app.middleware("http")
-async def add_process_time_header(request, call_next):
-    # Initialize state to avoid AttributeErrors if dependencies fail
-    if not hasattr(request.state, "query_result"):
-        request.state.query_result = {}
-    response = await call_next(request)
-    return response
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Depends
 import httpx
 from core.config import settings
 from utils.descriptor_builder import DescriptorBuilder
-from api.dependencies import data_injector
+from api.dependencies import get_map_data
 import os
 import json
 
@@ -98,25 +98,25 @@ async def get_descriptor(lang: str = 'pt-br'):
     }
     return result
 
-@router.get("/extent", dependencies=[Depends(data_injector)])
-async def get_extent(request: Request):
-    query_result = request.state.query_result
+@router.get("/extent")
+async def get_extent(query_result: dict = Depends(get_map_data)):
     # matching JS controller: { type: 'Feature', geometry: JSON.parse(queryResult[0].geojson) }
-    if query_result and len(query_result) > 0:
+    extent_data = query_result.get('extent')
+    if extent_data and len(extent_data) > 0:
         return {
             "type": "Feature",
-            "geometry": json.loads(query_result[0]['geojson'])
+            "geometry": json.loads(extent_data[0]['geojson'])
         }
     return {}
 
-@router.get("/search", dependencies=[Depends(data_injector)])
-async def get_search(request: Request):
-    query_result = request.state.query_result
+@router.get("/search")
+async def get_search(query_result: dict = Depends(get_map_data)):
+    search_data = query_result.get('search', [])
     ini_results = []
-    for row in query_result:
+    for row in search_data:
         row.pop('priority', None)
         ini_results.append(row)
-    
+
     # Deduplicate based on 'value'
     seen = set()
     result = []
@@ -124,9 +124,8 @@ async def get_search(request: Request):
         if item['value'] not in seen:
             seen.add(item['value'])
             result.append(item)
-            
-    return {"search": result}
 
+    return {"search": result}
 @router.get("/getowsdomain")
 async def get_host():
     return [f"{settings.OWS_HOST}/ows"]

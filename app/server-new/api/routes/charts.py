@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request, Depends
-from api.dependencies import data_injector
+from api.dependencies import get_chart_data
 from utils.language import language as lang_util
 
 router = APIRouter()
@@ -146,10 +146,8 @@ def build_table_data(all_queries_result, chart_description):
         print(f"Build Table Error: {e}")
         return None
 
-@router.get("/resumo", dependencies=[Depends(data_injector)])
-async def handle_resumo(request: Request, lang: str = 'pt', card_resume: str = ''):
-    query_result = request.state.query_result
-    
+@router.get("/resumo")
+async def handle_resumo(lang: str = 'pt', card_resume: str = '', query_result: dict = Depends(get_chart_data)):
     if card_resume == 'region':
         area = query_result['region'][0]['area_region'] if query_result.get('region') else 0
         return {"area": area}
@@ -173,8 +171,8 @@ async def handle_resumo(request: Request, lang: str = 'pt', card_resume: str = '
     else:
         return {"data": "Invalid argument"}
 
-@router.get("/pastureGraph", dependencies=[Depends(data_injector)])
-async def handle_pasture_graph(request: Request, lang: str = 'pt', typeRegion: str = '', textRegion: str = ''):
+@router.get("/pastureGraph")
+async def handle_pasture_graph(lang: str = 'pt', typeRegion: str = '', textRegion: str = '', query_result: dict = Depends(get_chart_data)):
     lang_data = lang_util.get_lang(lang)
     language_ob = lang_data.get('right_sidebar', {}) if lang_data else {}
     
@@ -224,11 +222,11 @@ async def handle_pasture_graph(request: Request, lang: str = 'pt', typeRegion: s
     
     chart_final = []
     for chart in chart_result:
-        chart['data'] = build_graph_result(request.state.query_result, chart)
+        chart['data'] = build_graph_result(query_result, chart)
         if chart['data']:
             chart['show'] = True
             if chart['id'] == 'pasture_quality':
-                chart['text'] = chart['getText'](request.state.query_result, chart['idsOfQueriesExecuted'])
+                chart['text'] = chart['getText'](query_result, chart['idsOfQueriesExecuted'])
             else:
                 chart['text'] = chart['getText'](chart)
         else:
@@ -242,8 +240,8 @@ async def handle_pasture_graph(request: Request, lang: str = 'pt', typeRegion: s
         
     return chart_final
 
-@router.get("/area2", dependencies=[Depends(data_injector)])
-async def handle_area2_data(request: Request, lang: str = 'pt', typeRegion: str = '', textRegion: str = '', year: int = 2021):
+@router.get("/area2")
+async def handle_area2_data(lang: str = 'pt', typeRegion: str = '', textRegion: str = '', year: int = 2021, query_result: dict = Depends(get_chart_data)):
     lang_data = lang_util.get_lang(lang)
     language_ob = lang_data.get('right_sidebar', {}) if lang_data else {}
     
@@ -276,10 +274,10 @@ async def handle_area2_data(request: Request, lang: str = 'pt', typeRegion: str 
 
     chart_final = []
     for chart in chart_result:
-        chart['data'] = build_graph_result(request.state.query_result, chart)
+        chart['data'] = build_graph_result(query_result, chart)
         if chart['data']:
             chart['show'] = True
-            chart['text'] = self_get_text(request.state.query_result, chart['idsOfQueriesExecuted'], area2_card, replacements, year)
+            chart['text'] = self_get_text(query_result, chart['idsOfQueriesExecuted'], area2_card, replacements, year)
         else:
             chart['data'] = {}
             chart['show'] = False
@@ -290,8 +288,8 @@ async def handle_area2_data(request: Request, lang: str = 'pt', typeRegion: str 
         
     return chart_final
 
-@router.get("/area3", dependencies=[Depends(data_injector)])
-async def handle_area3_data(request: Request, lang: str = 'pt', typeRegion: str = '', textRegion: str = ''):
+@router.get("/area3")
+async def handle_area3_data(lang: str = 'pt', typeRegion: str = '', textRegion: str = '', query_result: dict = Depends(get_chart_data)):
     lang_data = lang_util.get_lang(lang)
     language_ob = lang_data.get('right_sidebar', {}) if lang_data else {}
     
@@ -317,7 +315,7 @@ async def handle_area3_data(request: Request, lang: str = 'pt', typeRegion: str 
     
     chart_final = []
     for chart in chart_result:
-        chart['data'] = build_graph_result(request.state.query_result, chart)
+        chart['data'] = build_graph_result(query_result, chart)
         if chart['data']:
             chart['show'] = True
             chart['text'] = replacement_strings(area3_card.get('text', ''), replacements)
@@ -331,8 +329,8 @@ async def handle_area3_data(request: Request, lang: str = 'pt', typeRegion: str 
         
     return chart_final
 
-@router.get("/areatable", dependencies=[Depends(data_injector)])
-async def handle_table_rankings(request: Request, lang: str = 'pt', typeRegion: str = '', valueRegion: str = '', textRegion: str = ''):
+@router.get("/areatable")
+async def handle_table_rankings(lang: str = 'pt', typeRegion: str = '', valueRegion: str = '', textRegion: str = '', query_result: dict = Depends(get_chart_data)):
     lang_data = lang_util.get_lang(lang)
     language_ob = lang_data.get('right_sidebar', {}) if lang_data else {}
     
@@ -385,7 +383,7 @@ async def handle_table_rankings(request: Request, lang: str = 'pt', typeRegion: 
     
     result_final = []
     for res in tables_descriptor:
-        res['data'] = build_table_data(request.state.query_result, res)
+        res['data'] = build_table_data(query_result, res)
         if res['data']:
             res['show'] = True
             res['text'] = replacement_strings(area_table_card.get(res['id'], {}).get('text', ''), replacements)
