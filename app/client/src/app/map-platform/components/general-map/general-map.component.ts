@@ -1001,7 +1001,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy, Ruler {
     this.lat = 0;
     this.lon = 0;
 
-    this.controlObjs['point'].active = false;
+    if (this.controlObjs['point']) this.controlObjs['point'].active = false;
     this.controlObjs['drawArea'].active = false;
     this.drawing = false;
   }

@@ -2,11 +2,177 @@
   <div class="map-container">
     <app-ol-map>
       <div
+        *ngIf="this.layersLegend.length > 0"
+        [class]="legendExpanded ? 'legends' : 'legends legends-expanded'"
+      >
+        <div class="legends-container">
+          <div class="legends-header">
+            <h5>{{ "legend.title" | translate }}</h5>
+            <i
+              [pTooltip]="
+                legendExpanded
+                  ? ('minimize' | translate)
+                  : ('maximize' | translate)
+              "
+              (click)="legendExpanded = !legendExpanded"
+              [class]="legendExpanded ? 'bx bx-collapse' : 'bx bx-expand'"
+            ></i>
+          </div>
+          <div
+            class="legends-body"
+            cdkDropList
+            (cdkDropListDropped)="updateLayersOrder($event)"
+          >
+            <div
+              *ngFor="let legend of layersLegend"
+              cdkDrag
+              [class]="
+                legend.expanded
+                  ? 'legend-card legend-card-active'
+                  : 'legend-card'
+              "
+            >
+              <div class="legend-card-content">
+                <div class="abstract">
+                  <span>
+                    <i
+                      class="bx bx-move"
+                      tooltipPosition="left"
+                      pTooltip="{{ 'legend.move' | translate }}"
+                    ></i>
+                    <div
+                      class="legend-label"
+                      tooltipPosition="left"
+                      pTooltip="{{
+                        legend.key === 'planet'
+                          ? ('planet' | translate)
+                          : legend.label
+                      }}"
+                    >
+                      {{
+                        legend.key === "planet"
+                          ? ("planet" | translate)
+                          : legend.label
+                      }}
+                    </div>
+                    <div class="legend-tools">
+                      <i
+                        class="bx bxs-download"
+                        tooltipPosition="left"
+                        [pTooltip]="'sld.title' | translate"
+                        (click)="downloadSLD(legend.key)"
+                      ></i>
+                      <!-- TODO:  -->
+                      <i
+                        tooltipPosition="left"
+                        (click)="toggleLayerLegend(legend)"
+                        [pTooltip]="
+                          legend.expanded
+                            ? ('minimize' | translate)
+                            : ('maximize' | translate)
+                        "
+                        [class]="
+                          legend.expanded
+                            ? 'bx bxs-up-arrow-circle'
+                            : 'bx bxs-down-arrow-circle'
+                        "
+                      ></i>
+                    </div>
+                  </span>
+                </div>
+                <div class="details">
+                  <div
+                    *ngIf="legend.filterHandler === 'layername'; else noFilters"
+                    class="details-inner"
+                  >
+                    <img
+                      src="{{
+                        env.OWS
+                      }}/ows?EXCEPTIONS=application%2Fvnd.ogc.se_xml&TRANSPARENT=TRUE&VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&layer={{
+                        legend.filter
+                      }}&format=image%2Fpng"
+                      alt="{{ legend.key }}"
+                    />
+                  </div>
+                  <ng-template #noFilters>
+                    <div class="details-inner">
+                      <img
+                        src="{{
+                          env.OWS
+                        }}/ows?EXCEPTIONS=application%2Fvnd.ogc.se_xml&TRANSPARENT=TRUE&VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&layer={{
+                          legend.key
+                        }}&format=image%2Fpng"
+                        alt="{{ legend.key }}"
+                      />
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls mobileHide">
+        <div class="controls-container">
+          <i
+            *ngFor="let key of controlKeys"
+            [class]="
+              controlObjs[key].icon +
+              (controlObjs[key].active ? ' control-active' : '')
+            "
+            pRipple
+            [pTooltip]="'controls.' + key | translate"
+            (click)="controlObjs[key].onClick()"
+          >
+          </i>
+          <!-- Quando clicado deve resetar a região default do brasil -->
+          <i
+            class="bx bx-x"
+            pRipple
+            [pTooltip]="'controls.reset_zoom' | translate"
+            (click)="onResetZoom()"
+          ></i>
+          <i
+            class="bx bxs-trash"
+            pRipple
+            [pTooltip]="'controls.clear' | translate"
+            (click)="onClearGeometries()"
+          ></i>
+        </div>
+      </div>
+
+      <!-- Controll Dialog -->
+      <div *ngIf="controlOptions" class="controls-details">
+        <div class="controls-details-header">
+          <h5>{{ "controls.details.title" | translate }}</h5>
+          <i (click)="closeDetailsWindow()" class="bx bx-x-circle"></i>
+        </div>
+        <div class="controls-details-body">
+          <div
+            *ngIf="controlObjs['filter'].active"
+            class="controls-details-card"
+          >
+            <app-filter />
+          </div>
+          <div *ngIf="controlObjs['swipe'].active" class="controls-details-card">
+            <app-swipe (handleLayersLegend)="handleLayerSelected($event)" />
+          </div>
+          <div
+            *ngIf="controlObjs['drawArea'].active"
+            class="controls-details-card"
+          >
+            <app-draw-area />
+          </div>
+        </div>
+      </div>
+
+      <div
         [hidden]="popupRegion.coordinate.length == 0"
         #wfsCard
         id="popup"
         class="ol-popup wfs-card"
-      >
+      >      >
         <div class="popup-header">
           <h5>{{ "popup-info.title" | translate | uppercase }}</h5>
           <i
