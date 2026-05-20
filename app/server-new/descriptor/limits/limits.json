@@ -13,26 +13,19 @@
         "selectedType": "municipios",
         "types": ["municipios"]
     },
-    {
-        "idLayer": "biomas",
-        "labelLayer": "translate",
-        "visible": false,
-        "selectedType": "biomas",
-        "types": ["biomas"]
-    },
-    {
-        "idLayer": "limites_cartas_ibge",
-        "labelLayer": "translate",
-        "visible": false,
-        "selectedType": "limites_cartas_ibge",
-        "types": ["limites_cartas_ibge"]
-    },
-    {
+        {
         "idLayer": "malha_fundiaria_consolidada",
         "labelLayer": "translate",
         "visible": false,
         "selectedType": "malha_fundiaria_consolidada",
         "minZoom": 8,
         "types": ["malha_fundiaria_consolidada"]
+    },
+    {
+        "idLayer": "biomas",
+        "labelLayer": "translate",
+        "visible": false,
+        "selectedType": "biomas",
+        "types": ["biomas"]
     }
 ]
