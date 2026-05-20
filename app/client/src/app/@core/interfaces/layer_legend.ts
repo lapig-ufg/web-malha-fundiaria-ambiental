@@ -4,4 +4,5 @@ export interface LayerLegend {
     filter: string | null;
     filterHandler: string | null;
     expanded: boolean;
+    legend?: any[];
 }

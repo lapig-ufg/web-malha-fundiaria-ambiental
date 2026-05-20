@@ -54,6 +54,9 @@ class Layer:
                     
                     if 'projection' in self.params:
                         typed_ob['projection'] = self.params['projection']
+
+                    if 'legend' in self.params:
+                        typed_ob['legend'] = self.params['legend']
                     
                     layertypes_v.append(typed_ob)
         return layertypes_v

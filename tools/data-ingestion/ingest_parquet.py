@@ -1,6 +1,9 @@
-import duckdb
 import os
+import pathlib
+
+import duckdb
 import psycopg2
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -19,19 +22,9 @@ def get_connection():
 def get_connection_string():
     return f"postgresql://{DB_CONFIG['user']}:{DB_CONFIG['password']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']}"
 
-def ingest_data():
-    # Caminho para os arquivos parquet
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(script_dir, '..', 'data')
-    
-    if not os.path.exists(data_dir):
-        print(f"Pasta /{data_dir} não encontrada.")
-        return
-
-    files = [f for f in os.listdir(data_dir) if f.endswith('.parquet')]
-    
-    if not files:
-        print(f"Nenhum arquivo .parquet encontrado na pasta /{data_dir}.")
+def ingest_data(file_path: pathlib.Path):
+    if not file_path.exists():
+        print(f"O arquivo não foi encontrado.")
         return
 
     # Conectar ao DuckDB (em memória)

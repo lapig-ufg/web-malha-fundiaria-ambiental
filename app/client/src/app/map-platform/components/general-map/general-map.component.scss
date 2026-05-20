@@ -535,6 +535,32 @@
   }
   .details-inner {
     padding: 8px;
+
+    &.custom-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .custom-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .custom-legend-color {
+          width: 16px;
+          height: 16px;
+          border-radius: 2px;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          flex-shrink: 0;
+        }
+
+        .custom-legend-label {
+          font-size: 0.85em;
+          color: #444;
+          line-height: 1.2;
+        }
+      }
+    }
   }
 
   .cdk-drag-preview {

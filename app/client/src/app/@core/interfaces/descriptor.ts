@@ -72,6 +72,7 @@ export interface DescriptorType {
   wfsMapCard: DescriptorMapCard;
   cogStyle?: any;
   projection?: string;
+  legend?: any[];
 }
 
 /*
@@ -101,6 +102,7 @@ export interface DescriptorLayer {
   types: DescriptorType[];
   selectedType: string;
   selectedTypeObject?: DescriptorType;
+  legend?: any[];
 }
 
 export interface DescriptorGroup {

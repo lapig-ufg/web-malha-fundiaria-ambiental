@@ -98,6 +98,10 @@ module.exports = class Layer {
                         typedOb.projection = self.params.projection;
                     }
 
+                    if (self.params.hasOwnProperty('legend')) {
+                        typedOb.legend = self.params.legend;
+                    }
+
                     layertypesV.push(typedOb)
                 }
 

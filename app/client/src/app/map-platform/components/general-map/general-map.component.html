@@ -81,30 +81,38 @@
                   </span>
                 </div>
                 <div class="details">
-                  <div
-                    *ngIf="legend.filterHandler === 'layername'; else noFilters"
-                    class="details-inner"
-                  >
-                    <img
-                      src="{{
-                        env.OWS
-                      }}/ows?EXCEPTIONS=application%2Fvnd.ogc.se_xml&TRANSPARENT=TRUE&VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&layer={{
-                        legend.filter
-                      }}&format=image%2Fpng"
-                      alt="{{ legend.key }}"
-                    />
+                  <div *ngIf="legend.legend; else defaultLegend" class="details-inner custom-legend">
+                    <div *ngFor="let item of legend.legend" class="custom-legend-item">
+                      <span class="custom-legend-color" [style.background-color]="item.color"></span>
+                      <span class="custom-legend-label">{{ item.label }}</span>
+                    </div>
                   </div>
-                  <ng-template #noFilters>
-                    <div class="details-inner">
+                  <ng-template #defaultLegend>
+                    <div
+                      *ngIf="legend.filterHandler === 'layername'; else noFilters"
+                      class="details-inner"
+                    >
                       <img
                         src="{{
                           env.OWS
                         }}/ows?EXCEPTIONS=application%2Fvnd.ogc.se_xml&TRANSPARENT=TRUE&VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&layer={{
-                          legend.key
+                          legend.filter
                         }}&format=image%2Fpng"
                         alt="{{ legend.key }}"
                       />
                     </div>
+                    <ng-template #noFilters>
+                      <div class="details-inner">
+                        <img
+                          src="{{
+                            env.OWS
+                          }}/ows?EXCEPTIONS=application%2Fvnd.ogc.se_xml&TRANSPARENT=TRUE&VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&layer={{
+                            legend.key
+                          }}&format=image%2Fpng"
+                          alt="{{ legend.key }}"
+                        />
+                      </div>
+                    </ng-template>
                   </ng-template>
                 </div>
               </div>

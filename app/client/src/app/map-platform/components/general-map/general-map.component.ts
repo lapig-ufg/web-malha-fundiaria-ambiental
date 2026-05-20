@@ -749,6 +749,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
             filter: descriptorType.filterSelected!,
             filterHandler: descriptorType.filterHandler!,
             expanded: true,
+            legend: descriptorType.legend || descriptorLayer.legend
           });
         });
       });
@@ -778,6 +779,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
         filter: descriptorType.filterSelected!,
         filterHandler: descriptorType.filterHandler!,
         expanded: true,
+        legend: descriptorType.legend
       });
     }
 
