@@ -4,22 +4,6 @@
 <p-accordion [multiple]="true" [activeIndex]="accordionTabExpanded"
 (onOpen)="onAccordionTabOpen($event)" (onClose)="onAccordionTabClose($event)"
 >
-  <p-accordionTab header="{{ 'options.limits' | translate }}">
-    <div *ngIf="limits.length != 0; else loading">
-      <div *ngFor="let limit of limits">
-        <div class="content-card">
-          <p-inputSwitch
-            styleClass="inputSwitchClass"
-            (onChange)="onChangeLimit(limit, $event)"
-            [(ngModel)]="limit.checked"
-          ></p-inputSwitch>
-          <p class="inlineSwitchButton">
-            {{ limit.label }}
-          </p>
-        </div>
-      </div>
-    </div>
-  </p-accordionTab>
   <p-accordionTab header="{{ 'options.basemaps' | translate }}">
     <div *ngIf="bmaps.length != 0; else loading">
       <div *ngFor="let bmap of bmaps">

@@ -468,6 +468,34 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   public resetDrillDown() {
     this.drillDownLevel = 0;
     this.mapService.resetZoom();
+    this.refreshDrillDownLimits();
+  }
+
+  private refreshDrillDownLimits(): void {
+    const descriptor = this.descriptorService.getDescriptorValue();
+    if (!descriptor) return;
+
+    descriptor.limits.forEach((limit) => {
+      let visible = false;
+      if (this.drillDownLevel === 0 && limit.idLayer === 'estados')
+        visible = true;
+      if (this.drillDownLevel === 1 && limit.idLayer === 'municipios')
+        visible = true;
+      if (
+        this.drillDownLevel === 2 &&
+        limit.idLayer === 'malha_fundiaria_consolidada'
+      )
+        visible = true;
+
+      if (limit.selectedTypeObject) {
+        limit.selectedTypeObject.visible = visible;
+      }
+
+      this.updateLimitVisibility(
+        limit,
+        this.mapService.map.getView().getZoom() || 0
+      );
+    });
   }
 
   private refreshLayersVisibilityByZoom(zoom: number): void {
@@ -486,6 +514,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   }
 
   private initDescriptor(descriptor: Descriptor) {
+    this.refreshDrillDownLimits();
     this.initBasemaps(descriptor.basemaps);
     this.initLayers(descriptor.groups);
     this.initLimits(descriptor.limits);
@@ -1175,6 +1204,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
 
               map.getView().fit(extent, { duration: 1500 });
               this.drillDownLevel++;
+              this.refreshDrillDownLimits();
               hasIncremented = true;
             }
           } else {
