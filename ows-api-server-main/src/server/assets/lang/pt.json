@@ -1,0 +1,578 @@
+{
+    "labels": {
+        "layertype": {
+            "typeLabel": {
+                "type": "Tipo",
+                "quantity": "Quantidade",
+                "area_planted": "Área Plantada",
+                "production": "Produção",
+                "source": "Fonte"
+            },
+            "filterLabel": {
+                "year": "Ano",
+                "period": "Período",
+                "depth": "Profundidade",
+                "type": "Tipo"
+            }
+        }
+    },
+    "metadata_info": {
+        "general_titles": {
+            "title": "Metadados",
+            "description": "Descrição",
+            "format": "Formato",
+            "region": "Região",
+            "data": "Data",
+            "period": "Período",
+            "scale": "Escala",
+            "system_coordinator": "Sistemas de Referência e Coordenadas",
+            "cartographic_projection": "Projeção cartográfica",
+            "cod_caracter": "Codificação de caractere",
+            "coordinates": "Sistemas de Referência e Coordenadas",
+            "projection": "Projeção cartográfica",
+            "caracter": "Codificação de caractere",
+            "fonte": "Fonte",
+            "update": "Atualização",
+            "contato": "Contato",
+            "link": "URL"
+        },
+        "general_values": {
+            "format": {
+                "shp": "Shapefile (*.SHP), com arquivos complementares (*.PRJ, *DBF, *.SHX, *.SBX, *MAP).",
+                "tif": "Raster (*.TIF).",
+                "csv": "Valores separados por vírgula (*.CSV).",
+                "gpkg": "Geopackage (*.gpkg)",
+                "service": {
+                    "planet": "Webservice fornecido pelo Norway’s International Climate & Forests Initiative",
+                    "sentinel": "Webservice fornecido pela EOX "
+                }
+            },
+            "system_coordinator": {
+                "sirgas2000": "Superfície de referência SIRGAS 2000, Sistema de Coordenada Geográfica (em graus).",
+                "wgs84": "Sistema Geodésico Mundial (WGS84)"
+            },
+            "cartographic_projection": {
+                "utm": "Universal Transversa de Mercator (UTM)."
+            },
+            "cod_caracter": {
+                "latin1": "Latin 1",
+                "utf8": "UTF-8"
+            },
+            "region": {
+                "brasil": "Todo o território nacional do Brasil",
+                "cerrado": "Bioma Cerrado, permitindo analisar as classes de uso do solo por outras regiões de interesse como: estados e municípios."
+            },
+            "fonte": {
+                "lapig": "Laboratório de Processamento de Imagens e Geoprocessamento - LAPIG."
+            }
+        }
+    },
+    "layertype": {
+        "agricultura_agrosatelite": {
+            "viewValueType": "Agrosatélite",
+            "filters": {
+                "year=2001": 2001
+            },
+            "metadata": {
+                "title": "Agricultura - Agrosatélite",
+                "description": "Dinâmica da expansão da área plantada com culturas anuais no Bioma Cerrado.",
+                "format": "shp",
+                "region": "Bioma Cerrado, permitindo analisar as classes de uso do solo por outras regiões de interesse como: estados e municípios.",
+                "period": "2001; 2007; 2014",
+                "scale": "1:250.000",
+                "system_coordinator": "sirgas2000",
+                "cartographic_projection": "utm",
+                "cod_caracter": "latin1",
+                "fonte": "Agrosatélite Geotecnologia Aplicada, Fundação Gordon and Betty Moore (Financiadores)",
+                "url": "<a target='_blank' class='link-details' href='https://agrosatelite.com.br/'> https://agrosatelite.com.br/</a>"
+            }
+        },
+        "planet": {
+            "metadata": {
+                "title": "Imagens de Satélite: PLANET",
+                "description": "Com centenas de satélites em órbita a Planet é capaz de obter imagens com resolução de 3 metros de qualquer local da Terra diariamente.",
+                "region": "Global - O Mundo todo.",
+                "period": "2016 ~ até hoje",
+                "scale": "1:250.000"
+            }
+        },
+        "sentinel": {
+            "metadata": {
+                "title": "Imagens de Satélite: SENTINEL",
+                "description": "Mapa Sentinel-2 criada pela EOX.",
+                "region": "Global - O Mundo todo.",
+                "period": "2016 ~ 2020",
+                "scale": "1:250.000"
+            }
+        },
+        "geo_car_imovel": {
+            "metadata": {
+                "title": "Propriedades Rurais",
+                "description": "Propriedades inscritas no Cadastro Ambiental Rural (CAR) - Lei nº 12.651, de 25 de maio de 2012.",
+                "region": "Brasil",
+                "fonte": "Cadastro Ambiental Rural (CAR) / Serviço Florestal Brasileiro (SFB)"
+            }
+        },
+        "unidades_planejamento_hidrico": {
+            "viewValueType": "Unidades",
+            "metadata": {
+                "title": "Unidades de Planejamento Hídrico",
+                "description": "A unidade de planejamento hídrico pretende subsidiar a definição da mínima área de abrangência para o desenvolvimento de um plano, consideradas as necessidades de integração da Política Nacional com as Políticas Estaduais e Municipais.",
+                "region": "Brasil",
+                "fonte": "Agência Nacional de Águas - Superintendência de Planejamento de Recursos Hídricos"
+            }
+        },
+        "limites_terras_indigenas": {
+            "viewValueType": "Limites Terras Indígenas",
+            "metadata": {
+                "title": "Terras Indígenas (TI)",
+                "description": "Limite das terras indígenas brasileiras.",
+                "region": "Brasil",
+                "fonte": "Fundação Nacional do Índio (FUNAI)"
+            }
+        },
+        "areas_militares_br": {
+            "viewValueType": "Áreas Militares"
+        },
+        "assentamentos": {
+            "viewValueType": "Assentamentos",
+            "metadata": {
+                "title": "Assentamentos",
+                "description": "O assentamento de reforma agrária é um conjunto de unidades agrícolas, instaladas pelo Incra em um imóvel rural.",
+                "region": "Brasil",
+                "fonte": "Instituto Nacional de Colonização e Reforma Agrária (INCRA)"
+            }
+        },
+        "areas_quilombolas": {
+            "viewValueType": "Comunidades Quilombolas",
+            "metadata": {
+                "title": "Comunidades Quilombolas",
+                "description": "Limite das terras de Comunidades Quilombolas.",
+                "region": "Brasil",
+                "fonte": "Fundação Nacional do Índio (FUNAI)"
+            }
+        },
+        "pa_br_unidades_conservacao_PI": {
+            "viewValueType": "UCs - Proteção Integral",
+            "metadata": {
+                "title": "Unidades de Conservação (Proteção Integral)",
+                "description": "Localização das unidades de conservação de proteção integral.",
+                "region": "Brasil",
+                "fonte": "Instituto Chico Mendes de Conservação da Biodiversidade (ICMBio)"
+            }
+        },
+        "pa_br_unidades_conservacao_US": {
+            "viewValueType": "UCs - Uso Sustentável",
+            "metadata": {
+                "title": "Unidades de Conservação (Uso Sustentável)",
+                "description": "Localização das unidades de conservação de uso sustentável.",
+                "region": "Brasil",
+                "fonte": "Instituto Chico Mendes de Conservação da Biodiversidade (ICMBio)"
+            }
+        },
+        "soilgrids_argila": {
+            "viewValueType": "Argila no Solo - SoilGrids",
+            "filters": {
+                "or_ce_argila_0-5cm_soilgrids": "Entre 0 - 5 cm de profundidade",
+                "or_ce_argila_5-15cm_soilgrids": "Entre 5 - 15 cm de profundidade",
+                "or_ce_argila_15-30cm_soilgrids": "Entre 15 - 30 cm de profundidade",
+                "or_ce_argila_30-60cm_soilgrids": "Entre 30 - 60 cm de profundidade",
+                "or_ce_argila_60-100cm_soilgrids": "Entre 60 - 100 cm de profundidade",
+                "or_ce_argila_100-200cm_soilgrids": "Entre 100 - 200 cm de profundidade"
+            },
+            "metadata": {
+                "title": "Mapa de Argila no Solo - SoilGrids",
+                "description": "SoilGrids é um sistema de mapeamento global com escala de 250m que faz uso de 150.000 perfis de solo e Machine Learning para predizer diferentes propiedades quantitativas do solo como: argila, areia, densidade de carbono orgânico, estoque de carbono orgânico, carbono organico no solo e nitrogênio total. Com profundidades de 0, 5, 15, 30, 60, 100 e 200 centímetros. Proporção de partículas de Argila (menores que 0.002 mm) em g/kg.",
+                "format": "tif",
+                "region": "Bioma Cerrado, permitindo analisar as classes de uso do solo por outras regiões de interesse como: estados e municípios.",
+                "period": "2010",
+                "scale": "250 metros"
+            }
+        },
+        "default": {
+            "viewValueType": "Default Value",
+            "metadata": {
+                "title": "Metadados não enviados a TI, valor Default",
+                "description": "Devido a ausência de entrega dos Metadados, não foi possível obter descrição.",
+                "format": "Especificar se é SHP, GPKG (Vetor) ou TIF (Raster)",
+                "region": "Especificar a Região de abrangência do dado. Ex. Brasil, Cerrado, etc.",
+                "period": "Especificar o período do dado. Ex. 2000 ~ 2020",
+                "scale": "Especificar a escala do dado: Ex. 1:250.000",
+                "system_coordinator": "Especificar o sistema de coordenadas. Ex: SIRGAS2000",
+                "cartographic_projection": "Especificar a projeção cartográfica. Ex: UTM",
+                "cod_caracter": "Especificar o código do Caractere. Ex: UTF-8",
+                "fonte": "Não foi enviado para a TI. Especificar a organização ou pessoa que gerou o dado.",
+                "link": "Falta enviar. Especificar o link para especificação do dado ou e-mail de contato da pessoa."
+            }
+        },
+        "pasture_col6_s100": {
+            "viewValueType": "Área de Pastagem",
+            "metadata": {
+                "title": "Áreas de Pastagens do Brasil",
+                "description": "Mapeamento anual das pastagens brasileiras, realizado através do uso de séries de dados Landsat de 1985 a 2020. Utilizando abordagens de classificação supervisionada (Random Forest) através da plataforma Earth Engine da Google.",
+                "scale": "30 metros",
+                "fonte": "Laboratório de Processamento de Imagens e Geoprocessamento - Lapig (geração do dado). Projeto de Mapeamento Anual da Cobertura e Uso do Solo do Brasil - MapBiomas (viabilizador)."
+            }
+        },
+        "pasture_quality_col6_s100": {
+            "viewValueType": "Qualidade da Pastagem",
+            "metadata": {
+                "title": "Indícios de degradação das pastagens brasileiras",
+                "description": "Mapeamento da qualidade de pastagens, gerado pelo Lapig, onde foram analisados os dados de pastagens pixel a pixel para o período de 2011 a 2016, por meio de análise de tendências em anomalias acumuladas. A análise foi baseado em dados satelitários (NDVI/MOD13Q1), e avalia perdas ou ganho em produtividade. As áreas com tendência significativas de perda em produtividade (p < 0.05) foram consideradas áreas com indícios de degradação.",
+                "fonte": "Laboratório de Processamento de Imagens e Geoprocessamento - Lapig (geração do dado). Projeto de Mapeamento Anual da Cobertura e Uso do Solo do Brasil - MapBiomas (viabilizador)."
+            }
+        },
+        "lotacao_bovina_regions": {
+            "viewValueType": "Rebanho Bovino em Unidades Animal (UA)",
+            "metadata": {
+                "title": "Rebanho Bovino em Unidades Animal (UA)",
+                "description": "Cálculo realizado considerando a composição do rebanho para o censo agropecuário. Para os anos de 1986 a 1999, utilizou-se os dados do censo agropecuário de 1996. Para os anos de 2000 a 2018. utilizou-se os dados do censo agropecuário de 2006. Sendo que uma Unidade Animal (UA), equivale a um animal de 450 kg vivo."
+            }
+        },
+        "n_kbcs_regions": {
+            "viewValueType": "Rebanho Bovino em Nº de Cabeças (Kbcs)",
+            "metadata": {
+                "title": "Rebanho Bovino em Nº de Cabeças (Kbcs)",
+                "description": "Cálculo realizado considerando a composição do rebanho para o censo agropecuário. Para os anos de 1986 a 1999, utilizou-se os dados do censo agropecuário de 1996. Para os anos de 2000 a 2018. utilizou-se os dados do censo agropecuário de 2006."
+            }
+        },
+        "pasture_carbon_aglivc": {
+            "viewValueType": "Biomassa Aérea Viva (MgC.ha)",
+            "metadata": {
+                "title": "Estoque de Carbono na Biomassa Aérea Viva nas pastagens do bioma Cerrado",
+                "description": "Estimativas de estoques de nas áreas de pastagens do bioma Cerrado, nos seguintes compartimentos: (a) biomassa aérea viva; (b) biomassa aérea morta; (c) matéria orgânica do solo; e (d) raízes."
+            }
+        },
+        "pasture_carbon_stdeadc": {
+            "viewValueType": "Biomassa Aérea Morta (MgC.ha)",
+            "metadata": {
+                "title": "Estoque de Carbono Biomassa Morta nas pastagens do bioma Cerrado",
+                "description": "Estimativas de estoques de nas áreas de pastagens do bioma Cerrado, nos seguintes compartimentos: (a) biomassa aérea viva; (b) biomassa aérea morta; (c) matéria orgânica do solo; e (d) raízes."
+            }
+        },
+        "pasture_carbon_somsc": {
+            "viewValueType": "Matéria orgânica do solo - 0-20cm (MgC.ha)",
+            "metadata": {
+                "title": "Estoque de Carbono na Matéria Orgânica do Solo nas pastagens do bioma Cerrado",
+                "description": "Estimativas de estoques de nas áreas de pastagens do bioma Cerrado, nos seguintes compartimentos: (a) biomassa aérea viva; (b) biomassa aérea morta; (c) matéria orgânica do solo; e (d) raízes."
+            }
+        },
+        "pasture_carbon_bglivs": {
+            "viewValueType": "Raízes - 0-20cm (MgC.ha)",
+            "metadata": {
+                "title": "Estoque de Carbono nas Raízes nas pastagens do bioma Cerrado",
+                "description": "Estimativas de estoques de nas áreas de pastagens do bioma Cerrado, nos seguintes compartimentos: (a) biomassa aérea viva; (b) biomassa aérea morta; (c) matéria orgânica do solo; e (d) raízes."
+            }
+        },
+        "pontos_campo_parada": {
+            "viewValueType": "Com Parada",
+            "metadata": {
+                "title": "Pontos de Campo com Parada",
+                "description": "Com o propósito de validar mapas produzidos pelo LAPIG-UFG no âmbito do MapBiomas e de subsidiar pesquisas voltadas à qualificação das pastagens brasileiras, seis atividades de campo foram realizadas durante os anos de 2017 e 2018. Um grande conjunto de pontos georreferenciados foi formado e organizado com dados de uso/cobertura do solo e indicativos de qualidade das pastagens."
+            }
+        },
+        "pontos_campo_sem_parada": {
+            "viewValueType": "Sem Parada",
+            "metadata": {
+                "title": "Pontos de Campo Sem Parada",
+                "description": "Com o propósito de validar mapas produzidos pelo LAPIG-UFG no âmbito do MapBiomas e de subsidiar pesquisas voltadas à qualificação das pastagens brasileiras, seis atividades de campo foram realizadas durante os anos de 2017 e 2018. Um grande conjunto de pontos georreferenciados foi formado e organizado com dados de uso/cobertura do solo e indicativos de qualidade das pastagens."
+            }
+        },
+        "pontos_tvi_treinamento": {
+            "viewValueType": "Treinamento",
+            "metadata": {
+                "title": "Pontos Visualmente Inspecionados",
+                "description": "Conjunto georreferenciado de pontos para todo o território brasileiro, sendo atribuídas classes de uso e cobertura do solo referente a cada ano no período de 1985 a 2017. Foram utilizadas imagens Landsat provenientes dos sensores TM, ETM+ e OLI. Buscou-se também abordar os critérios adotados, dificuldades e especificidades encontradas quanto a interpretação de imagens em cada um dos 6 biomas brasileiros."
+            }
+        },
+        "pontos_tvi_validacao": {
+            "viewValueType": "Validação",
+            "metadata": {
+                "title": "Pontos Visualmente Inspecionados",
+                "description": "Conjunto georreferenciado de pontos para todo o território brasileiro, sendo atribuídas classes de uso e cobertura do solo referente a cada ano no período de 1985 a 2017. Foram utilizadas imagens Landsat provenientes dos sensores TM, ETM+ e OLI. Buscou-se também abordar os critérios adotados, dificuldades e especificidades encontradas quanto a interpretação de imagens em cada um dos 6 biomas brasileiros."
+            }
+        },
+        "v_union_tvi_validacao_1985_2017": {
+            "viewValueType": "Pontos (1985-2017)",
+            "metadata": {
+                "title": "Pontos Visualmente Inspecionados",
+                "description": "Conjunto georreferenciado de pontos para todo o território brasileiro, sendo atribuídas classes de uso e cobertura do solo referente a cada ano no período de 1985 a 2017. Foram utilizadas imagens Landsat provenientes dos sensores TM, ETM+ e OLI. Buscou-se também abordar os critérios adotados, dificuldades e especificidades encontradas quanto a interpretação de imagens em cada um dos 6 biomas brasileiros."
+            }
+        },
+        "pontos_classes_raras_85k_mapbiomas": {
+            "viewValueType": "Pontos (1985-2019)",
+            "metadata": {
+                "title": "Pontos Visualmente Inspecionados",
+                "description": "Conjunto georreferenciado de pontos para todo o território brasileiro utilizado para validação dos mapeamentos do mapbiomas, sendo atribuídas classes de uso e cobertura da terra conforme a legenda mapbiomas referente aos anos de 1985 a 2018. Foram utilizadas series temporais de imagens Landsat e utilizando a ferramenta TVI. Período: 1985 a 2019"
+            }
+        },
+        "pontos_validacao_pastagem_mapbiomas_col6": {
+            "viewValueType": "Pontos (Col.6)",
+            "metadata": {
+                "title": "Pontos Visualmente Inspecionados",
+                "description": "Conjunto georreferenciado de pontos para todo o território brasileiro, sendo atribuídas classes de pastagem e não pastagem referente ao ano de 2020. Foram utilizadas imagens semestrais de Sentinel 2 através da plataforma GEE e utilizando o software Qgis. "
+            }
+        },
+        "floresta_plantada_mapbiomas": {
+            "viewValueType": "Floresta Plantada",
+            "metadata": {
+                "title": "Floresta Plantada (MapBiomas Coleção 6)",
+                "description": "Espécies arbóreas plantadas para fins comerciais (e.g., pinus, eucalipto, araucária). "
+            }
+        },
+        "lavoura_perene_mapbiomas": {
+            "viewValueType": "Lavoura Perene",
+            "metadata": {
+                "title": "Lavoura Temporária (MapBiomas Coleção 6)",
+                "description": "Áreas ocupadas com cultivos agrícolas de curta ou média duração (e.g., Soja, Cana-de-Áçucar, Arroz, e outros)."
+            }
+        },
+        "lavoura_temporaria_mapbiomas": {
+            "viewValueType": "Lavoura Temporária",
+            "metadata": {
+                "title": "Lavoura Perene (MapBiomas Coleção 6)",
+                "description": "Áreas ocupadas com cultivos agrícolas de ciclo vegetativo longo (e.g., Café, Citrus, Cacau, Caju, e outros)."
+            }
+        },
+        "areas_publicas_nao_destinadas_br": {
+            "viewValueType": "Áreas Públicas Não-Destinadas"
+        },
+        "reserva_legal_br": {
+            "viewValueType": "Reserva Legal",
+            "metadata": {
+                "title": "Reserva Legal (RL)",
+                "description": "Área da propriedade com a função de assegurar o uso econômico de modo sustentável dos recursos naturais do imóvel rural, auxiliar a conservação e a reabilitação dos processos ecológicos e promover a conservação da biodiversidade.",
+                "fonte": "Cadastro Ambiental Rural (CAR) / Serviço Florestal Brasileiro (SFB)"
+            }
+        },
+        "armazens_conab_br": {
+            "viewValueType": "Armazéns",
+            "metadata": {
+                "title": "Armazéns",
+                "description": "Número de armazéns destinados a armazenamento e controle de produção no Brasil.",
+                "scale": "Pontual",
+                "fonte": "Companhia Nacional de Abastecimento (CONAB) (Revisado pelo LAPIG-UFG)"
+            }
+        },
+        "pa_br_rodovias_dnit": {
+            "viewValueType": "Rodovias - DNIT",
+            "metadata": {
+                "title": "Malha Viária (DNIT)",
+                "description": "Malha viária brasileira detalhada fornecida pelo Departamento Nacional de Infraestrutura e Transporte brasileiro (DNIT).",
+                "fonte": "Governo Federal do Brasil - Departamento Nacional de Infraestrutura e Transporte (DNIT)"
+            }
+        },
+        "pa_br_estradas_osm": {
+            "viewValueType": "Vias Detalhadas - OSM",
+            "metadata": {
+                "title": "Malha Viária detalhada (OSM)",
+                "description": "Malha viária brasileira detalhada fornecida pelo OpenStreet Map (OSM)."
+            }
+        },
+        "limites_frigorificos_2021": {
+            "viewValueType": "Limites Frigoríficos"
+        }
+    },
+    "basemap": {
+        "mapbox": {
+            "viewValueType": "Geopolítico"
+        },
+        "bing": {
+            "viewValueType": "Bing Maps"
+        },
+        "google": {
+            "viewValueType": "Google"
+        },
+        "roads": {
+            "viewValueType": "Estradas"
+        },
+        "relief": {
+            "viewValueType": "Relevo"
+        },
+        "planet": {
+            "viewValueType": "Planet"
+        },
+        "mapbox-dark": {
+            "viewValueType": "Geopolítico Dark"
+        }
+    },
+    "limit": {
+        "estados": {
+            "viewValueType": "Estados do Brasil"
+        },
+        "municipios": {
+            "viewValueType": "Municípios do Brasil"
+        },
+        "municipios_info": {
+            "viewValueType": "Municípios do Brasil com Biomas e Estado"
+        },
+        "biomas": {
+            "viewValueType": "Biomas do Brasil"
+        },
+        "limites_cartas_ibge": {
+            "viewValueType": "Cartas do IBGE"
+        }
+    },
+    "cardMapLabels": {
+        "uf": "UF",
+        "estado": "Estado",
+        "cd_geocmu": "Código Municipal",
+        "municipio": "Município",
+        "bioma": "Bioma",
+        "regiao": "Região",
+        "area_municipio_ha": {
+            "text": "Área do Município (ha)",
+            "type": "double"
+        },
+        "area_ha": {
+            "text": "Área do polígono (ha)",
+            "type": "double"
+        },
+        "classe_agricultura_agrosatelite": "Classe de Agricultura",
+        "data_ref": {
+            "text": "Data de Referência",
+            "type": "date"
+        },
+        "cod_car": "Código do CAR",
+        "uph_nm": "Nome da Unidade de Plan. Hídrico",
+        "uph_cd": "Código da Unidade de Plan. Hídrico",
+        "nome_limites_terras_indigenas": "Nome da TI",
+        "etnia_limites_terras_indigenas": "Etnia",
+        "fase_limites_terras_indigenas": "Fase",
+        "modalidade_limites_terras_indigenas": "Modalidade",
+        "cr_limites_terras_indigenas": "Coordenação Regional",
+        "cd_sipra_assentamentos": "Código SIPRA",
+        "nome_proje_assentamentos": "Nome do Projeto",
+        "capacidade_assentamentos": {
+            "text": "Capacidade do Assentamento",
+            "type": "integer"
+        },
+        "num_famili_assentamentos": {
+            "text": "Número de Famílias",
+            "type": "integer"
+        },
+        "data_obten_assentamentos": {
+            "text": "Data de Obtenção",
+            "type": "date"
+        },
+        "forma_obte_assentamentos": "Forma de Obtenção",
+        "descricao__assentamentos": "Descrição",
+        "year": "Ano",
+        "n_kbcs": {
+            "text": "Nº de Cabeças",
+            "type": "integer"
+        },
+        "ua": {
+            "text": "Unidades Animal",
+            "type": "integer"
+        },
+        "cobertura": "Cobertura",
+        "data": {
+            "text": "Data",
+            "type": "date"
+        },
+        "lon": "Longitude",
+        "lat": "Latitude",
+        "longitude": "Longitude",
+        "latitude": "Latitude",
+        "periodo": "Período",
+        "horario": "Horário",
+        "altura": "Altura",
+        "invasoras": "Invasoras?",
+        "gado": "Gado?",
+        "qtd_cupins": "Qtd. de Cupins",
+        "forrageira": "Forrageira",
+        "solo_exp": "Solo Exposto",
+        "obs": "Observações",
+        "condicao": "Condição",
+        "cultivo": "Cultivo",
+        "cons_1985": "Classe em 1985",
+        "cons_1986": "Classe em 1986",
+        "cons_1987": "Classe em 1987",
+        "cons_1988": "Classe em 1988",
+        "cons_1989": "Classe em 1989",
+        "cons_1990": "Classe em 1990",
+        "cons_1991": "Classe em 1991",
+        "cons_1992": "Classe em 1992",
+        "cons_1993": "Classe em 1993",
+        "cons_1994": "Classe em 1994",
+        "cons_1995": "Classe em 1995",
+        "cons_1996": "Classe em 1996",
+        "cons_1997": "Classe em 1997",
+        "cons_1998": "Classe em 1998",
+        "cons_1999": "Classe em 1999",
+        "cons_2000": "Classe em 2000",
+        "cons_2001": "Classe em 2001",
+        "cons_2002": "Classe em 2002",
+        "cons_2003": "Classe em 2003",
+        "cons_2004": "Classe em 2004",
+        "cons_2005": "Classe em 2005",
+        "cons_2006": "Classe em 2006",
+        "cons_2007": "Classe em 2007",
+        "cons_2008": "Classe em 2008",
+        "cons_2009": "Classe em 2009",
+        "cons_2010": "Classe em 2010",
+        "cons_2011": "Classe em 2011",
+        "cons_2012": "Classe em 2012",
+        "cons_2013": "Classe em 2013",
+        "cons_2014": "Classe em 2014",
+        "cons_2015": "Classe em 2015",
+        "cons_2016": "Classe em 2016",
+        "cons_2017": "Classe em 2017",
+        "cons_2018": "Classe em 2018",
+        "cons_2019": "Classe em 2019",
+        "cons_2020": "Classe em 2020",
+        "class_2020": "Classe em 2020",
+        "carta": "Carta",
+        "declividade": "Declividade",
+        "classe": "Classe",
+        "dt_publica": {
+            "text": "Data Pública",
+            "type": "date"
+        },
+        "esfera": "Esfera",
+        "status": "Status",
+        "nm_comunid": "Nome da Comunidade",
+        "nr_process": "Nº do Processo",
+        "nome": "Nome",
+        "grupo": "Categoria",
+        "codigouc": "Código UC",
+        "anocriacao": "Ano de Criação",
+        "atolegal": "Ato Legal",
+        "qualidade": "Qualidade",
+        "origem": "Fonte",
+        "campanha": "Campanha",
+        "year_created": "Ano de Criação",
+        "category": "Categoria",
+        "type": "Tipo",
+        "agency_man": "Agência",
+        "codigo": "Código",
+        "paof_fase": "Plano Anual de Outorga Florestal (PAOF)",
+        "nom_tema_reserva_legal_br": "Tema",
+        "armazenado": "Nome do Armazém",
+        "endereco": "Endereço",
+        "capacidade": "Capacidade",
+        "nm_tipo_tr_pa_br_rodovias_dnit": "Tipo do Trecho",
+        "ds_local_i_pa_br_rodovias_dnit": "Rodovia Início",
+        "ds_local_f_pa_br_rodovias_dnit": "Rodovia Final",
+        "ds_tipo_ad_pa_br_rodovias_dnit": "Tipo de Administração",
+        "ds_legenda_pa_br_rodovias_dnit": "Tipo Rodovia",
+        "leg_multim_pa_br_rodovias_dnit": "Detalhes",
+        "tamanho": "Tamanho",
+        "versao": "Versão",
+        "comprimento_km": "Comprimento em KMs.",
+        "cnpj": "CNPJ",
+        "data_regis": {
+            "text": "Data de Registro",
+            "type": "date"
+        },
+        "razao_social": "Razão Social",
+        "sif": "Nº do SIF",
+        "situacao": "Situação",
+        "area_limites_frigorificos_2021": "Área de Atuação",
+        "classe_1_limites_frigorificos_2021": "Classe 01",
+        "classe_2_limites_frigorificos_2021": "Classe 02",
+        "classe_3_limites_frigorificos_2021": "Classe 03",
+        "classe_4_limites_frigorificos_2021": "Classe 04"
+    }
+}

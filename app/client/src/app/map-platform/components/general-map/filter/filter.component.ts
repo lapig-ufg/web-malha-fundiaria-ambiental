@@ -73,12 +73,6 @@ export class FilterComponent implements OnInit, OnDestroy {
       icon: 'home',
       placeholder: 'search_placeholder_region',
     },
-    {
-      label: 'controls.filter_texts.label_uc',
-      value: 'uc',
-      icon: 'nature_people',
-      placeholder: 'search_placeholder_region',
-    },
   ];
 
   public textsComponentesFilters: TextFilter = {
@@ -165,11 +159,6 @@ export class FilterComponent implements OnInit, OnDestroy {
           this.listForAutoComplete = result.search;
         });
         break;
-      case 'uc':
-        this.mapAPIService.getUCs(query).subscribe((result) => {
-          this.listForAutoComplete = result.search;
-        });
-        break;
     }
   }
 
@@ -198,30 +187,33 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   private zoomExtent() {
-    if (this.selectRegion.type == '') return;
+    if (this.selectRegion.type == '' || this.selectRegion.type == 'country') return;
 
     let map = this.mapService.map;
 
     this.mapAPIService
       .getExtent(this.selectRegion)
-      .subscribe((extentResult: ArrayBuffer) => {
-        let features = new GeoJSON().readFeatures(extentResult, {
-          dataProjection: 'EPSG:4326',
-          featureProjection: 'EPSG:3857',
-        });
+      .subscribe((extentResult: any) => {
+        if (extentResult && extentResult.geometry) {
+          let features = new GeoJSON().readFeatures(extentResult, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: 'EPSG:3857',
+          });
 
-        this.regionsLimits = this.createVectorLayer(features);
+          if (features.length > 0) {
+            this.regionsLimits = this.createVectorLayer(features);
 
-        this.mapService.addLayer(this.regionsLimits);
+            this.mapService.addLayer(this.regionsLimits);
 
-        // this.source = this.regionsLimits.getSource();
-        this.source.clear();
-        // @ts-ignore
-        this.source.addFeature(features[0]);
-        // @ts-ignore
-        let extent = features[0].getGeometry().getExtent();
+            this.source.clear();
+            // @ts-ignore
+            this.source.addFeature(features[0]);
+            // @ts-ignore
+            let extent = features[0].getGeometry().getExtent();
 
-        map.getView().fit(extent, { duration: 1000 });
+            map.getView().fit(extent, { duration: 1000 });
+          }
+        }
       });
   }
 

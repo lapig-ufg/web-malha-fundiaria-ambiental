@@ -206,10 +206,6 @@ class LayerService {
     
     filters = filters.concat(this.parseMsFilter(descriptorType))
 
-    if (descriptorType.regionFilter) {
-      filters.push(descriptorType.regionFilter.toString());
-    }
-
     if (descriptorType.filterHandler == 'layername') {
       if (descriptorType.filterSelected != null) {
         layername = descriptorType!.filterSelected;
@@ -222,16 +218,14 @@ class LayerService {
   }
 
   private parseMsFilter(descriptorType: DescriptorType): string[] {
-    if (descriptorType.filterHandler !== 'msfilter') return []
-
     let filters: string[] = [];
 
-    filters.push(descriptorType.filterSelected!);
+    if (descriptorType.filterHandler === 'msfilter' && descriptorType.filterSelected) {
+      filters.push(descriptorType.filterSelected);
+    }
 
-    if (descriptorType.regionFilter) {
-      if (this.regionFilterService.hasMsFilter) {
-        filters.push(this.regionFilterService.currentMsFilter);
-      }
+    if (descriptorType.regionFilter && this.regionFilterService.hasMsFilter) {
+      filters.push(this.regionFilterService.currentMsFilter);
     }
 
     return filters;
