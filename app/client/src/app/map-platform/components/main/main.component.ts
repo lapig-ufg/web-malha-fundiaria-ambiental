@@ -30,11 +30,6 @@ export class MainComponent {
       show: false,
     },
     {
-      key: 'area',
-      icon: 'fg-polygon-hole-pt',
-      show: false,
-    },
-    {
       key: 'options',
       icon: 'fg-map-options-alt',
       show: false,
@@ -65,7 +60,6 @@ export class MainComponent {
   public onLeftSidebarClose(): void {
     this.menus[0].show = false;
     this.menus[2].show = false;
-    this.menus[3].show = false;
   }
 
   public isLeftSidebarToggle(): boolean {

@@ -1,9 +1,4 @@
 /**
- * AreaService exports.
- */
-export { AnalysisService } from './analysis.service';
-
-/**
  * ChartsService exports.
  */
 export { ChartService } from './statistics.service';

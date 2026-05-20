@@ -34,14 +34,6 @@ app.include_router(proxy.router)
 app.include_router(contact.router, prefix="/service/contact")
 app.include_router(http.router, prefix="/service/http")
 
-# Import upload and download, but catch if they aren't fully implemented
-try:
-    from api.routes import upload, download
-    app.include_router(upload.router, prefix="/service/upload")
-    app.include_router(download.router, prefix="/service/download")
-except ImportError:
-    pass
-
 # Mount angular client static files
 client_dir = os.path.join(settings.app_root, settings.CLIENT_DIR)
 

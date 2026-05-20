@@ -11,11 +11,6 @@ const routes: Routes = [
     path: 'map',
     loadChildren: () => import('./map-platform/components.module')
       .then(module => module.ComponentsModule),
-  },
-  {
-    path: 'results',
-    loadChildren: () => import('./analysis/analysis.module')
-      .then(module => module.AnalysisModule),
   }
 ];
 

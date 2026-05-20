@@ -70,10 +70,8 @@ import { RippleModule } from 'primeng/ripple';
  */
 import { DragScrollComponent } from 'ngx-drag-scroll';
 import { TranslateModule } from '@ngx-translate/core';
-import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { OptionsSidebarComponent } from './components/options-sidebar/options-sidebar.component';
 import { StatisticsSidebarComponent } from './components/statistics-sidebar/statistics-sidebar.component';
-import { AreaSidebarComponent } from './components/area-sidebar/area-sidebar.component';
 import { LoadingSpinnerComponent } from '../@core/components/loading_spinner/loading_spinner.component';
 import { UserInfoComponent } from '../@core/components/user-info-dialog/user-info-dialog.component';
 import { FilterComponent } from './components/general-map/filter/filter.component';
@@ -86,9 +84,7 @@ registerLocaleData(localePt);
     LayersSidebarComponent,
     StatisticsSidebarComponent,
     OptionsSidebarComponent,
-    AreaSidebarComponent,
     GeneralMapComponent,
-    FileUploadComponent,
     FilterComponent
   ],
   imports: [
