@@ -24,6 +24,7 @@
     "filter": "Filtrar",
     "search": "Filtros do Mapa",
     "reset_zoom": "Voltar ao Zoom Inicial",
+    "reset_navigation": "Resetar Navegação",
     "point": "Inserir Ponto",
     "print": "Imprimir Mapa",
     "details": {

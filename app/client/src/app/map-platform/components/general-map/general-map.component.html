@@ -134,13 +134,6 @@
             (click)="controlObjs[key].onClick()"
           >
           </i>
-          <!-- Quando clicado deve resetar a região default do brasil -->
-          <i
-            class="bx bx-x"
-            pRipple
-            [pTooltip]="'controls.reset_zoom' | translate"
-            (click)="onResetZoom()"
-          ></i>
         </div>
       </div>
 
@@ -262,6 +255,17 @@
         </div>
       </div>
     </app-ol-map>
+
+    <div class="reset-drilldown" *ngIf="drillDownLevel > 0">
+      <button 
+        pButton 
+        type="button" 
+        icon="pi pi-refresh" 
+        label="{{ 'controls.reset_navigation' | translate }}" 
+        (click)="resetDrillDown()"
+        class="p-button-secondary p-button-raised">
+      </button>
+    </div>
   </div>
   <p-toast></p-toast>
 

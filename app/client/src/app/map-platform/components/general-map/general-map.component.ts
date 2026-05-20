@@ -379,6 +379,8 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   public legendExpanded: boolean = true;
   public isMobile: boolean;
 
+  public drillDownLevel: number = 0;
+
   public displayFormJob: boolean = false;
   public job!: Job;
   public emailValid: boolean = true;
@@ -461,6 +463,11 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     }
 
     this.refreshLayersVisibilityByZoom(zoom);
+  }
+
+  public resetDrillDown() {
+    this.drillDownLevel = 0;
+    this.mapService.resetZoom();
   }
 
   private refreshLayersVisibilityByZoom(zoom: number): void {
@@ -1076,6 +1083,8 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
 
     let self = this;
 
+    const currentLevel = this.drillDownLevel;
+
     // Resetando variveis de controle.
     this.featureCollections = [];
 
@@ -1103,7 +1112,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
 
     const bufferedPoint = buffer(
       { type: 'Point', coordinates: this.popupRegion.coordinate },
-      20,
+      2,
       {
         units: 'kilometers',
       }
@@ -1125,32 +1134,65 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     const pixel: Pixel = map.getEventPixel(event.originalEvent);
     let promises: any[] = [];
 
-    promises.push(this.getFeatures('municipios_info', bbox));
+    if (currentLevel === 0) {
+      promises.push(this.getFeatures('estados', bbox));
+    } else if (currentLevel === 1) {
+      promises.push(this.getFeatures('municipios', bbox));
+    } else {
+      // Always query malha fundiaria at level 2
+      promises.push(this.getFeatures('malha_fundiaria_consolidada', bbox));
 
-    map.forEachFeatureAtPixel(pixel, function (layer: any) {
-      const layerType: DescriptorType = layer.get('descriptorType');
-      if (
-        layer.get('type') === 'layertype' &&
-        layerType.typeLayer === 'vectorial' &&
-        layer.getVisible() &&
-        layerType.wfsMapCard.show
-      ) {
-        promises.push(self.getFeatures(layer, bbox));
-      }
-    });
+      map.forEachFeatureAtPixel(pixel, function (layer: any) {
+        const layerType: DescriptorType = layer.get('descriptorType');
+        if (
+          layer.get('type') === 'layertype' &&
+          layerType.typeLayer === 'vectorial' &&
+          layer.getVisible() &&
+          layerType.wfsMapCard.show
+        ) {
+          promises.push(self.getFeatures(layer, bbox));
+        }
+      });
+    }
 
     Promise.all(promises)
       .then((layersFeatures) => {
         if (layersFeatures.length <= 0) return;
 
+        let hasIncremented = false;
+
         layersFeatures.forEach((featureCollection, index) => {
           if (featureCollection.features.length <= 0) return;
 
-          if (index === 0) {
+          if (currentLevel < 2) {
+            if (!hasIncremented) {
+              const feature = featureCollection.features[0];
+              const olFeature = new GeoJSON().readFeature(feature, {
+                dataProjection: 'EPSG:4326',
+                featureProjection: 'EPSG:3857',
+              }) as any;
+              const extent = olFeature.getGeometry()!.getExtent();
+
+              map.getView().fit(extent, { duration: 1500 });
+              this.drillDownLevel++;
+              hasIncremented = true;
+            }
+          } else {
             featureCollection.features = this.getFeatureToDisplay(
               this.popupRegion.coordinate,
               featureCollection.features
             );
+
+            // Zoom to the parcel on Level 2
+            if (index === 0 && featureCollection.features.length > 0) {
+              const feature = featureCollection.features[0];
+              const olFeature = new GeoJSON().readFeature(feature, {
+                dataProjection: 'EPSG:4326',
+                featureProjection: 'EPSG:3857',
+              }) as any;
+              const extent = olFeature.getGeometry()!.getExtent();
+              map.getView().fit(extent, { duration: 1000 });
+            }
 
             this.popupRegion.geojson = featureCollection;
             this.popupRegion.properties =
@@ -1161,14 +1203,6 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
                 this.popupRegion.attributes = response;
               },
             });
-          } else {
-            featureCollection.features = this.getFeatureToDisplay(
-              this.popupRegion.coordinate,
-              featureCollection.features
-            );
-            featureCollection['expanded'] = true;
-
-            this.featureCollections.push(featureCollection);
           }
         });
 
@@ -1218,6 +1252,8 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
           });
           this.mapService.addLayer(vectorLayer);
         }
+
+        if (currentLevel < 2) return;
 
         this.wfsCard.nativeElement.style.visibility = 'visible';
         this.wfsCard.nativeElement.style.bottom = '12px';
@@ -1287,10 +1323,6 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
         player.load();
       }
     }
-  }
-
-  public onResetZoom(): void {
-    this.mapService.resetZoom();
   }
 
   public closeDetailsWindow() {
