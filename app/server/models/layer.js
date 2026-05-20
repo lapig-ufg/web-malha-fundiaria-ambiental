@@ -18,6 +18,7 @@ module.exports = class Layer {
 
         this.idGroup = idGroup ? idGroup : null;
         this.idLayer = params.idLayer;
+        this.params = params;
 
 
         if (params.hasOwnProperty('types')) {
@@ -76,7 +77,7 @@ module.exports = class Layer {
     }
 
     getLayerTypesArray(layertypes, alllayertypes) {
-
+        const self = this;
         let layertypesV = []
         layertypes.forEach(function (userSelectedLayerTypeValue, index) {
             for (var k in alllayertypes) {
@@ -86,7 +87,18 @@ module.exports = class Layer {
                 })
 
                 if (ob) {
-                    layertypesV.push(Object.assign({}, ob))
+                    let typedOb = Object.assign({}, ob);
+
+                    // Merge properties from the layer definition in the JSON descriptor
+                    if (self.params.hasOwnProperty('cogStyle')) {
+                        typedOb.cogStyle = self.params.cogStyle;
+                    }
+
+                    if (self.params.hasOwnProperty('projection')) {
+                        typedOb.projection = self.params.projection;
+                    }
+
+                    layertypesV.push(typedOb)
                 }
 
             }
@@ -103,6 +115,14 @@ module.exports = class Layer {
             "selectedType": this.selectedType,
             "types": this.layerTypes
         }
+
+        // Merge any extra parameters from the JSON descriptor
+        for (let key in this.params) {
+            if (!ob.hasOwnProperty(key) && key !== 'labelLayer' && key !== 'types') {
+                ob[key] = this.params[key];
+            }
+        }
+
         return ob;
     }
 

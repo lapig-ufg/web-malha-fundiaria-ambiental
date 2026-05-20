@@ -70,6 +70,8 @@ export interface DescriptorType {
   viewValueType: string;
   visible?: boolean;
   wfsMapCard: DescriptorMapCard;
+  cogStyle?: any;
+  projection?: string;
 }
 
 /*

@@ -3,6 +3,7 @@ from utils.auxiliar import remove_null_properties
 class Layer:
     def __init__(self, language_ob: dict, params: dict, id_group: str, all_layers_t: dict):
         self.language_ob = language_ob
+        self.params = params
         self.id_group = id_group
         self.id_layer = params.get('idLayer')
         
@@ -44,7 +45,17 @@ class Layer:
             for k in alllayertypes:
                 ob = next((obj for obj in alllayertypes[k] if obj.get('valueType', '').upper() == user_selected.upper()), None)
                 if ob:
-                    layertypes_v.append(ob.copy())
+                    typed_ob = ob.copy()
+                    
+                    # Merge properties from the layer definition in the JSON descriptor
+                    # This allows specifying styles and projections per layer in the JSON
+                    if 'cogStyle' in self.params:
+                        typed_ob['cogStyle'] = self.params['cogStyle']
+                    
+                    if 'projection' in self.params:
+                        typed_ob['projection'] = self.params['projection']
+                    
+                    layertypes_v.append(typed_ob)
         return layertypes_v
 
     def get_layer_instance(self):
@@ -56,4 +67,10 @@ class Layer:
             "minZoom": self.min_zoom,
             "types": self.layer_types
         }
+
+        # Merge any extra parameters from the JSON descriptor
+        for key, value in self.params.items():
+            if key not in ob and key not in ['labelLayer', 'types']:
+                ob[key] = value
+
         return remove_null_properties(ob)
