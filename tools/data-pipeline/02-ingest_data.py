@@ -19,12 +19,10 @@ DB_CONFIG = {
 def get_connection():
     return psycopg2.connect(**DB_CONFIG)
 
-def ingest_data(file_path: pathlib.Path):
+def ingest_data(file_path: pathlib.Path, table_name: str):
     if not file_path.exists():
         print(f"Erro: O arquivo '{file_path}' não foi encontrado.")
         return
-
-    table_name = file_path.stem
     
     # Conectar ao DuckDB
     con = duckdb.connect()
@@ -79,9 +77,10 @@ def ingest_data(file_path: pathlib.Path):
 
 def main():
     parser = argparse.ArgumentParser(description='Ingere um arquivo (Parquet, etc) no Postgres via DuckDB.')
-    parser.add_argument('file_path', type=str, help='Caminho para o arquivo a ser ingerido')
+    parser.add_argument('file_path', type=str, help='Caminho para o arquivo a ser ingerido.')
+    parser.add_argument('table_name', type=str, help='Nome da tabela no banco de dados.')
     
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 3:
         parser.print_help()
         return
 
@@ -93,7 +92,7 @@ def main():
         conn = get_connection()
         conn.close()
         
-        ingest_data(file_path)
+        ingest_data(file_path, args.table_name)
         
     except Exception as e:
         print(f"Erro de conexão ou processamento: {e}")
