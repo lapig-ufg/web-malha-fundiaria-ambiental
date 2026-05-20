@@ -2,14 +2,19 @@
   <section class="main-layout desktop">
     <div class="menu-sidebar">
       <div class="logo-menu-header">
-        <a class="nav-link" href="/">
-          <img src="../../../assets/logos/lapig.png" alt="Logo Lapig" title="Lapig" />
-        </a>
+        <div class="nav-list-element" routerLink="/" pTooltip="Home" tooltipPosition="right">
+          <i class="bx bx-home-alt"></i>
+        </div>
       </div>
 
-      <ul #leftSidebar class="nav-list">
+      <ul class="nav-list">
         <li *ngFor="let menu of menus">
-          <div pRipple [class]="menu.show ? ' nav-list-element nav-list-element-active' : 'nav-list-element'" (click)="onMenuClick(menu)">
+          <div pRipple 
+               class="nav-list-element" 
+               [ngClass]="{'nav-list-element-active': menu.show}" 
+               (click)="onMenuClick(menu)"
+               [pTooltip]="'menu.' + menu.key | translate"
+               tooltipPosition="right">
             <i [class]="menu.icon"></i>
             <div class="links-name">{{ "menu." + menu.key | translate }}</div>
           </div>
@@ -18,12 +23,12 @@
 
       <ul class="nav-list footer">
           <li (click)="changeLanguage('pt')">
-            <div [class]="lang == 'pt' ? 'lng lng-active' : 'lng'">
+            <div class="lng" [ngClass]="{'lng-active': lang == 'pt'}">
               <span class="lng-name"> PT </span>
             </div>
           </li>
           <li (click)="changeLanguage('en')">
-            <div [class]="lang == 'en' ? 'lng lng-active' : 'lng'">
+            <div class="lng" [ngClass]="{'lng-active': lang == 'en'}">
               <span class="lng-name"> EN </span>
             </div>
           </li>
@@ -31,12 +36,13 @@
     </div>
   </section>
 
+  <!-- Left Sidebar (Layers & Options) -->
   <p-sidebar
-    [appendTo]="leftSidebar"
     [modal]="false"
     (onHide)="onLeftSidebarClose()"
-    [transitionOptions]="'2ms cubic-bezier(0, 0, 0.2, 1)'"
-    [visible]="menus[0].show || menus[2].show"
+    [transitionOptions]="'200ms cubic-bezier(0, 0, 0.2, 1)'"
+    [(visible)]="leftSidebarVisible"
+    styleClass="p-sidebar-left"
   >
     <ng-template pTemplate="header">
       <img class="logo" src="../../../assets/logos/lapig.png" alt="Logo Lapig" title="Lapig" />
@@ -54,21 +60,19 @@
     </div>
 
     <ng-template pTemplate="footer">
-      <div class="partners">
-        <img src="assets/logos/marcas.png" alt="" />
-      </div>
-      <div class="build_version">
-        <p>{{ COMMIT_ID }}</p>
+      <div class="partners" style="padding: 10px; text-align: center;">
+        <img src="assets/logos/marcas.png" alt="" style="max-width: 90%;" />
       </div>
     </ng-template>
   </p-sidebar>
 
-  <!-- Right Sidebar-->
+  <!-- Right Sidebar (Statistics) -->
   <p-sidebar
     position="right"
     [modal]="false"
     [(visible)]="menus[1].show"
-    [transitionOptions]="'2ms cubic-bezier(0, 0, 0.2, 1)'"
+    [transitionOptions]="'200ms cubic-bezier(0, 0, 0.2, 1)'"
+    styleClass="p-sidebar-right"
   >
     <app-statistics-sidebar></app-statistics-sidebar>
   </p-sidebar>

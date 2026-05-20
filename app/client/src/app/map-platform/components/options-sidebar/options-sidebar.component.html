@@ -1,42 +1,32 @@
 <h4 class="sidebar-title">{{ "menu.options" | translate }}</h4>
 
-<!-- Layer Sidebar Content -->
-<p-accordion [multiple]="true" [activeIndex]="accordionTabExpanded"
-(onOpen)="onAccordionTabOpen($event)" (onClose)="onAccordionTabClose($event)"
->
-  <p-accordionTab header="{{ 'options.basemaps' | translate }}">
+<div class="options-container" style="padding: 0 4px;">
+  <div style="margin-bottom: 2rem;">
+    <h5 style="font-size: 14px; font-weight: 600; color: #7f8c8d; margin-bottom: 1rem; padding-left: 4px;">{{ 'options.basemaps' | translate }}</h5>
     <div *ngIf="bmaps.length != 0; else loading">
-      <div *ngFor="let bmap of bmaps">
-        <div class="content-card">
-          <p-inputSwitch
-            styleClass="inputSwitchClass"
-            (onChange)="onChangeBmap(bmap, $event)"
-            [(ngModel)]="bmap.checked"
-          ></p-inputSwitch>
-          <p class="inlineSwitchButton">
-            {{ bmap.label }}
-          </p>
-        </div>
+      <div *ngFor="let bmap of bmaps" class="options-card">
+        <span>{{ bmap.label }}</span>
+        <p-inputSwitch
+          (onChange)="onChangeBmap(bmap, $event)"
+          [(ngModel)]="bmap.checked"
+        ></p-inputSwitch>
       </div>
     </div>
-  </p-accordionTab>
-  <p-accordionTab header="{{ 'options.options' | translate }}">
+  </div>
+
+  <div>
+    <h5 style="font-size: 14px; font-weight: 600; color: #7f8c8d; margin-bottom: 1rem; padding-left: 4px;">{{ 'options.options' | translate }}</h5>
     <div *ngIf="options.length != 0; else loading">
-      <div *ngFor="let option of options">
-        <div class="content-card">
-          <p-inputSwitch
-            styleClass="inputSwitchClass"
-            (onChange)="onChangeOption(option.key, $event)"
-            [(ngModel)]="option.checked"
-          ></p-inputSwitch>
-          <p class="inlineSwitchButton">
-            {{ "options." + option.key | translate }}
-          </p>
-        </div>
+      <div *ngFor="let option of options" class="options-card">
+        <span>{{ "options." + option.key | translate }}</span>
+        <p-inputSwitch
+          (onChange)="onChangeOption(option.key, $event)"
+          [(ngModel)]="option.checked"
+        ></p-inputSwitch>
       </div>
     </div>
-  </p-accordionTab>
-</p-accordion>
+  </div>
+</div>
 
 <ng-template #loading>
   <app-loading-spinner />

@@ -1,7 +1,7 @@
+@import url(https://fonts.googleapis.com/css?family=Lato);
 @import "src/app/@core/styles/default_theme";
 @import "src/app/@core/styles/reponsive";
 @import "node_modules/ol/ol.css";
-@import url(https://fonts.googleapis.com/css?family=Lato);
 
 :host ::ng-deep {
   .p-accordion-header-text {
@@ -31,7 +31,6 @@
 
 @include media(">=desktop") {
   
-
   .mobile {
     display: none;
   }
@@ -40,18 +39,23 @@
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: space-between;
+    overflow: hidden;
+    background-color: $primary; 
 
     app-general-map {
-      width: 100%;
-    }
-
-    app-general-map.right-sidebar-open {
-      margin-right: 320px;
+      flex: 1;
+      height: 100%;
+      margin-left: 80px; 
+      transition: margin 0.2s cubic-bezier(0, 0, 0.2, 1);
+      background-color: #fff;
     }
 
     app-general-map.left-sidebar-open {
-      margin-left: 320px;
+      margin-left: calc(80px + $left-sb-full-width);
+    }
+
+    app-general-map.right-sidebar-open {
+      margin-right: $right-sb-width; 
     }
   }
 
@@ -59,216 +63,164 @@
     height: $height;
     text-align: center;
     font-size: 12px;
-    font-weight: 400;
-    font-family: Montserrat, sans-serif;
+    font-family: 'Montserrat', sans-serif;
 
     .menu-sidebar {
       height: 100%;
-      position: relative;
+      margin: 0;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 80px;
       background: $primary;
-      padding: 6px 6px;
-      z-index: 99;
-      transition: all 0.5s ease;
+      padding: 0;
+      z-index: 1004;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: $transition;
 
-      .logo {
-        &-menu-header {
-          width: 100%;
-          display: flex;
-          aspect-ratio: 3 / 2;
-          align-items: center;
-          justify-content: center;
-
-          img {
-            width: 4em;
-          }
-        }
+      .logo-menu-header {
+        width: 100%;
+        padding: 0;
+        margin-bottom: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       .nav-list {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        li {
+          width: 100%;
+          padding: 0;
+        }
+      }
+
+      .nav-list-element {
+        color: rgba(255, 255, 255, 0.5); // More subtle base color
         width: 80px;
-        padding: 0px;
-        margin-top: 4px;
+        height: 80px;
+        padding: 0;
+        border-radius: 0;
+        transition: $transition;
+        display: flex;
+        flex-direction: column;
         align-items: center;
+        justify-content: center;
+        gap: 4px;
+        border-left: 4px solid transparent;
+        cursor: pointer;
 
-        .nav-list-element {
+        &-active {
+          color: #fff !important;
+          background: rgba(255, 255, 255, 0.12) !important;
+          border-left-color: $accent !important;
+        }
+
+        &:hover {
           color: #fff;
-          margin-bottom: 8px;
-          padding: 8px 8px;
-          border-radius: 12px;
-          background: lighten($primary, 10%);
+          background: rgba(255, 255, 255, 0.08);
+        }
 
-          &-active {
-            color: $primary;
-            background: #fff;
-          }
+        i {
+          font-size: 1.5rem;
+        }
 
-          &:hover {
-            cursor: pointer;
-            color: $primary;
-            background-color: #fff;
-
-            .tooltip {
-              opacity: 1;
-              pointer-events: auto;
-              transition: all 0.4s ease;
-              top: 50%;
-              transform: translateY(-50%);
-            }
-
-            .links-name,
-            i {
-              color: $primary;
-            }
-
-            .lng_name,
-            i {
-              color: $primary;
-            }
-          }
-
-          i {
-            line-height: 36px;
-            font-size: 2em;
-          }
-
-          .links-name {
-            font-size: 100%;
-            font-weight: 400;
-            white-space: nowrap;
-          }
-
-          .lng_name {
-            font-size: 12px;
-            font-weight: 400;
-            white-space: nowrap;
-            opacity: 1;
-            pointer-events: none;
-            transition: all 0.5s ease;
-          }
-
-          .tooltip {
-            position: absolute;
-            top: -20px;
-            left: calc(100% + 15px);
-            z-index: 3;
-            background: #fff;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 15px;
-            font-weight: 400;
-            opacity: 0;
-            white-space: nowrap;
-            pointer-events: none;
-            transition: all 0.5s ease;
-          }
+        .links-name {
+          font-size: 9px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
         }
       }
 
       .footer {
-        width: calc(100% - 12px);
-        height: 6rem;
-        bottom: 0px;
-        position: absolute;
+        width: 100%;
+        padding: 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        flex: 0;
 
         li {
-          height: 35px;
-          margin: 8px 0;
+          margin: 0;
+          list-style: none;
 
           .lng {
-            padding: 10px 0;
-            border-radius: 12px;
-            
-            color: white;
-            background: lighten($primary, 10%);
+            padding: 16px 0;
+            border-radius: 0;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 700;
+            font-size: 12px;
+            transition: $transition;
+            border-left: 4px solid transparent;
+            cursor: pointer;
 
             &-active {
-              color: $primary;
-              background: white;
+              color: $accent !important;
+              background: rgba(255, 255, 255, 0.1) !important;
+              border-left-color: $accent !important;
             }
 
             &:hover {
-              cursor: pointer;
-              color: $primary;
-              background: white;
+              color: #fff;
+              background: rgba(255, 255, 255, 0.05);
             }
           }
-        }
-      }
-
-      .partners {
-        img {
-          margin-top: 2px;
-          margin-bottom: -15px;
-          padding: 2px;
-          max-width: 80%;
-        }
-      }
-
-      .build_version {
-        margin-top: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 10px;
-        font-weight: 800;
-      }
-    }
-
-    .title {
-      padding-bottom: 8px;
-      padding-top: 8px;
-      transition: 0.6s ease all;
-      color: white;
-      margin: 5px;
-      text-align: center;
-      background: $primary;
-      border-radius: 5px;
-    }
-
-    .content {
-      overflow-y: auto;
-      box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%),
-        0 1px 5px 0 rgb(0 0 0 / 12%);
-
-      .options {
-        .details-inner {
-          padding: 18px 8px 0px 8px;
         }
       }
     }
   }
 
   ::ng-deep .p-sidebar {
-    width: 20rem;
-    background: lighten($primary, 75%) !important;
+    background: #fff !important;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05) !important;
+    border: none !important;
 
     &-left {
-      left: 93px;
+      width: $left-sb-full-width !important;
+      left: 80px !important;
+      margin: 0;
+      height: 100% !important;
+      border-right: 1px solid rgba(0, 0, 0, 0.05) !important;
+    }
+
+    &-right {
+      width: $right-sb-width !important;
+      margin: 0;
+      height: 100% !important;
+      border-left: 1px solid rgba(0, 0, 0, 0.05) !important;
     }
 
     .p-sidebar-header {
-      z-index: 1;
-      height: 3.5rem;
-      padding: 0px;
-      box-shadow: 0 1px 4px rgb(0 0 0 / 40%);
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      background: #fcfcfc;
+      box-shadow: none;
 
       .p-sidebar-close {
-        width: 64px;
-        background: transparent;
+        color: $primary;
+        transition: $transition;
+        
+        &:hover {
+          background: rgba(0, 0, 0, 0.03);
+          border-radius: 4px;
+        }
       }
 
       .logo {
-        width: 50%;
-        padding-left: 8px;
+        width: 100px;
+        filter: none;
       }
     }
 
-    .p-sidebar-footer {
-      z-index: 1;
-      height: 10%;
-      padding: 0px;
-      box-shadow: 0 -1px 4px rgb(0 0 0 / 20%);
+    .p-sidebar-content {
+      padding: 1rem 0.75rem;
     }
   }
 }

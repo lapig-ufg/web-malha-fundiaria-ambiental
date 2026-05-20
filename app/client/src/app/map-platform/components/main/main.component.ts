@@ -36,6 +36,15 @@ export class MainComponent {
     },
   ];
 
+  get leftSidebarVisible(): boolean {
+    return this.menus[0].show || this.menus[2].show;
+  }
+
+  set leftSidebarVisible(value: boolean) {
+    this.menus[0].show = value;
+    this.menus[2].show = value;
+  }
+
   constructor(
     private localizationService: LocalizationService,
     private cdRef: ChangeDetectorRef

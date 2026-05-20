@@ -1,78 +1,31 @@
-<h4 class="title">{{ "right_sidebar.title" | translate }}</h4>
+<h4 class="sidebar-title">{{ "right_sidebar.title" | translate }}</h4>
 
-<p-accordion [multiple]="true" [activeIndex]="accordionTabExpanded"
-  (onOpen)="onAccordionTabOpen($event)" (onClose)="onAccordionTabClose($event)"
->
-  <!-- Summary Tab -->
-  <p-accordionTab header="{{ 'right_sidebar.cards_titles.resumoTitle' | translate }}">
-      <div *ngIf="summaryData.get('pasture_quality') && summaryData.get('pasture_quality_comparison'); else loadingSpinner">
-        
-        <!-- Comparison Chart (Stacked Bar) -->
-        <div class="chart-container" style="padding: 10px; border-bottom: 1px solid #eee;">
-          <div class="resumo-card-title" style="margin-bottom: 10px; border-radius: 4px;">{{ 'right_sidebar.resumo_card.pasture_quality_comparison' | translate }}</div>
-          <div style="height: 350px;">
-            <p-chart type="bar" [data]="pastureQualityComparisonChartData" [options]="stackedBarOptions" height="330px">
-            </p-chart>
-          </div>
-        </div>
-
-        <!-- Doughnut Chart -->
-        <div class="chart-container" style="padding: 10px; margin-top: 10px;">
-          <div class="resumo-card-title" style="margin-bottom: 10px; border-radius: 4px;">{{ 'right_sidebar.resumo_card.pasture_quality_title' | translate }} ({{summaryData.get('pasture_quality').year}})</div>
-          <div style="height: 250px;">
-            <p-chart type="doughnut" [data]="pastureQualityChartData" [options]="doughnutOptions" height="230px">
-            </p-chart>
-          </div>
-        </div>
-
+<div class="statistics-container" style="padding: 0 4px;">
+  <div *ngIf="summaryData.get('pasture_quality') && summaryData.get('pasture_quality_comparison'); else loadingSpinner">
+    
+    <!-- Comparison Chart (Stacked Bar) -->
+    <div class="chart-section" style="margin-bottom: 2rem;">
+      <h5 class="section-title">{{ 'right_sidebar.resumo_card.pasture_quality_comparison' | translate }}</h5>
+      <div class="chart-container" style="height: 350px; padding: 10px;">
+        <p-chart type="bar" [data]="pastureQualityComparisonChartData" [options]="stackedBarOptions" height="330px">
+        </p-chart>
       </div>
-  </p-accordionTab>
-
-    <!-- Graphs Tab -->
-    <p-accordionTab header="{{'right_sidebar.cards_titles.pastureGraphTitle' | translate}}">
-      <div *ngIf="graphsData.length; else loadingSpinner">
-        <div class="details">
-          <div class="details-inner">
-              <div class="time-series-card-margin" *ngFor="let graph of graphsData">
-                <p-card *ngIf="layersForStatistics[graph.id].switch">
-                  <ng-template pTemplate="title">
-                    {{graph.title}}
-                    <button class="matButton" color="primary" (click)="onFullscreenMode(graph)" mat-icon-button>
-                      <mat-icon>aspect_ratio</mat-icon>
-                    </button>
-                  </ng-template>
-                  <div class="margin">
-                    <h4 class="graphicTitle"> {{graph.text}} </h4>
-                  </div>
-                  <p-chart #chartU [type]="graph.type" [responsive]="true" [data]="graph.data" height="150px">
-                  </p-chart>
-                </p-card>
-              </div>
-            </div>
-          </div>
-        </div>
-    </p-accordionTab>
-
-</p-accordion>
-
-<p-dialog [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false" [modal]="true"
-  [visible]="dialogData.visible" [style]="{width: '50vw'}" (visibleChange)="closeFullscreenMode()">
-    <ng-template pTemplate="header">
-      {{ dialogData.title }}
-    </ng-template>
-    <p>
-      {{ dialogData.text }}
-    </p>
-    <div class="chart">
-      <p-chart *ngIf="dialogData.type" [responsive]="true" [type]="$any(dialogData.type)"
-        [data]="dialogData.data" [options]="dialogData.options">
-      </p-chart>
     </div>
-</p-dialog>
+
+    <!-- Doughnut Chart -->
+    <div class="chart-section">
+      <h5 class="section-title">{{ 'right_sidebar.resumo_card.pasture_quality_title' | translate }} ({{summaryData.get('pasture_quality').year}})</h5>
+      <div class="chart-container" style="height: 250px; padding: 10px;">
+        <p-chart type="doughnut" [data]="pastureQualityChartData" [options]="doughnutOptions" height="230px">
+        </p-chart>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <ng-template #loadingSpinner>
-  <app-loading-spinner></app-loading-spinner>
+  <div class="loader-container">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
 </ng-template>
-      
-      
-      

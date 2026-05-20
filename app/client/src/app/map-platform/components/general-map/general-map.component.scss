@@ -5,17 +5,11 @@
 
   .map-container {
     height: $height;
-    width: $map-width;
-    background: transparent;
-    transition: all 0.8s ease !important;
-
-    .open-layers {
-      margin-left: 321px;
-    }
-
-    .open-layers-right {
-      margin-right: 321px;
-    }
+    width: 100%;
+    background: #fff;
+    transition: $transition;
+    position: relative;
+    overflow: hidden;
   }
 
   .reset-drilldown {
@@ -231,9 +225,10 @@
       top: 8px;
       left: 50px;
       transition: all 0.5s ease;
-      background: rgba($primary, 0.4);
-      border-radius: 5px 5px 0px 0px;
-      box-shadow: 0 0 16px rgb(0 0 0 / 40%);
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: $border-radius;
+      box-shadow: $box-shadow;
       overflow: hidden;
 
       .controls-details-header {
