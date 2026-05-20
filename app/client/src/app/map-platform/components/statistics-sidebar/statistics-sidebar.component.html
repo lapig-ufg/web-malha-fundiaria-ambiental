@@ -5,65 +5,28 @@
 >
   <!-- Summary Tab -->
   <p-accordionTab header="{{ 'right_sidebar.cards_titles.resumoTitle' | translate }}">
-      <div *ngIf="summaryData.size; else loadingSpinner">
+      <div *ngIf="summaryData.get('pasture_quality') && summaryData.get('pasture_quality_comparison'); else loadingSpinner">
         
-        <!-- Summary -->
-        <div class="resumo-card">
-          <div class="resumo-card-title">{{'right_sidebar.region_types.' + regionFilter.type | translate}}</div>
-          <div class="resumo-card-content"> {{ regionFilter.text }} </div>
-        </div>
-        <div class="resumo-card" *ngIf="summaryData.get('region')">
-          <div class="resumo-card-title">{{'right_sidebar.resumo_card.area_region' | translate}}</div>
-          <div class="resumo-card-content">{{summaryData.get('region').data.area | number:'1.2-3' }} ha</div>
-        </div>
-        
-        <!-- Pasture Area -->
-        <div class="resumo-card" *ngIf="layersForStatistics.pasture.switch && summaryData.get('pasture')">
-          <div class="resumo-card-title">{{'right_sidebar.resumo_card.area_pastagem' | translate}}
-            ({{summaryData.get('pasture').year}})</div>
-          <div class="resumo-card-content">{{summaryData.get('pasture').data.area | number:'1.2-3' }} ha
-            ({{summaryData.get('pasture').data.percentOfRegionArea}}
-            {{'right_sidebar.resumo_card.complement_text' | translate}} {{regionFilter.text}})</div>
-        </div>
-  
-        <!-- Carbon -->
-        <div class="resumo-card" *ngIf="layersForStatistics.carbono.switch && summaryData.get('carbono')">
-          <div class="resumo-card-title">{{'right_sidebar.resumo_card.carbono.title' | translate}}
-            ({{summaryData.get('carbono').year}})</div>
-          <div class="resumo-card-content">
-            {{'right_sidebar.resumo_card.carbono.total' | translate}}
-            {{summaryData.get('carbono').data.total | number:'1.2-3'}} 
-            (MgC) {{'right_sidebar.resumo_card.carbono.mean' | translate}}
-            {{summaryData.get('carbono').data.mean | number:'1.2-3'}} (MgC.ha)
-            ({{'right_sidebar.resumo_card.complement_text' | translate}} {{regionFilter.text}})
+        <!-- Comparison Chart (Stacked Bar) -->
+        <div class="chart-container" style="padding: 10px; border-bottom: 1px solid #eee;">
+          <div class="resumo-card-title" style="margin-bottom: 10px; border-radius: 4px;">{{ 'right_sidebar.resumo_card.pasture_quality_comparison' | translate }}</div>
+          <div style="height: 350px;">
+            <p-chart type="bar" [data]="pastureQualityComparisonChartData" [options]="stackedBarOptions" height="330px">
+            </p-chart>
           </div>
         </div>
-        
-        <!-- Pasture Quality -->
-        <div class="resumo-card"
-          *ngIf="layersForStatistics.pasture_quality.switch && summaryData.get('pasture_quality')">
-          <div class="resumo-card-title">{{'right_sidebar.resumo_card.pasture_quality_title' | translate}}
-            ({{summaryData.get('pasture_quality').year}})</div>
-          <div class="resumo-card-content">
-            <div class="resumo-card-content" *ngFor="let cl of summaryData.get('pasture_quality').data"
-              [style]="'border-radius: 5px; margin: 5px; background: ' + cl.color">
-              <div class="resumo-card-title-content">{{cl.classe}}</div>
-              <div class="resumo-card-content">{{cl.value | number:'1.2-3'}} ha ({{cl.percentAreaPasture}}
-                {{'right_sidebar.resumo_card.complement_text_pasture_quality' | translate}} e
-                {{cl.percentOfRegionArea}} {{'right_sidebar.resumo_card.complement_text' | translate}}
-                {{regionFilter.text}})</div>
-            </div>
+
+        <!-- Doughnut Chart -->
+        <div class="chart-container" style="padding: 10px; margin-top: 10px;">
+          <div class="resumo-card-title" style="margin-bottom: 10px; border-radius: 4px;">{{ 'right_sidebar.resumo_card.pasture_quality_title' | translate }} ({{summaryData.get('pasture_quality').year}})</div>
+          <div style="height: 250px;">
+            <p-chart type="doughnut" [data]="pastureQualityChartData" [options]="doughnutOptions" height="230px">
+            </p-chart>
           </div>
         </div>
-        
-        <!-- Comments -->
-        <div class="resumo-card">
-          <div class="resumo-card-title">Obs. </div>
-          <div class="resumo-card-content obs" [innerHTML]="'right_sidebar.resumo_card.obs_text' | translate">
-          </div>
-        </div>
+
       </div>
-    </p-accordionTab>
+  </p-accordionTab>
 
     <!-- Graphs Tab -->
     <p-accordionTab header="{{'right_sidebar.cards_titles.pastureGraphTitle' | translate}}">

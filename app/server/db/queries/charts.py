@@ -31,6 +31,9 @@ def get_queries(params: dict = None):
     region_filter = get_region_filter(params.get('typeRegion'), params.get('valueRegion'))
     year_filter = get_year_filter(params.get('year'))
 
+    type_region = params.get('typeRegion')
+    comparison_col = 'uf' if type_region == 'country' else 'municipio'
+
     queries = {
         'resumo': lambda p: [
             {
@@ -48,6 +51,12 @@ def get_queries(params: dict = None):
                 'source': 'lapig',
                 'id': 'pasture_quality',
                 'sql': f" SELECT b.name as classe, b.color, CAST(sum(a.st_area_ha) as double precision) as value FROM pasture_vigor_col9 a INNER JOIN graphic_colors as b on cast(a.classe as varchar) = b.class_number AND b.table_rel = 'pasture_quality' WHERE {region_filter} AND {year_filter} GROUP BY 1,2;",
+                'mantain': True
+            },
+            {
+                'source': 'lapig',
+                'id': 'pasture_quality_comparison',
+                'sql': f" SELECT upper({comparison_col}) as label, b.name as classe, b.color, CAST(sum(a.st_area_ha) as double precision) as value FROM pasture_vigor_col9 a INNER JOIN graphic_colors as b on cast(a.classe as varchar) = b.class_number AND b.table_rel = 'pasture_quality' WHERE {region_filter} AND {year_filter} GROUP BY 1,2,3 ORDER BY 1, 2",
                 'mantain': True
             },
             {

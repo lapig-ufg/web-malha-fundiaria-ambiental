@@ -40,14 +40,131 @@ class StatisticsSidebarComponent implements OnDestroy {
   private regionFilterSubscription: Subscription = new Subscription();
 
   public summaryKeys: string[] = [
-    'region',
-    'pasture',
+    'pasture_quality_comparison',
     'pasture_quality',
-    'carbono',
   ];
 
   public summaryData: Map<string, any> = new Map<string, any>();
   public graphsData: Array<any> = [];
+
+  public stackedBarOptions: any = {
+    indexAxis: 'y',
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: {
+          usePointStyle: true,
+          pointStyle: 'circle',
+          padding: 15,
+          font: {
+            size: 11
+          }
+        }
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        callbacks: {
+          label: (context: any) => {
+            let label = context.dataset.label || '';
+            if (label) {
+              label += ': ';
+            }
+            if (context.parsed.x !== null) {
+              label += new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(context.parsed.x) + ' ha';
+            }
+            return label;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        stacked: true,
+        grid: {
+          display: false
+        },
+        ticks: {
+          callback: (value: any) => {
+            if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
+            if (value >= 1000) return (value / 1000).toFixed(0) + 'k';
+            return value;
+          }
+        }
+      },
+      y: {
+        stacked: true,
+        grid: {
+          display: false
+        }
+      }
+    },
+    maintainAspectRatio: false,
+    hover: {
+      mode: 'index',
+      intersect: false
+    }
+  };
+
+  public doughnutOptions: any = {
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: {
+          usePointStyle: true,
+          pointStyle: 'circle',
+          padding: 20,
+          font: {
+            size: 12,
+            weight: '500'
+          },
+          color: '#495057'
+        }
+      },
+      tooltip: {
+        enabled: true,
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleFont: {
+          size: 14,
+          weight: 'bold'
+        },
+        bodyFont: {
+          size: 13
+        },
+        padding: 10,
+        cornerRadius: 4,
+        displayColors: true,
+        callbacks: {
+          label: (context: any) => {
+            let label = context.label || '';
+            if (label) {
+              label += ': ';
+            }
+            if (context.parsed !== null) {
+              const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+              const percent = ((context.parsed / total) * 100).toFixed(2) + '%';
+              label += new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(context.parsed) + ' ha (' + percent + ')';
+            }
+            return label;
+          }
+        }
+      }
+    },
+    animation: {
+      animateRotate: true,
+      animateScale: true,
+      duration: 1000,
+      easing: 'easeOutQuart'
+    },
+    maintainAspectRatio: false,
+    cutout: '65%',
+    hover: {
+      mode: 'nearest',
+      intersect: true
+    }
+  };
 
   public dialogData = {
     title: '',
@@ -70,7 +187,13 @@ class StatisticsSidebarComponent implements OnDestroy {
       layer: 'pasture_quality',
       group: 'pasture_general',
       year: 2023,
-      switch: false,
+      switch: true,
+    },
+    pasture_quality_comparison: {
+      layer: 'pasture_quality',
+      group: 'pasture_general',
+      year: 2023,
+      switch: true,
     },
     carbono: {
       layer: 'biomassa',
@@ -107,6 +230,76 @@ class StatisticsSidebarComponent implements OnDestroy {
           this.updateLayersForStatistics(descriptor);
         })
     );
+  }
+
+  get pastureQualityComparisonChartData() {
+    const summary = this.summaryData.get('pasture_quality_comparison');
+    if (!summary || !summary.data || !Array.isArray(summary.data)) return null;
+
+    const rawData = summary.data;
+    
+    // Aggregate total area per label to sort and limit
+    const totalAreaPerLabel = new Map<string, number>();
+    rawData.forEach((item: any) => {
+      const current = totalAreaPerLabel.get(item.label) || 0;
+      totalAreaPerLabel.set(item.label, current + item.value);
+    });
+
+    // Get top 15 labels by total area
+    const sortedLabels = Array.from(totalAreaPerLabel.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 15)
+      .map(entry => entry[0]);
+
+    // Get unique classes and their colors
+    const classesMap = new Map<string, string>();
+    rawData.forEach((item: any) => {
+      if (!classesMap.has(item.classe)) {
+        classesMap.set(item.classe, item.color);
+      }
+    });
+
+    const datasets = Array.from(classesMap.entries()).map(([classe, color]) => {
+      const data = sortedLabels.map(label => {
+        const found = rawData.find((item: any) => item.label === label && item.classe === classe);
+        return found ? found.value : 0;
+      });
+
+      return {
+        label: classe,
+        data: data,
+        backgroundColor: color,
+        hoverBackgroundColor: color
+      };
+    });
+
+    return {
+      labels: sortedLabels,
+      datasets: datasets
+    };
+  }
+
+  get pastureQualityChartData() {
+    const summary = this.summaryData.get('pasture_quality');
+    if (!summary || !summary.data || !Array.isArray(summary.data)) return null;
+
+    const labels = summary.data.map((item: any) => item.classe);
+    const data = summary.data.map((item: any) => item.value);
+    const backgroundColor = summary.data.map((item: any) => item.color);
+
+    return {
+      labels: labels,
+      datasets: [
+        {
+          data: data,
+          backgroundColor: backgroundColor,
+          hoverBackgroundColor: backgroundColor,
+          borderWidth: 2,
+          borderColor: '#ffffff',
+          hoverOffset: 20
+        }
+      ]
+    };
   }
 
   ngOnDestroy(): void {
@@ -159,10 +352,11 @@ class StatisticsSidebarComponent implements OnDestroy {
   }
 
   private getLayerSummaryData(summaryKey: string): void {
-    let year: string = '2023';
+    let year: any = '2023';
 
-    if (summaryKey !== 'region')
+    if (this.layersForStatistics[summaryKey]) {
       year = this.layersForStatistics[summaryKey].year;
+    }
 
     this.chartService
       .getSummary(summaryKey, this.regionFilter, year)

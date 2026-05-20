@@ -344,6 +344,7 @@
       "area_classe_pasture_quality": "Area of this Degradation Class",
       "complement_text": "of",
       "pasture_quality_title": "Pasture Vigor",
+      "pasture_quality_comparison": "Regional Vigor Comparison",
       "complement_text_pasture_quality": "in Pasture Area of",
       "obs_text": "*The difference between the pasture area presented here and the mapped area is explained by the area adjustment from the accuracy analysis, detailed in Parente et al. 2019 (<a target='_blank' class='link-details' href='https://doi.org/10.1016/j.rse.2019.111301'> https://doi.org/10.1016/j.rse.2019.111301</a>)",
       "pasture_quality": {

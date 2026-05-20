@@ -152,6 +152,8 @@ async def handle_resumo(lang: str = 'pt', card_resume: str = '', query_result: d
             ob['percentOfRegionArea'] = number_format((ob['value'] / area_region) * 100) + "%"
             result.append(ob)
         return result
+    elif card_resume == 'pasture_quality_comparison':
+        return query_result.get('pasture_quality_comparison', [])
     else:
         return {"data": "Invalid argument"}
 
