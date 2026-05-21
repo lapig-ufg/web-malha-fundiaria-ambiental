@@ -1140,7 +1140,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
 
     const bufferedPoint = buffer(
       { type: 'Point', coordinates: this.popupRegion.coordinate },
-      2,
+      0.0001,
       {
         units: 'kilometers',
       }
