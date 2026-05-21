@@ -360,6 +360,7 @@
     "lat": "Latitude",
     "lon": "Longitude",
     "warn_message": "Atenção",
+    "malha_fundiaria": "Detalhamento do Imóvel",
     "has_not_info_message": "Não foi encontrado informações para a região selecionada."
   },
   "hotsite": {

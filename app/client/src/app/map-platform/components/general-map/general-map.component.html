@@ -140,68 +140,31 @@
           ></i>
         </div>
         <div class="popup-body" *ngIf="featureCollections.length > 0">
-          <div
-            *ngFor="let featureCollection of featureCollections"
-            [class]="
-              featureCollection.expanded
-                ? 'legend-card legend-card-active'
-                : 'legend-card'
-            "
-          >
-            <div class="legend-card-content">
+          <div *ngFor="let featureCollection of featureCollections">
+            <div class="details-inner">
               <div
-                (click)="
-                  featureCollection.expanded = !featureCollection.expanded;
-                  $event.stopPropagation()
+                class="details-row"
+                *ngFor="
+                  let attribute of featureCollection.layerType.wfsMapCard
+                    .attributes
                 "
-                class="abstract"
               >
-                <span>
-                  <div class="legend-label">
-                    {{ featureCollection.layerType.viewValueType }}
-                  </div>
-                  <i
-                    tooltipPosition="left"
-                    [pTooltip]="
-                      featureCollection.expanded
-                        ? ('minimize' | translate)
-                        : ('maximize' | translate)
-                    "
-                    [class]="
-                      featureCollection.expanded
-                        ? 'bx bxs-up-arrow-circle'
-                        : 'bx bxs-down-arrow-circle'
-                    "
-                  ></i>
-                </span>
-              </div>
-              <div class="details">
-                <div class="details-inner">
-                  <div
-                    class="details-row"
-                    *ngFor="
-                      let attribute of featureCollection.layerType.wfsMapCard
-                        .attributes
-                    "
-                  >
-                    <div class="details-row-header">{{ attribute.label }}:</div>
-                    <div class="details-row-content">
-                      {{
-                        getAttributeValue(
-                          attribute,
-                          featureCollection.features[0].properties[
-                            attribute.column
-                          ]
-                        )
-                      }}
-                    </div>
-                  </div>
+                <div class="details-row-header">{{ attribute.label }}:</div>
+                <div class="details-row-content">
+                  {{
+                    getAttributeValue(
+                      attribute,
+                      featureCollection.features[0].properties[
+                        attribute.column
+                      ]
+                    )
+                  }}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div *ngIf="popupRegion.coordinate.length > 0" class="popup-footer">
+        <div *ngIf="popupRegion.coordinate.length > 0 && featureCollections.length <= 0" class="popup-footer">
           <span *ngFor="let attribute of popupRegion.attributes">
             {{ attribute.label }}:
             <strong>{{
@@ -211,18 +174,6 @@
               )
             }}</strong>
           </span>
-          <span
-            >{{ "popup-info.lat" | translate }}:
-            <strong>{{
-              popupRegion.coordinate[1] | number : "1.0-4" : "en-US"
-            }}</strong></span
-          >
-          <span
-            >{{ "popup-info.lon" | translate }}:
-            <strong>{{
-              popupRegion.coordinate[0] | number : "1.0-4" : "en-US"
-            }}</strong></span
-          >
         </div>
       </div>
     </app-ol-map>

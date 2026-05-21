@@ -359,8 +359,9 @@
     "close": "close",
     "lat": "Latitude",
     "lon": "Longitude",
-    "warn_message": "Warning",
-    "has_not_info_message": "No information was found for the selected region."
+    "warn_message": "Attention",
+    "malha_fundiaria": "Property Details",
+    "has_not_info_message": "No information found for the selected region."
   },
   "hotsite": {
     "lang_label": "Language",

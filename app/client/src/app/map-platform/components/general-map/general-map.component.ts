@@ -269,6 +269,21 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   public lon!: number;
   public classes!: string;
 
+  private malhaAttributes: any[] = [
+    { column: 'landternure_code', label: 'Código', columnType: 'string' },
+    { column: 'landternure_class', label: 'Classe', columnType: 'string' },
+    { column: 'municipality', label: 'Município', columnType: 'string' },
+    { column: 'state', label: 'Estado', columnType: 'string' },
+    { column: 'area_hectare', label: 'Área (ha)', columnType: 'double' },
+    { column: 'legal_reserves_hectare', label: 'Reserva Legal (ha)', columnType: 'double' },
+    { column: 'permanent_preservation_area_hectare', label: 'APP (ha)', columnType: 'double' },
+    { column: 'has_asset', label: 'Ativo', columnType: 'string' },
+    { column: 'source_data', label: 'Fonte', columnType: 'string' },
+    { column: 'gid', label: 'GID', columnType: 'string' },
+    { column: 'municipality_code', label: 'Cód. Município', columnType: 'string' },
+    { column: 'state_code', label: 'Cód. Estado', columnType: 'string' }
+  ];
+
   public popupOverlay!: Overlay;
 
   public featureCollections: any[] = [];
@@ -1210,15 +1225,33 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
               map.getView().fit(extent, { duration: 1000 });
             }
 
-            this.popupRegion.geojson = featureCollection;
-            this.popupRegion.properties =
-              featureCollection.features[0].properties;
+            if (index === 0) {
+              this.popupRegion.geojson = featureCollection;
+              this.popupRegion.properties =
+                featureCollection.features[0].properties;
+            }
 
-            this.mapAPIService.getMunicipalitiesAtributes().subscribe({
-              next: (response) => {
-                this.popupRegion.attributes = response;
-              },
-            });
+            if (currentLevel === 2 && index === 0) {
+              featureCollection.layerType = {
+                viewValueType: this.localizationService.translate(
+                  'popup-info.malha_fundiaria'
+                ),
+                wfsMapCard: {
+                  show: true,
+                  attributes: this.malhaAttributes,
+                },
+              };
+              this.featureCollections.push(featureCollection);
+              this.popupRegion.attributes = this.malhaAttributes;
+            } else if (featureCollection.hasOwnProperty('layerType')) {
+              this.featureCollections.push(featureCollection);
+            } else {
+              this.mapAPIService.getMunicipalitiesAtributes().subscribe({
+                next: (response) => {
+                  this.popupRegion.attributes = response;
+                },
+              });
+            }
           }
         });
 
