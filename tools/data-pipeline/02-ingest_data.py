@@ -8,6 +8,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
+GEOM_COL = "geom"
+
 DB_CONFIG = {
     "user": os.getenv("DB_USER"),
     "password": os.getenv("DB_PASSWORD"),
@@ -37,36 +40,32 @@ def ingest_data(file_path: pathlib.Path, table_name: str):
     con.execute(f"ATTACH '{pg_conn_str}' AS pg (TYPE postgres);")
     
     try:
-        # Detectar a coluna de geometria para o ajuste posterior
-        cols_info = con.execute(f"DESCRIBE SELECT * FROM '{file_path}'").fetchall()
-        geom_col = None
-        for col in cols_info:
-            name = col[0]
-            dtype = col[1]
-            if 'geometry' in dtype.lower() or name.lower() in ['geometry', 'geom']:
-                geom_col = name
-                break
-
         print(f"Iniciando ingestão de {file_path.name} para a tabela pg.{table_name}...")
         
         # Ingestão direta - mantém todos os nomes de colunas originais
         con.execute(f"CREATE TABLE IF NOT EXISTS pg.{table_name} AS SELECT * FROM '{file_path}';")
         
-        if geom_col:
-            print(f"Ajustando coluna '{geom_col}' para geometria 2D...")
-            try:
-                with psycopg2.connect(**DB_CONFIG) as conn:
-                    with conn.cursor() as cur:
-                        # Força 2D e garante que seja do tipo geometry
-                        cur.execute(f"""
-                            ALTER TABLE "{table_name}" 
-                            ALTER COLUMN "{geom_col}" TYPE geometry 
-                            USING ST_Force2D("{geom_col}"::geometry);
-                        """)
-                    conn.commit()
-                print(f"Ajuste de geometria concluído.")
-            except Exception as pg_err:
-                print(f"Aviso: Erro ao ajustar geometria no Postgres: {pg_err}")
+
+        print(f"Ajustando coluna '{GEOM_COL}' para geometria 2D e criando índice...")
+        try:
+            with psycopg2.connect(**DB_CONFIG) as conn:
+                with conn.cursor() as cur:
+                    # Força 2D, define SRID de origem (102033) e transforma para SIRGAS 2000 (4674)
+                    cur.execute(f"""
+                        ALTER TABLE "{table_name}" 
+                        ALTER COLUMN "{GEOM_COL}" TYPE geometry(Geometry, 4674) 
+                        USING ST_Transform(ST_SetSRID(ST_Force2D("{GEOM_COL}"::geometry), 102033), 4674);
+                    """)
+                    
+                    # Criar índice espacial (GIST)
+                    index_name = f"idx_{table_name}_{GEOM_COL}"
+                    print(f"Criando índice espacial '{index_name}'...")
+                    cur.execute(f'CREATE INDEX IF NOT EXISTS "{index_name}" ON "{table_name}" USING GIST ("{GEOM_COL}");')
+                    
+                conn.commit()
+            print(f"Ajuste de geometria e criação de índice concluídos.")
+        except Exception as pg_err:
+            print(f"Aviso: Erro ao ajustar geometria ou criar índice no Postgres: {pg_err}")
         
         print(f"Ingestão de {table_name} concluída com sucesso!")
         

@@ -1,6 +1,7 @@
 <section id="map-platform">
   <div class="map-container">
     <app-ol-map>
+      <!-- Layer Legend Section: Displays the active layers, their legend graphics, and controls (reorder, download SLD, toggle visibility) -->
       <div
         *ngIf="this.layersLegend.length > 0"
         [class]="legendExpanded ? 'legends' : 'legends legends-expanded'"
@@ -121,44 +122,14 @@
         </div>
       </div>
 
-      <div class="controls mobileHide">
-        <div class="controls-container">
-          <i
-            *ngFor="let key of controlKeys"
-            [class]="
-              controlObjs[key].icon +
-              (controlObjs[key].active ? ' control-active' : '')
-            "
-            pRipple
-            [pTooltip]="'controls.' + key | translate"
-            (click)="controlObjs[key].onClick()"
-          >
-          </i>
-        </div>
-      </div>
 
-      <!-- Controll Dialog -->
-      <div *ngIf="controlOptions" class="controls-details">
-        <div class="controls-details-header">
-          <h5>{{ "controls.details.title" | translate }}</h5>
-          <i (click)="closeDetailsWindow()" class="bx bx-x-circle"></i>
-        </div>
-        <div class="controls-details-body">
-          <div
-            *ngIf="controlObjs['filter'].active"
-            class="controls-details-card"
-          >
-            <app-filter />
-          </div>
-        </div>
-      </div>
-
+      <!-- Information Popup: Displays details about clicked features (WFS/Identify results) -->
       <div
         [hidden]="popupRegion.coordinate.length == 0"
         #wfsCard
         id="popup"
         class="ol-popup wfs-card"
-      >      >
+      >
         <div class="popup-header">
           <h5>{{ "popup-info.title" | translate | uppercase }}</h5>
           <i
@@ -256,6 +227,7 @@
       </div>
     </app-ol-map>
 
+    <!-- Navigation controls: Reset drilldown navigation -->
     <div class="reset-drilldown" *ngIf="drillDownLevel > 0">
       <button 
         pButton 
@@ -267,6 +239,8 @@
       </button>
     </div>
   </div>
+
+  <!-- Global UI Components: Toasts, Information Dialogs, and User Info -->
   <p-toast></p-toast>
 
   <!-- TODO: Fix it -->

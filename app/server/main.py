@@ -9,15 +9,17 @@ from core.config import settings
 from db.session import db
 from api.routes import charts, map, proxy, contact, http
 
-app = FastAPI(title=settings.APP_NAME)
+from contextlib import asynccontextmanager
 
-@app.on_event("startup")
-async def startup():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup logic
     await db.connect()
-
-@app.on_event("shutdown")
-async def shutdown():
+    yield
+    # Shutdown logic
     await db.disconnect()
+
+app = FastAPI(title=settings.APP_NAME, lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

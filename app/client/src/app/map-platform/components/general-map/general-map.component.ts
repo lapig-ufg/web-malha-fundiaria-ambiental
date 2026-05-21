@@ -45,7 +45,7 @@ import { LocalizationService } from '@core/internationalization/localization.ser
  */
 import { Job, RegionFilter } from '@core/interfaces';
 import { DirtyType, LayerLegend } from '@core/interfaces';
-import { Control, Descriptor, DescriptorType } from '@core/interfaces';
+import { Descriptor, DescriptorType } from '@core/interfaces';
 import { DescriptorGroup, DescriptorLayer } from '@core/interfaces';
 
 /**
@@ -262,25 +262,12 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   private isLayerHighResolution: boolean = false;
 
   public showFormPoint: boolean = false;
-  public controlOptions: boolean = false;
   public _displayLayers!: boolean;
   public showRightSideBar!: boolean;
   public drawing: boolean = false;
   public lat!: number;
   public lon!: number;
   public classes!: string;
-
-  public controlKeys: string[] = [
-    'filter',
-  ];
-
-  public controlObjs: { [key: string]: Control } = {
-    filter: {
-      icon: 'fg-map-search',
-      active: false,
-      onClick: () => this.onSearch(),
-    },
-  };
 
   public popupOverlay!: Overlay;
 
@@ -874,11 +861,6 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onSearch() {
-    this.controlObjs['filter'].active = !this.controlObjs['filter'].active;
-    this.controlOptions = true;
-  }
-
   getOverlay(overlay: Overlay) {
 
     return overlay;
@@ -1038,7 +1020,9 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
             //do nothing
           } else {
             features['layerType'] = layer.get('descriptorType');
+            console.log(`${features}`)
           }
+          //console.log(features)
           resolve(features);
         },
         (error) => {
@@ -1184,9 +1168,11 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
       });
     }
 
-    Promise.all(promises)
-      .then((layersFeatures) => {
-        if (layersFeatures.length <= 0) return;
+    Promise.all(promises).then((layersFeatures) => {
+        if (Array.isArray(layersFeatures) && layersFeatures.length <= 0) {
+          console.error("No features found.")
+          return;
+        }
 
         let hasIncremented = false;
 
@@ -1353,15 +1339,5 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
         player.load();
       }
     }
-  }
-
-  public closeDetailsWindow() {
-    Object.keys(this.controlObjs).forEach((key) => {
-      this.controlObjs[key].active = false;
-    });
-
-    this.controlOptions = !this.controlOptions;
-
-    this.drawing = false;
   }
 }
