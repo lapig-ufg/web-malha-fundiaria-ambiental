@@ -14,12 +14,12 @@
         "types": ["municipios"]
     },
         {
-        "idLayer": "malha_fundiaria_consolidada",
+        "idLayer": "malha_fundiaria_ambiental",
         "labelLayer": "translate",
         "visible": false,
-        "selectedType": "malha_fundiaria_consolidada",
+        "selectedType": "malha_fundiaria_ambiental",
         "minZoom": 8,
-        "types": ["malha_fundiaria_consolidada"]
+        "types": ["malha_fundiaria_ambiental"]
     },
     {
         "idLayer": "biomas",
