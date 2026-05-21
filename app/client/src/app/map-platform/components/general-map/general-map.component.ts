@@ -472,6 +472,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     this.drillDownLevel = 0;
     this.mapService.resetZoom();
     this.refreshDrillDownLimits();
+    this.closePopup();
   }
 
   private refreshDrillDownLimits(): void {
@@ -1080,12 +1081,15 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   }
 
   closePopup() {
-    const closer = document.getElementById('popup-closer');
-    // @ts-ignore
-    this.popupOverlay.setPosition(undefined);
-    // @ts-ignore
-    closer.blur();
+    if (this.popupOverlay) {
+      const closer = document.getElementById('popup-closer');
+      // @ts-ignore
+      this.popupOverlay.setPosition(undefined);
+      // @ts-ignore
+      if (closer) closer.blur();
+    }
 
+    this.featureCollections = [];
     this.popupRegion = {
       coordinate: [],
       attributes: [],
@@ -1113,22 +1117,9 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     const currentLevel = this.drillDownLevel;
 
     // Resetando variveis de controle.
-    this.featureCollections = [];
-
-    this.popupRegion = {
-      coordinate: [],
-      attributes: [],
-      properties: {},
-      geojson: {},
-    };
+    this.closePopup();
 
     this.wfsCard.nativeElement.style.visibility = 'hidden';
-
-    this.mapService.layers.forEach((layer) => {
-      if (layer.get('key') === 'popup-vector') {
-        this.mapService.removeLayer(layer);
-      }
-    });
 
     // Transforma as coordenadas do click para a projeção desejada.
     this.popupRegion.coordinate = transform(
@@ -1302,7 +1293,10 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
           this.mapService.addLayer(vectorLayer);
         }
 
-        if (currentLevel < 2) return;
+        if (currentLevel < 2 || this.featureCollections.length === 0) {
+          this.closePopup();
+          return;
+        }
 
         this.wfsCard.nativeElement.style.visibility = 'visible';
         this.wfsCard.nativeElement.style.bottom = '12px';
