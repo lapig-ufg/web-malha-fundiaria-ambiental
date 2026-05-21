@@ -486,7 +486,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
         visible = true;
       if (
         this.drillDownLevel === 2 &&
-        limit.idLayer === 'malha_fundiaria_consolidada'
+        limit.idLayer === 'malha_fundiaria_ambiental'
       )
         visible = true;
 
@@ -1167,7 +1167,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
       promises.push(this.getFeatures('municipios', bbox));
     } else {
       // Always query malha fundiaria at level 2
-      promises.push(this.getFeatures('malha_fundiaria_consolidada', bbox));
+      promises.push(this.getFeatures('malha_fundiaria_ambiental', bbox));
 
       map.forEachFeatureAtPixel(pixel, function (layer: any) {
         const layerType: DescriptorType = layer.get('descriptorType');

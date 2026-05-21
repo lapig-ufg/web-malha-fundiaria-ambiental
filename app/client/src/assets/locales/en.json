@@ -73,7 +73,7 @@
       "municipios": {
         "labelLayer": "Municipalities"
       },
-      "malha_fundiaria_consolidada": {
+      "malha_fundiaria_ambiental": {
         "labelLayer": "Land Tenure"
       },
       "biomas": {
