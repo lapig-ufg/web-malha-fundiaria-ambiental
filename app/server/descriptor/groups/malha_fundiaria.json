@@ -7,7 +7,7 @@
       {
         "idLayer": "malha_fundiaria_cog",
         "labelLayer": "translate",
-        "visible": true,
+        "visible": false,
         "selectedType": "malha_fundiaria_cog",
         "types": [
           "malha_fundiaria_cog"

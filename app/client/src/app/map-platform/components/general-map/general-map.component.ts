@@ -407,6 +407,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
         next: (descriptor: Descriptor | null) => {
           if (descriptor == null) return;
 
+          console.log('Map Descriptor:', descriptor);
           this.action(descriptor);
         },
       })
@@ -1035,9 +1036,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
             //do nothing
           } else {
             features['layerType'] = layer.get('descriptorType');
-            console.log(`${features}`)
           }
-          //console.log(features)
           resolve(features);
         },
         (error) => {
@@ -1172,6 +1171,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
 
       map.forEachFeatureAtPixel(pixel, function (layer: any) {
         const layerType: DescriptorType = layer.get('descriptorType');
+
         if (
           layer.get('type') === 'layertype' &&
           layerType.typeLayer === 'vectorial' &&

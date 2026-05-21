@@ -66,7 +66,19 @@
       "labelLayer": "Base Maps"
     },
     "limits": {
-      "labelLayer": "Territorial Limits"
+      "labelLayer": "Territorial Limits",
+      "estados": {
+        "labelLayer": "States"
+      },
+      "municipios": {
+        "labelLayer": "Municipalities"
+      },
+      "malha_fundiaria_consolidada": {
+        "labelLayer": "Land Tenure"
+      },
+      "biomas": {
+        "labelLayer": "Biomes"
+      }
     },
     "groups": {
       "pasture_general": {

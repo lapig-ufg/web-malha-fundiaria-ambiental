@@ -44,7 +44,6 @@ class LayerService {
   ) {}
 
   public createLayer(descriptorType: DescriptorType): Promise<BaseLayer> | null {
-    console.log(`Creating layer for ${descriptorType.valueType} (TMS: ${descriptorType.origin.typeOfTMS})`);
     switch (descriptorType.origin.typeOfTMS) {
       case 'wmts':
         return this.createTileLayerWMTS(descriptorType);
