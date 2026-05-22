@@ -10,7 +10,7 @@ let commitId = ''
 }*/
 
 export const environment = {
-  APP_NAME: 'Malha Fundiária Ambiental',
+  APP_NAME: 'Environmental Land Tenure',
   production: true,
   GTAG: '',
   OWS_API: 'https://ows.lapig.iesa.ufg.br/api',

@@ -15,7 +15,7 @@ console.debug = function() {};
 }*/
 
 export const environment = {
-  APP_NAME: 'Malha Fundiária Ambiental',
+  APP_NAME: 'Environmental Land Tenure',
   production: false,
   GTAG: '',
   OWS_API: 'https://ows.lapig.iesa.ufg.br/api',

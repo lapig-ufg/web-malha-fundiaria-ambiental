@@ -394,7 +394,7 @@
       },
       "footer": {
         "contact": "Contact us",
-        "copyright": "Malha Fundiária Ambiental. All rights reserved.",
+        "copyright": "Environmental Land Tenure. All rights reserved.",
         "partners": "Partners",
         "go_to_top": "Go to top",
         "build": "Build:"
@@ -402,11 +402,11 @@
     },
     "home": {
       "banner": {
-        "text": "Malha Fundiária Ambiental consolidates an integrated geospatial infrastructure for the organization and qualification of the Brazilian territorial structure. We connect complex land and environmental data to drive governance, technical analysis, and sustainable territory management nationwide.",
+        "text": "Environmental Land Tenure consolidates an integrated geospatial infrastructure for the organization and qualification of the Brazilian territorial structure. We connect complex land and environmental data to drive governance, technical analysis, and sustainable territory management nationwide.",
         "btn": "Access the Platform"
       },
       "abstract": {
-        "title": "Malha Fundiária Ambiental",
+        "title": "Environmental Land Tenure",
         "text": "The platform provides integrated territorial databases, allowing for the analysis of the land structure alongside environmental indicators. The system offers tools for visualizing rural perimeters, protected area overlaps, and land-use dynamics, promoting transparency and precision in Brazilian territorial management."
       },
       "news": {
@@ -423,10 +423,10 @@
       }
     },
     "about": {
-      "page_title": "Malha Fundiária Ambiental",
+      "page_title": "Environmental Land Tenure",
       "abstract": {
         "title": "About",
-        "p1": "Malha Fundiária Ambiental is an initiative of the Image Processing and Geoprocessing Laboratory (Lapig) at the Federal University of Goiás (UFG). The project aims to consolidate and qualify information about Brazil's land and environmental structure, providing tools for territorial analysis and governance.",
+        "p1": "Environmental Land Tenure is an initiative of the Image Processing and Geoprocessing Laboratory (Lapig) at the Federal University of Goiás (UFG). The project aims to consolidate and qualify information about Brazil's land and environmental structure, providing tools for territorial analysis and governance.",
         "p2": "The platform integrates data from various official sources, such as the Rural Environmental Registry (CAR), databases of Conservation Units, Indigenous Lands, and settlements, allowing for a systemic view of occupations and environmental restrictions in the national territory."
       },
       "team": {
@@ -436,7 +436,7 @@
     "methods": {
       "page_title": "Methodology",
       "title": "Methodology",
-      "subtitle": "Learn about the technical rigor and fundamental processes that underpin Malha Fundiária Ambiental.",
+      "subtitle": "Learn about the technical rigor and fundamental processes that underpin Environmental Land Tenure.",
       "cta": {
         "title": "Explore the Full Methodology",
         "subtitle": "For a detailed analysis of technical criteria, data sources, and validation processes, access our full technical documentation.",
@@ -483,7 +483,7 @@
       "title": "Help",
       "abstract": {
         "title": "Help Center",
-        "text": "Find tutorials and answers to the main questions about how to navigate and make the most of Malha Fundiária Ambiental tools."
+        "text": "Find tutorials and answers to the main questions about how to navigate and make the most of Environmental Land Tenure tools."
       },
       "faq": {
         "title": "FAQ"
@@ -546,7 +546,7 @@
     "gallery": {
       "page_title": "Photo Gallery of Brazilian Pastures",
       "title": "Photos of Brazilian Pastures",
-      "p1": "The Malha Fundiária Ambiental provides a diversified and representative collection of photos of the Brazilian pastures. They are records of pastures at different quality or degradation levels, those being influenced by climate, soil, relief and management techniques.",
+      "p1": "The Environmental Land Tenure provides a diversified and representative collection of photos of the Brazilian pastures. They are records of pastures at different quality or degradation levels, those being influenced by climate, soil, relief and management techniques.",
       "p2": "This gallery is made up of photographic material from the various field activities carried out by the Image Processing and Geoprocessing Laboratory (LAPIG/UFG). Trips undertaken over different purposes, but with the common objective of exploring and recording the characteristics and particularities found in the different pastures and landscapes of Brazil.",
       "search_images": {
         "title": "Search Images",
@@ -575,7 +575,7 @@
   },
   "atlasinformation": {
     "title": "Information Note",
-    "text": "<p>Malha Fundiária Ambiental integrates various databases to provide a qualified view of the Brazilian territory. For questions or suggestions, please contact our technical team.</p><p>Malha Fundiária Ambiental Team</p>"
+    "text": "<p>Environmental Land Tenure integrates various databases to provide a qualified view of the Brazilian territory. For questions or suggestions, please contact our technical team.</p><p>Environmental Land Tenure Team</p>"
   },
   "area": {
     "upload_choose": "Choose .zip or .kml file",
