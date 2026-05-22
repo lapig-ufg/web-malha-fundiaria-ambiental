@@ -359,12 +359,14 @@
       "pasture_quality_title": "Pasture Vigor",
       "pasture_quality_comparison": "Regional Vigor Comparison",
       "coverage_natural_title": "Natural Areas Distribution",
+      "coverage_comparison_title": "Regional Coverage",
       "coverage_comparison_app_title": "Regional Coverage: APP",
       "coverage_comparison_rl_title": "Regional Coverage: Legal Reserve",
       "coverage_comparison_mfa_title": "Regional Coverage: Environmental Land Tenure",
       "chart_labels": {
         "app": "Permanent Preservation Areas",
         "rl": "Legal Reserve",
+        "mfa": "Environmental Land Tenure",
         "natural": "Natural",
         "non_natural": "Non-Natural"
       },

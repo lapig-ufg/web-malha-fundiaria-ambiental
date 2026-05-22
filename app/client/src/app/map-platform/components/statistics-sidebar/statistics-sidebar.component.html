@@ -15,34 +15,34 @@
         </div>
       </p-accordionTab>
 
-      <!-- Section: APP -->
-      <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_comparison_app_title' | translate" *ngIf="coverageComparisonAppChartData">
-        <div class="chart-section">
-          <div class="chart-container" style="height: 650px; padding: 10px;">
-            <p-chart type="bar" [data]="coverageComparisonAppChartData" [options]="stackedBarOptions" height="630px">
-            </p-chart>
-          </div>
-        </div>
-      </p-accordionTab>
-
-      <!-- Section: Reserva Legal -->
-      <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_comparison_rl_title' | translate" *ngIf="coverageComparisonRlChartData">
-        <div class="chart-section">
-          <div class="chart-container" style="height: 650px; padding: 10px;">
-            <p-chart type="bar" [data]="coverageComparisonRlChartData" [options]="stackedBarOptions" height="630px">
-            </p-chart>
-          </div>
-        </div>
-      </p-accordionTab>
-
-      <!-- Section: Malha Fundiária -->
-      <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_comparison_mfa_title' | translate" *ngIf="coverageComparisonMfaChartData">
-        <div class="chart-section">
-          <div class="chart-container" style="height: 650px; padding: 10px;">
-            <p-chart type="bar" [data]="coverageComparisonMfaChartData" [options]="stackedBarOptions" height="630px">
-            </p-chart>
-          </div>
-        </div>
+      <!-- Section: Cobertura por Região (Tabs) -->
+      <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_comparison_title' | translate" *ngIf="coverageComparisonAppChartData || coverageComparisonRlChartData || coverageComparisonMfaChartData">
+        <p-tabView>
+          <p-tabPanel header="APP" *ngIf="coverageComparisonAppChartData">
+            <div class="chart-section">
+              <div class="chart-container" style="height: 600px; padding: 10px;">
+                <p-chart type="bar" [data]="coverageComparisonAppChartData" [options]="stackedBarOptions" height="580px">
+                </p-chart>
+              </div>
+            </div>
+          </p-tabPanel>
+          <p-tabPanel [header]="'right_sidebar.resumo_card.chart_labels.rl' | translate" *ngIf="coverageComparisonRlChartData">
+            <div class="chart-section">
+              <div class="chart-container" style="height: 600px; padding: 10px;">
+                <p-chart type="bar" [data]="coverageComparisonRlChartData" [options]="stackedBarOptions" height="580px">
+                </p-chart>
+              </div>
+            </div>
+          </p-tabPanel>
+          <p-tabPanel [header]="'right_sidebar.resumo_card.chart_labels.mfa' | translate" *ngIf="coverageComparisonMfaChartData">
+            <div class="chart-section">
+              <div class="chart-container" style="height: 600px; padding: 10px;">
+                <p-chart type="bar" [data]="coverageComparisonMfaChartData" [options]="stackedBarOptions" height="580px">
+                </p-chart>
+              </div>
+            </div>
+          </p-tabPanel>
+        </p-tabView>
       </p-accordionTab>
 
     </p-accordion>
