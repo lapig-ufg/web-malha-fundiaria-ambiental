@@ -118,12 +118,15 @@
     text-align: center !important;
   }
 
-  .team-card-role {
+  .team-card .team-card-role {
+    text-indent: 0 !important;
+    text-align: center !important;
     font-size: 0.85rem;
     font-weight: 400;
     color: #6c757d;
     margin: 0;
     line-height: 1.4;
-    text-align: center !important;
+    text-align: center;
+    text-indent: 0;
   }
   
