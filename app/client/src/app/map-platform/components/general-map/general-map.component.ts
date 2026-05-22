@@ -1370,59 +1370,39 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   }
 
   public getAttributeValue(type: any, value: any) {
-    let formattedValue: string | number | null = '';
+    if (value === null || value === undefined || value === '') return '';
+
     const lang = this.localizationService.currentLang();
+    const locale = lang === 'pt' ? 'pt-BR' : 'en-US';
 
     let columnType = type;
-    let label = '';
-
     if (typeof type === 'object' && type !== null) {
       columnType = type.columnType;
-      label = type.label || '';
+    }
+
+    // Attempt to convert to number if it's a numeric string
+    const numValue =
+      typeof value === 'string' && value.trim() !== ''
+        ? Number(value.replace(',', '.'))
+        : value;
+    const isNumeric = typeof numValue === 'number' && !isNaN(numValue);
+
+    // If it's numeric, we apply rounding rules regardless of the explicit columnType
+    // (unless it's explicitly an integer)
+    if (isNumeric && columnType !== 'integer') {
+      return this.decimalPipe.transform(numValue, '1.0-2', locale) || value;
     }
 
     switch (columnType) {
       case 'integer':
-        if (lang === 'pt') {
-          formattedValue = this.decimalPipe.transform(value, '', 'pt-BR');
-        } else {
-          formattedValue = this.decimalPipe.transform(value, '', 'en-US');
-        }
-        break;
-      case 'double':
-        let format = '1.0-2';
-
-        if (
-          label.toLowerCase().includes('(ha)') ||
-          label.toLowerCase().includes(' ha') ||
-          label.toLowerCase().includes('hectares')
-        ) {
-          format = '1.0-0';
-        }
-
-        if (lang === 'pt') {
-          formattedValue = this.decimalPipe.transform(value, format, 'pt-BR');
-        } else {
-          formattedValue = this.decimalPipe.transform(value, format, 'en-US');
-        }
-        break;
+        return this.decimalPipe.transform(numValue, '1.0-0', locale) || value;
       case 'date':
-        const isBrazilianDate = value.includes('/');
-        if (isBrazilianDate) {
-          formattedValue = value;
-        } else {
-          // TODO: Fix it.
-          //formattedValue = moment(value).format('DD/MM/YYYY');
-        }
-        break;
+        return value;
       case 'string':
-        formattedValue = value;
-        break;
+        return value;
       default:
-        formattedValue = value;
-        break;
+        return value;
     }
-    return formattedValue;
   }
 
   public loadVideo(key: any) {
