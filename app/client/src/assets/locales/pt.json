@@ -361,6 +361,12 @@
       "coverage_natural_title": "Distribuição de Áreas Naturais",
       "coverage_comparison_app_title": "Cobertura por Região: APP",
       "coverage_comparison_rl_title": "Cobertura por Região: Reserva Legal",
+      "chart_labels": {
+        "app": "Áreas de Preservação Permanente",
+        "rl": "Reserva Legal",
+        "natural": "Natural",
+        "non_natural": "Não Natural"
+      },
       "complement_text_pasture_quality": "da área de Pastagem do(a)",
       "obs_text": "*A diferença entre a área de pastagem aqui apresentada e a área mapeada, é explicada pelo ajuste de área a partir da análise de acurácia, detalhada em Parente et al. 2019 (<a target='_blank' class='link-details' href='https://doi.org/10.1016/j.rse.2019.111301'> https://doi.org/10.1016/j.rse.2019.111301</a>)",
       "pasture_quality": {

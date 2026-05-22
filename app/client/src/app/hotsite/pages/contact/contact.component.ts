@@ -8,6 +8,6 @@ import { Component } from '@angular/core';
 })
 export class ContactComponent {
 
-  formLink = 'https://forms.gle/PLACEHOLDER';
+  formLink = 'https://forms.gle/aASvicqHXP2PCi549';
 
 }
