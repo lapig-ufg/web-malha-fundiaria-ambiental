@@ -567,7 +567,14 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   private updateDescriptor(descriptor: Descriptor): void {
     let { dirty, layer, layerType } = descriptor.dirtyBit;
 
-    if (dirty == DirtyType.CLEAN) return;
+    if (dirty == DirtyType.CLEAN) {
+      // If the descriptor is clean but updated, it's likely a language change.
+      // Re-initialize the layersLegend to reflect localized labels.
+      this.layersLegend = [];
+      this.selectedLayers = [];
+      this.initLayersSelected(descriptor.groups);
+      return;
+    }
 
     switch (layerType) {
       case 'layertype':

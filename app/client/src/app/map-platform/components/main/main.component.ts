@@ -50,7 +50,9 @@ export class MainComponent {
   constructor(
     private localizationService: LocalizationService,
     private cdRef: ChangeDetectorRef
-  ) {}
+  ) {
+    this.lang = this.localizationService.currentLang();
+  }
 
   public onMenuClick(menu: Menu): void {
     menu.show = !menu.show;

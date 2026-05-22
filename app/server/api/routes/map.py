@@ -53,6 +53,38 @@ async def get_descriptor(lang: str = 'pt-br'):
             })
 
     # Hardcode new COG layer type
+    is_en = lang.startswith('en')
+    
+    view_value_type = "Environmental Land Tenure" if is_en else "Malha Fundiária Ambiental"
+    metadata_title = "Metadata" if is_en else "Metadados"
+    metadata_description = "Consolidated Environmental Land Tenure (COG 10m)." if is_en else "Malha Fundiária Ambiental consolidada (COG 10m)."
+    
+    legend_data = [
+        (1, "#0000cd", "Massa d'água", "Water body"),
+        (2, "#6c747e", "Malha Urbana", "Urban area"),
+        (3, "#833dc9", "Território Indígena Homologado", "Homologated Indigenous Territory"),
+        (4, "#64efef", "Unidade de Conservação de Proteção Integral", "Strictly Protected Conservation Unit"),
+        (5, "#cd73a0", "Área Militar", "Military area"),
+        (6, "#fdae61", "Imóvel Privado (SIGEF/SNCI)", "Private Property (SIGEF/SNCI)"),
+        (7, "#a8e16e", "Assentamento", "Settlement"),
+        (8, "#17af05", "Glebas Públicas - FPND", "Public Lands - FPND"),
+        (9, "#efef4d", "Unidade de Conservação de Uso Sustentável", "Sustainable Use Conservation Unit"),
+        (10, "#dc1010", "Glebas Públicas", "Public Lands"),
+        (11, "#4587ca", "Quilombola Declarado", "Declared Quilombola"),
+        (12, "#3333e6", "Território Indígena Não Homologado", "Non-homologated Indigenous Territory"),
+        (13, "#44ce44", "Quilombola Não Declarado", "Non-declared Quilombola"),
+        (14, "#cf3ccf", "Cadastro Ambiental Rural sem sobreposição", "Rural Environmental Registry without overlap"),
+        (15, "#ff636a", "Cadastro Ambiental Rural com sobreposição", "Rural Environmental Registry with overlap"),
+        (20, "#e6e9b4", "Área de Preservação Permanente", "Permanent Preservation Area"),
+        (21, "#1e570d", "Reserva Legal", "Legal Reserve"),
+        (22, "#dfdfde", "Vazio Fundiário", "Land Vacancy")
+    ]
+    
+    cog_legend = [
+        { "value": val, "color": color, "label": label_en if is_en else label_pt }
+        for val, color, label_pt, label_en in legend_data
+    ]
+
     cog_layer = {
         "valueType": "malha_fundiaria_cog",
         "type": "layertype",
@@ -63,7 +95,7 @@ async def get_descriptor(lang: str = 'pt-br'):
             "epsg": "ESRI:102033"
         },
         "typeLayer": "raster",
-        "viewValueType": "Malha Fundiária Ambiental",
+        "viewValueType": view_value_type,
         "typeLabel": "COG",
         "wfsMapCard": {
             "show": False,
@@ -82,8 +114,8 @@ async def get_descriptor(lang: str = 'pt-br'):
         "opacity": 1.0,
         "metadata": [
             {
-                "title": "Metadados",
-                "description": "Malha Fundiária Ambiental consolidada (COG 10m)."
+                "title": metadata_title,
+                "description": metadata_description
             }
         ],
         "cogStyle": {
@@ -137,26 +169,7 @@ async def get_descriptor(lang: str = 'pt-br'):
             ]
           ]
         },
-        "legend": [
-          { "value": 1, "color": "#0000cd", "label": "Massa d'água" },
-          { "value": 2, "color": "#6c747e", "label": "Malha Urbana" },
-          { "value": 3, "color": "#833dc9", "label": "TI Homologada" },
-          { "value": 4, "color": "#64efef", "label": "UC Proteção Integral" },
-          { "value": 5, "color": "#cd73a0", "label": "Área Militar" },
-          { "value": 6, "color": "#fdae61", "label": "Imóvel Privado (SIGEF/SNCI)" },
-          { "value": 7, "color": "#a8e16e", "label": "Assentamento" },
-          { "value": 8, "color": "#17af05", "label": "Glebas Públicas - FPND" },
-          { "value": 9, "color": "#efef4d", "label": "UC Uso Sustentável" },
-          { "value": 10, "color": "#dc1010", "label": "Glebas Públicas" },
-          { "value": 11, "color": "#4587ca", "label": "Quilombola Declarado" },
-          { "value": 12, "color": "#3333e6", "label": "TI Não Homologada" },
-          { "value": 13, "color": "#44ce44", "label": "Quilombola Não Declarado" },
-          { "value": 14, "color": "#cf3ccf", "label": "CAR sem sobreposição" },
-          { "value": 15, "color": "#ff636a", "label": "CAR com sobreposição" },
-          { "value": 20, "color": "#e6e9b4", "label": "Área de Preservação Permanente" },
-          { "value": 21, "color": "#1e570d", "label": "Reserva Legal" },
-          { "value": 22, "color": "#dfdfde", "label": "Vazio Fundiário" }
-        ]
+        "legend": cog_legend
     }
     
     # layertypes is a dict organized by thematic keys. Let's add ours.

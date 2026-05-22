@@ -36,14 +36,15 @@ export class LocalizationService {
    */
   public initService(): Promise<void> {
     // language code same as file name.
-   const lng = localStorage.getItem('lang');
+    const lng = localStorage.getItem('lang');
 
-   if(lng){
-     this._localeId = lng;
-   } else {
-     let browserLang = this.translateService.getBrowserLang();
-     this._localeId = browserLang!.match(/en|pt/) ? browserLang! : 'en';
-   }
+    if (lng) {
+      this._localeId = lng;
+    } else {
+      // Force 'pt' as default if no lang is stored
+      this._localeId = 'pt';
+      localStorage.setItem('lang', this._localeId);
+    }
     return this.useLanguage(this._localeId);
   }
 
@@ -53,6 +54,7 @@ export class LocalizationService {
    */
   public useLanguage(lang: string): Promise<void> {
     const self = this;
+    localStorage.setItem('lang', lang);
     return this.translateService
       .use(lang)
       .toPromise()
@@ -60,7 +62,7 @@ export class LocalizationService {
         self.translateService.get('primeng').subscribe(res => self.primengConfig.setTranslation(res));
       })
       .catch((e) => {
-        throw new Error('LocalizationService.init failed: '+ e.message);
+        throw new Error('LocalizationService.init failed: ' + e.message);
       });
   }
 
