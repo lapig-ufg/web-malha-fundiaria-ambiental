@@ -6,8 +6,8 @@
     <!-- Coverage Comparison Chart (Stacked Bar) -->
     <div class="chart-section" style="margin-bottom: 2rem;" *ngIf="coverageComparisonChartData">
       <h5 class="section-title">{{ 'right_sidebar.resumo_card.coverage_comparison_title' | translate }}</h5>
-      <div class="chart-container" style="height: 350px; padding: 10px;">
-        <p-chart type="bar" [data]="coverageComparisonChartData" [options]="stackedBarOptions" height="330px">
+      <div class="chart-container" style="height: 650px; padding: 10px;">
+        <p-chart type="bar" [data]="coverageComparisonChartData" [options]="stackedBarOptions" height="630px">
         </p-chart>
       </div>
     </div>

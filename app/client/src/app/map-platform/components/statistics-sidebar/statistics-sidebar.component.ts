@@ -290,7 +290,6 @@ class StatisticsSidebarComponent implements OnDestroy {
 
       const sortedLabels = Array.from(totalAreaPerLabel.entries())
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 15)
         .map(entry => entry[0]);
 
       const classesMap = new Map<string, string>();
