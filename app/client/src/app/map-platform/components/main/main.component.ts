@@ -41,8 +41,10 @@ export class MainComponent {
   }
 
   set leftSidebarVisible(value: boolean) {
-    this.menus[0].show = value;
-    this.menus[2].show = value;
+    if (!value) {
+      this.menus[0].show = false;
+      this.menus[2].show = false;
+    }
   }
 
   constructor(
