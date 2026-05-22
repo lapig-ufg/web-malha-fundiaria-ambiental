@@ -7,8 +7,8 @@
 .subtitle {
   color: #6c757d;
   font-size: 1.1rem;
-  max-width: 700px;
   text-indent: 0;
+  text-align: left;
 }
 
 .method-card {
@@ -63,6 +63,7 @@
     line-height: 1.6;
     font-size: 0.95rem;
     text-indent: 0;
+    text-align: left;
   }
 
   .card-footer-glow {
@@ -106,10 +107,9 @@
 
   .subtitle {
     color: #666;
-    max-width: 800px;
-    margin: 0 auto;
     font-size: 1.1rem;
     line-height: 1.6;
+    text-align: left;
   }
 
   .btn-primary {
