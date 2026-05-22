@@ -427,8 +427,9 @@
       "page_title": "Malha Fundiária Ambiental",
       "abstract": {
         "title": "Sobre",
-        "p1": "A Malha Fundiária Ambiental é uma iniciativa do Laboratório de Processamento de Imagens e Geoprocessamento (Lapig) da Universidade Federal de Goiás (UFG). O projeto visa consolidar e qualificar as informações sobre a estrutura fundiária e ambiental do Brasil, provendo ferramentas para análise e governança territorial.",
-        "p2": "A plataforma integra dados de diversas fontes oficiais, como o Cadastro Ambiental Rural (CAR), bases de Unidades de Conservação, Terras Indígenas e assentamentos, permitindo uma visão sistêmica das ocupações e restrições ambientais no território nacional."
+        "p1": "A Malha Fundiária Ambiental é uma iniciativa desenvolvida pelo Laboratório de Sensoriamento Remoto e Geoprocessamento (LAPIG) da Universidade Federal de Goiás (UFG). O projeto foi criado para organizar, integrar e qualificar informações sobre a estrutura fundiária e ambiental do Brasil, apoiando a análise, gestão e governança territorial.",
+        "p2": "A plataforma integra dados de múltiplas fontes oficiais, incluindo o Cadastro Ambiental Rural (CAR), Unidades de Conservação, Terras Indígenas, assentamentos e outras bases territoriais. Ao reunir esses conjuntos de dados em uma base geoespacial padronizada e continuamente atualizada, a iniciativa oferece uma compreensão mais clara e consistente da ocupação do solo, sobreposições territoriais e restrições ambientais em todo o Brasil.",
+        "p3": "A Malha Fundiária Ambiental apoia a identificação de conflitos territoriais, ativos ambientais e dinâmicas de uso do solo, contribuindo para melhorar a transparência, o planejamento territorial, as análises ambientais e os processos de tomada de decisão."
       },
       "team": {
         "title": "Equipe",

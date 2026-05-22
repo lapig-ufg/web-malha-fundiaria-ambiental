@@ -427,8 +427,9 @@
       "page_title": "Environmental Land Tenure",
       "abstract": {
         "title": "About",
-        "p1": "Environmental Land Tenure is an initiative of the Image Processing and Geoprocessing Laboratory (Lapig) at the Federal University of Goiás (UFG). The project aims to consolidate and qualify information about Brazil's land and environmental structure, providing tools for territorial analysis and governance.",
-        "p2": "The platform integrates data from various official sources, such as the Rural Environmental Registry (CAR), databases of Conservation Units, Indigenous Lands, and settlements, allowing for a systemic view of occupations and environmental restrictions in the national territory."
+        "p1": "The Environmental Land Tenure Dataset is an initiative developed by the Remote Sensing and GIS Lab (LAPIG) at the Federal University of Goiás (UFG). The project was created to organize, integrate, and qualify information about Brazil's land tenure and environmental structure, supporting territorial analysis, management, and governance.",
+        "p2": "The platform integrates data from multiple official sources, including the Rural Environmental Registry (CAR), Conservation Units, Indigenous Lands, settlements, and other territorial databases. By bringing these datasets together into a standardized and continuously updated geospatial base, the initiative provides a clearer and more consistent understanding of land occupation, territorial overlaps, and environmental restrictions across Brazil.",
+        "p3": "The Environmental Land Tenure Dataset supports the identification of territorial conflicts, environmental assets, and land-use dynamics, helping improve transparency, territorial planning, environmental analyses, and decision-making processes."
       },
       "team": {
         "title": "Team",
