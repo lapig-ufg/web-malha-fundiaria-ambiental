@@ -37,7 +37,7 @@
 
   .blog-details {
     padding: 1.5rem;
-    
+
     p {
       color: #666;
       line-height: 1.6;
@@ -47,6 +47,7 @@
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
+      text-indent: 0;
     }
   }
 

@@ -14,13 +14,14 @@
 .abstract p {
   font-size: 18px;
   color: black !important;
+  text-indent: 0;
 }
 
 .service-details p {
-  text-align: justify;
   height: 20em;
   font-size: 14px;
   overflow: hidden;
+  text-indent: 0;
 }
 
 .btn-cta {

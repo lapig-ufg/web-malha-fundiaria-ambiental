@@ -43,6 +43,10 @@
       
         &-content {
           padding: 2%;
+
+          p {
+            text-indent: 0;
+          }
         }
       }
 }
