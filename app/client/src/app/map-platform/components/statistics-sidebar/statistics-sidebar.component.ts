@@ -8,6 +8,7 @@ import { Component, OnDestroy } from '@angular/core';
  */
 import { DescriptorService, DEFAULT_REGION } from '../../../@core/services';
 import { ChartService, RegionFilterService } from '../../../@core/services';
+import { LocalizationService } from '@core/internationalization/localization.service';
 
 /**
  * Interfaces imports.
@@ -172,7 +173,8 @@ class StatisticsSidebarComponent implements OnDestroy {
   constructor(
     private descriptorService: DescriptorService,
     private regionFilterService: RegionFilterService,
-    private chartService: ChartService
+    private chartService: ChartService,
+    private localizationService: LocalizationService
   ) {
     this.regionFilterSubscription.add(
       this.regionFilterService.getRegionFilter().subscribe({
@@ -181,6 +183,12 @@ class StatisticsSidebarComponent implements OnDestroy {
 
           this.getAllSummaryData();
         },
+      })
+    );
+
+    this.regionFilterSubscription.add(
+      this.localizationService.translateService.onLangChange.subscribe(() => {
+        this.getAllSummaryData();
       })
     );
 
@@ -253,6 +261,20 @@ class StatisticsSidebarComponent implements OnDestroy {
       });
   }
 
+  private labelMap: any = {
+    'app': 'app',
+    'rl': 'rl',
+    'mfa': 'mfa',
+    'natural': 'natural',
+    'non_natural': 'non_natural',
+    'Áreas de Preservação Permanente': 'app',
+    'Reserva Legal': 'rl',
+    'Reserva_Legal': 'rl',
+    'Malha Fundiária': 'mfa',
+    'Natural': 'natural',
+    'Não Natural': 'non_natural'
+  };
+
   private updateChartData(key: string): void {
     if (key === 'coverage_natural') {
       const summary = this.summaryData.get('coverage_natural');
@@ -261,7 +283,10 @@ class StatisticsSidebarComponent implements OnDestroy {
         return;
       }
 
-      const labels = summary.data.map((item: any) => item.label);
+      const labels = summary.data.map((item: any) => {
+        const labelKey = this.labelMap[item.label] || item.label;
+        return this.localizationService.translate('right_sidebar.resumo_card.chart_labels.' + labelKey);
+      });
       const data = summary.data.map((item: any) => item.value);
       const backgroundColor = summary.data.map((item: any) => item.color);
 
@@ -314,7 +339,7 @@ class StatisticsSidebarComponent implements OnDestroy {
         });
 
         return {
-          label: classe,
+          label: this.localizationService.translate('right_sidebar.resumo_card.chart_labels.' + (this.labelMap[classe] || classe)),
           data: data,
           backgroundColor: color,
           hoverBackgroundColor: color

@@ -364,11 +364,16 @@
       "coverage_comparison_rl_title": "Regional Coverage: Legal Reserve",
       "coverage_comparison_mfa_title": "Regional Coverage: Environmental Land Tenure",
       "chart_labels": {
-        "app": "Permanent Preservation Areas",
+        "app": "APP",
         "rl": "Legal Reserve",
         "mfa": "Environmental Land Tenure",
         "natural": "Natural",
-        "non_natural": "Non-Natural"
+        "non_natural": "Non-Natural",
+        "Reserva Legal": "Legal Reserve",
+        "Reserva_Legal": "Legal Reserve",
+        "Áreas de Preservação Permanente": "APP",
+        "Malha Fundiária": "Environmental Land Tenure",
+        "Não Natural": "Non-Natural"
       },
       "complement_text_pasture_quality": "in Pasture Area of",
       "obs_text": "*The difference between the pasture area presented here and the mapped area is explained by the area adjustment from the accuracy analysis, detailed in Parente et al. 2019 (<a target='_blank' class='link-details' href='https://doi.org/10.1016/j.rse.2019.111301'> https://doi.org/10.1016/j.rse.2019.111301</a>)",

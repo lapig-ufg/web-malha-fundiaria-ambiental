@@ -78,21 +78,21 @@ def get_queries(params: dict = None):
                 'id': 'coverage_natural',
                 'sql': f"""
                     SELECT 
-                        'Áreas de Preservação Permanente' as label, 
+                        'app' as label, 
                         '#228B22' as color, 
                         COALESCE(SUM("CLASSE_1_HA"), 0) as value 
                     FROM app_brazil_coverage_2024_reclassificado_app_projetado 
                     WHERE {region_filter_coverage}
                     UNION ALL
                     SELECT 
-                        'Reserva Legal' as label, 
+                        'rl' as label, 
                         '#006400' as color, 
                         COALESCE(SUM("CLASSE_1_HA"), 0) as value 
                     FROM app_brazil_coverage_2024_reclassificado_rl_projetado 
                     WHERE {region_filter_coverage}
                     UNION ALL
                     SELECT 
-                        'Malha Fundiária' as label, 
+                        'mfa' as label, 
                         '#4169E1' as color, 
                         COALESCE(SUM("CLASSE_1_HA"), 0) as value 
                     FROM app_brazil_coverage_2024_reclassificado_mfa_projetado 
@@ -104,9 +104,9 @@ def get_queries(params: dict = None):
                 'source': 'lapig',
                 'id': 'coverage_comparison_app',
                 'sql': f"""
-                    SELECT UPPER({comparison_col_coverage}) as label, 'Natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM app_brazil_coverage_2024_reclassificado_app_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM app_brazil_coverage_2024_reclassificado_app_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     UNION ALL
-                    SELECT UPPER({comparison_col_coverage}) as label, 'Não Natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM app_brazil_coverage_2024_reclassificado_app_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM app_brazil_coverage_2024_reclassificado_app_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     ORDER BY 1, 2
                 """,
                 'mantain': True
@@ -115,9 +115,9 @@ def get_queries(params: dict = None):
                 'source': 'lapig',
                 'id': 'coverage_comparison_rl',
                 'sql': f"""
-                    SELECT UPPER({comparison_col_coverage}) as label, 'Natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM app_brazil_coverage_2024_reclassificado_rl_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM app_brazil_coverage_2024_reclassificado_rl_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     UNION ALL
-                    SELECT UPPER({comparison_col_coverage}) as label, 'Não Natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM app_brazil_coverage_2024_reclassificado_rl_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM app_brazil_coverage_2024_reclassificado_rl_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     ORDER BY 1, 2
                 """,
                 'mantain': True
@@ -126,9 +126,9 @@ def get_queries(params: dict = None):
                 'source': 'lapig',
                 'id': 'coverage_comparison_mfa',
                 'sql': f"""
-                    SELECT UPPER({comparison_col_coverage}) as label, 'Natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM app_brazil_coverage_2024_reclassificado_mfa_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM app_brazil_coverage_2024_reclassificado_mfa_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     UNION ALL
-                    SELECT UPPER({comparison_col_coverage}) as label, 'Não Natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM app_brazil_coverage_2024_reclassificado_mfa_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM app_brazil_coverage_2024_reclassificado_mfa_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     ORDER BY 1, 2
                 """,
                 'mantain': True

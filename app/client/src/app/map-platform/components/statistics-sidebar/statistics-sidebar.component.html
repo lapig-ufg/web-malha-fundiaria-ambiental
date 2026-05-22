@@ -18,7 +18,7 @@
       <!-- Section: Cobertura por Região (Tabs) -->
       <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_comparison_title' | translate" *ngIf="coverageComparisonAppChartData || coverageComparisonRlChartData || coverageComparisonMfaChartData">
         <p-tabView>
-          <p-tabPanel header="APP" *ngIf="coverageComparisonAppChartData">
+          <p-tabPanel [header]="'right_sidebar.resumo_card.chart_labels.app' | translate" *ngIf="coverageComparisonAppChartData">
             <div class="chart-section">
               <div class="chart-container" style="height: 600px; padding: 10px;">
                 <p-chart type="bar" [data]="coverageComparisonAppChartData" [options]="stackedBarOptions" height="580px">
