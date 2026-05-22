@@ -2,15 +2,12 @@
 
 .methodology-container {
   background-color: #f8f9fa;
-  
-  .header-section {
-    .subtitle {
-      color: #6c757d;
-      font-size: 1.1rem;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-  }
+}
+
+.subtitle {
+  color: #6c757d;
+  font-size: 1.1rem;
+  max-width: 700px;
 }
 
 .method-card {
@@ -99,16 +96,10 @@
   border-radius: 20px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
-  margin-top: 3rem;
 
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  }
-
-  .title-style-2 {
-    color: #333;
-    font-weight: 700;
   }
 
   .subtitle {
