@@ -46,6 +46,7 @@ def get_queries(params: dict = None):
 
     type_region = params.get('typeRegion')
     comparison_col = 'uf' if type_region == 'country' else 'municipio'
+    comparison_col_coverage = '"UF"' if type_region == 'country' else '"MUNICIPIO"'
 
     queries = {
         'resumo': lambda p: [
@@ -94,16 +95,22 @@ def get_queries(params: dict = None):
             },
             {
                 'source': 'lapig',
-                'id': 'coverage_comparison',
+                'id': 'coverage_comparison_app',
                 'sql': f"""
-                    WITH combined AS (
-                        SELECT "UF" as uf, "MUNICIPIO" as municipio, "CLASSE_1_HA", "CLASSE_2_HA" FROM app_brazil_coverage_2024_reclassificado_app_projetado WHERE {region_filter_coverage}
-                        UNION ALL
-                        SELECT "UF" as uf, "MUNICIPIO" as municipio, "CLASSE_1_HA", "CLASSE_2_HA" FROM app_brazil_coverage_2024_reclassificado_rl_projetado WHERE {region_filter_coverage}
-                    )
-                    SELECT UPPER({comparison_col}) as label, 'Natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM combined GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'Natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM app_brazil_coverage_2024_reclassificado_app_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     UNION ALL
-                    SELECT UPPER({comparison_col}) as label, 'Não Natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM combined GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'Não Natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM app_brazil_coverage_2024_reclassificado_app_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    ORDER BY 1, 2
+                """,
+                'mantain': True
+            },
+            {
+                'source': 'lapig',
+                'id': 'coverage_comparison_rl',
+                'sql': f"""
+                    SELECT UPPER({comparison_col_coverage}) as label, 'Natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM app_brazil_coverage_2024_reclassificado_rl_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    UNION ALL
+                    SELECT UPPER({comparison_col_coverage}) as label, 'Não Natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM app_brazil_coverage_2024_reclassificado_rl_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     ORDER BY 1, 2
                 """,
                 'mantain': True

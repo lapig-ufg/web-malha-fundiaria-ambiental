@@ -47,3 +47,38 @@ h4.sidebar-title {
   justify-content: center;
   align-items: center;
 }
+
+.modern-accordion {
+  ::ng-deep {
+    .p-accordion-header-link {
+      background: #f8f9fa !important;
+      border: 1px solid rgba(0, 0, 0, 0.05) !important;
+      border-radius: 8px !important;
+      margin: 0 4px 8px !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) !important;
+      padding: 14px 16px !important;
+      transition: $transition !important;
+
+      &:hover {
+        background: #f2f2f2 !important;
+        border-color: rgba(0, 0, 0, 0.1) !important;
+      }
+
+      .p-accordion-header-text {
+        color: $primary;
+        font-weight: 700;
+        font-size: 13px;
+      }
+
+      .p-accordion-toggle-icon {
+        color: $primary !important;
+      }
+    }
+
+    .p-accordion-content {
+      background: #fff !important;
+      border: none !important;
+      padding: 0 4px 16px 4px !important;
+    }
+  }
+}

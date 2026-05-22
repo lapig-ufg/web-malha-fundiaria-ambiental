@@ -33,13 +33,15 @@ class StatisticsSidebarComponent implements OnDestroy {
 
   public summaryKeys: string[] = [
     'coverage_natural',
-    'coverage_comparison',
+    'coverage_comparison_app',
+    'coverage_comparison_rl',
   ];
 
   public summaryData: Map<string, any> = new Map<string, any>();
 
   public coverageNaturalChartData: any = null;
-  public coverageComparisonChartData: any = null;
+  public coverageComparisonAppChartData: any = null;
+  public coverageComparisonRlChartData: any = null;
 
   public stackedBarOptions: any = {
     indexAxis: 'y',
@@ -275,10 +277,11 @@ class StatisticsSidebarComponent implements OnDestroy {
           }
         ]
       };
-    } else if (key === 'coverage_comparison') {
-      const summary = this.summaryData.get('coverage_comparison');
+    } else if (key === 'coverage_comparison_app' || key === 'coverage_comparison_rl') {
+      const summary = this.summaryData.get(key);
       if (!summary || !summary.data || !Array.isArray(summary.data)) {
-        this.coverageComparisonChartData = null;
+        if (key === 'coverage_comparison_app') this.coverageComparisonAppChartData = null;
+        else this.coverageComparisonRlChartData = null;
         return;
       }
 
@@ -315,10 +318,13 @@ class StatisticsSidebarComponent implements OnDestroy {
         };
       });
 
-      this.coverageComparisonChartData = {
+      const chartData = {
         labels: sortedLabels,
         datasets: datasets
       };
+
+      if (key === 'coverage_comparison_app') this.coverageComparisonAppChartData = chartData;
+      else this.coverageComparisonRlChartData = chartData;
     }
   }
 

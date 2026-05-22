@@ -1,25 +1,41 @@
 <h4 class="sidebar-title">{{ "right_sidebar.title" | translate }}</h4>
 
 <div class="statistics-container" style="padding: 0 4px;">
-  <div *ngIf="summaryData.get('coverage_natural') && summaryData.get('coverage_comparison'); else loadingSpinner">
+  <div *ngIf="summaryData.get('coverage_natural'); else loadingSpinner">
     
-    <!-- Coverage Comparison Chart (Stacked Bar) -->
-    <div class="chart-section" style="margin-bottom: 2rem;" *ngIf="coverageComparisonChartData">
-      <h5 class="section-title">{{ 'right_sidebar.resumo_card.coverage_comparison_title' | translate }}</h5>
-      <div class="chart-container" style="height: 650px; padding: 10px;">
-        <p-chart type="bar" [data]="coverageComparisonChartData" [options]="stackedBarOptions" height="630px">
-        </p-chart>
-      </div>
-    </div>
+    <p-accordion [multiple]="true" [activeIndex]="[0, 1, 2]" styleClass="modern-accordion">
+      
+      <!-- Section: Geral -->
+      <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_natural_title' | translate">
+        <div class="chart-section">
+          <div class="chart-container" style="height: 250px; padding: 10px;">
+            <p-chart type="doughnut" [data]="coverageNaturalChartData" [options]="doughnutOptions" height="230px">
+            </p-chart>
+          </div>
+        </div>
+      </p-accordionTab>
 
-    <!-- Coverage Natural Chart -->
-    <div class="chart-section" style="margin-top: 2rem;" *ngIf="coverageNaturalChartData">
-      <h5 class="section-title">{{ 'right_sidebar.resumo_card.coverage_natural_title' | translate }}</h5>
-      <div class="chart-container" style="height: 250px; padding: 10px;">
-        <p-chart type="doughnut" [data]="coverageNaturalChartData" [options]="doughnutOptions" height="230px">
-        </p-chart>
-      </div>
-    </div>
+      <!-- Section: APP -->
+      <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_comparison_app_title' | translate" *ngIf="coverageComparisonAppChartData">
+        <div class="chart-section">
+          <div class="chart-container" style="height: 650px; padding: 10px;">
+            <p-chart type="bar" [data]="coverageComparisonAppChartData" [options]="stackedBarOptions" height="630px">
+            </p-chart>
+          </div>
+        </div>
+      </p-accordionTab>
+
+      <!-- Section: Reserva Legal -->
+      <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_comparison_rl_title' | translate" *ngIf="coverageComparisonRlChartData">
+        <div class="chart-section">
+          <div class="chart-container" style="height: 650px; padding: 10px;">
+            <p-chart type="bar" [data]="coverageComparisonRlChartData" [options]="stackedBarOptions" height="630px">
+            </p-chart>
+          </div>
+        </div>
+      </p-accordionTab>
+
+    </p-accordion>
 
   </div>
 </div>
