@@ -71,7 +71,7 @@ class StatisticsSidebarComponent implements OnDestroy {
               label += ': ';
             }
             if (context.parsed.x !== null) {
-              label += new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(context.parsed.x) + ' ha';
+              label += new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(context.parsed.x) + ' %';
             }
             return label;
           }
@@ -81,14 +81,13 @@ class StatisticsSidebarComponent implements OnDestroy {
     scales: {
       x: {
         stacked: true,
+        max: 100,
         grid: {
           display: false
         },
         ticks: {
           callback: (value: any) => {
-            if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
-            if (value >= 1000) return (value / 1000).toFixed(0) + 'k';
-            return value;
+            return value + '%';
           }
         }
       },
@@ -310,7 +309,8 @@ class StatisticsSidebarComponent implements OnDestroy {
       const datasets = Array.from(classesMap.entries()).map(([classe, color]) => {
         const data = sortedLabels.map(label => {
           const found = rawData.find((item: any) => item.label === label && item.classe === classe);
-          return found ? found.value : 0;
+          const totalArea = totalAreaPerLabel.get(label) || 1;
+          return found ? (found.value / totalArea) * 100 : 0;
         });
 
         return {
