@@ -389,7 +389,8 @@
           "methods": "Métodos",
           "articles": "Artigos",
           "help": "Ajuda",
-          "gallery": "Galeria"
+          "gallery": "Galeria",
+          "contact": "Contato"
         }
       },
       "footer": {
@@ -541,7 +542,9 @@
           "success": "Sua mensagem foi enviada com sucesso",
           "fail": "Seu envio falhou"
         }
-      }
+      },
+      "description": "Queremos ouvir você! Se tiver dúvidas, sugestões ou gostaria de saber mais sobre a Malha Fundiária Ambiental, entre em contato conosco preenchendo o formulário abaixo.",
+      "cta": "Acesse o formulário"
     },
     "gallery": {
       "page_title": "Galeria de imagens das Pastagens",

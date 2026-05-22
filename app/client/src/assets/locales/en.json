@@ -389,7 +389,8 @@
           "methods": "Methodology",
           "articles": "Articles",
           "help": "Help",
-          "gallery": "Gallery"
+          "gallery": "Gallery",
+          "contact": "Contact"
         }
       },
       "footer": {
@@ -541,7 +542,9 @@
           "success": "Your message has been sent successfully ",
           "fail": "Your submission has been failed"
         }
-      }
+      },
+      "description": "We would love to hear from you! If you have questions, suggestions, or would like to learn more about Environmental Land Tenure, please get in touch by filling out the form below.",
+      "cta": "Open the form"
     },
     "gallery": {
       "page_title": "Photo Gallery of Brazilian Pastures",

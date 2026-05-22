@@ -34,6 +34,7 @@ export class BaseComponent implements AfterViewInit {
       'about',
       'methods',
       'articles',
+      'contact',
     ];
 
     this.menu = menuNames.map((name) => {

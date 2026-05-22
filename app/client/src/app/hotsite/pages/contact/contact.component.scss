@@ -1,0 +1,28 @@
+.contact-content {
+  padding: 40px;
+  background: rgb(234 230 230 / 77%);
+  border-radius: 15px;
+}
+
+.contact-text p {
+  font-size: 18px;
+  color: black !important;
+}
+
+.contact-cta {
+  margin-top: 1.5rem;
+}
+
+.btn-style {
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+}

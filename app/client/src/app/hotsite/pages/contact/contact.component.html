@@ -1,0 +1,40 @@
+<app-site-base>
+  <!-- inner banner -->
+  <section class="inner-banner">
+    <div class="w3l-breadcrumb py-5">
+      <div class="container py-xl-5 py-md-4 mt-5">
+        <h4 class="inner-text-title font-weight-bold mb-sm-2">{{'hotsite.contact.page_title' | translate}}</h4>
+        <ul class="breadcrumbs-custom-path">
+          <li><a href="/">{{'hotsite.base.header.menu.home' | translate}}</a></li>
+          <li class="active"><i class='bx bx-chevron-right'></i> {{'hotsite.contact.page_title' | translate}}</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- //inner banner -->
+
+  <!-- contact section -->
+  <section class="contact-section">
+    <div class="container py-md-5 py-4">
+      <div class="contact-content mx-auto" style="max-width:700px">
+        <div class="style-title position-relative">
+          <h3 class="title-style mb-sm-3 mb-2">{{'hotsite.contact.title' | translate}}</h3>
+        </div>
+
+        <div class="contact-text">
+          <p class="mb-4">
+            {{'hotsite.contact.description' | translate}}
+          </p>
+        </div>
+
+        <div class="contact-cta text-center">
+          <a [href]="formLink" target="_blank" class="btn btn-style btn-primary">
+            {{'hotsite.contact.cta' | translate}}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- //contact section -->
+
+</app-site-base>

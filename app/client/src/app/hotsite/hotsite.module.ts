@@ -23,6 +23,7 @@ import { AboutCompenent } from "./pages/about/about.component";
 import { MethodsComponent } from "./pages/methods/methods.component";
 import { ArticlesComponent } from "./pages/articles/articles.component";
 import { HelpComponent } from "./pages/help/help.component";
+import { ContactComponent } from "./pages/contact/contact.component";
 
 @NgModule({
     imports: [
@@ -41,6 +42,7 @@ import { HelpComponent } from "./pages/help/help.component";
         MethodsComponent,
         ArticlesComponent,
         HelpComponent,
+        ContactComponent,
         BaseComponent,
         FilterPipe
     ],

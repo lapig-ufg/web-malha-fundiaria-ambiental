@@ -6,6 +6,7 @@ import { AboutCompenent } from "./pages/about/about.component";
 import { MethodsComponent } from "./pages/methods/methods.component";
 import { ArticlesComponent } from "./pages/articles/articles.component";
 import { HelpComponent } from "./pages/help/help.component";
+import { ContactComponent } from "./pages/contact/contact.component";
 
 const routes: Routes = [
     {
@@ -30,8 +31,11 @@ const routes: Routes = [
     },
     {
       path: 'help',
-
         component: HelpComponent,
+    },
+    {
+        path: 'contact',
+        component: ContactComponent,
     }
 ]
 
