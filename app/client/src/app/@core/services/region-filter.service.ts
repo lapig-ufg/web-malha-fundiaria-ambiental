@@ -43,27 +43,8 @@ export class RegionFilterService {
       case 'state':
         this.msFilterRegion = `uf ilike '${newFilter.value}'`;
         break;
-      case 'region':
-        this.msFilterRegion = `upper(regiao) = '${newFilter.value}'`;
-        break;
-      case 'biome':
-        this.msFilterRegion = `unaccent(bioma) ilike unaccent('${newFilter.value}')`;
-        break;
-      case 'fronteira':
-        let value = newFilter.value.toUpperCase();
-
-        if (value == 'AMZ_LEGAL') {
-          this.msFilterRegion = 'amaz_legal = 1';
-        } else if (value == 'MATOPIBA') {
-          this.msFilterRegion = 'matopiba = 1';
-        } else if (value == 'ARCODESMAT') {
-          this.msFilterRegion = 'arcodesmat = 1';
-        }
-
-        break;
       default:
         this.msFilterRegion = '';
-        
         break;
     }
 

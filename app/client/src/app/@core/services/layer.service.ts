@@ -174,9 +174,13 @@ class LayerService {
   public parseLimitURL(descriptorType): string[] {
     let layerName = descriptorType.valueType;
 
-    return this.urls.map((url: string) => {
+    let parsedLimitUrl = this.urls.map((url: string) => {
       return `${url}?layers=${layerName}&MSFILTER=&mode=tile&tile={x}+{y}+{z}&tilemode=gmap&map.imagetype=png`;
-    });
+    })
+
+    console.log(parsedLimitUrl)
+
+    return parsedLimitUrl;
   }
 
   public parseLayersURL(descriptorType: DescriptorType, highResolution: boolean): string[] {
