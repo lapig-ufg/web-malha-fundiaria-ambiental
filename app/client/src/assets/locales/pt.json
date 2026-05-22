@@ -431,7 +431,17 @@
         "p2": "A plataforma integra dados de diversas fontes oficiais, como o Cadastro Ambiental Rural (CAR), bases de Unidades de Conservação, Terras Indígenas e assentamentos, permitindo uma visão sistêmica das ocupações e restrições ambientais no território nacional."
       },
       "team": {
-        "title": "Equipe"
+        "title": "Equipe",
+        "roles": {
+          "laerte": "Coordenador do Programa de Pesquisa em Pastagens",
+          "bernard": "Doutorando & Assistente de Pesquisa",
+          "ana_silva": "Doutoranda & Assistente de Pesquisa",
+          "tharles": "Analista de Desenvolvimento",
+          "felipe": "Bolsista de Pesquisa em Geoprocessamento e Sensoriamento Remoto",
+          "guilherme": "Bolsista de Pesquisa Científica em Análise Ambiental",
+          "ana_assuncao": "Bolsista de Pesquisa em Geoprocessamento e Interpretação Visual",
+          "tiago": "Analista de Desenvolvimento"
+        }
       }
     },
     "methods": {

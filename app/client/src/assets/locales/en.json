@@ -431,7 +431,17 @@
         "p2": "The platform integrates data from various official sources, such as the Rural Environmental Registry (CAR), databases of Conservation Units, Indigenous Lands, and settlements, allowing for a systemic view of occupations and environmental restrictions in the national territory."
       },
       "team": {
-        "title": "Team"
+        "title": "Team",
+        "roles": {
+          "laerte": "Coordinator of the Pasture Research Program",
+          "bernard": "PhD Candidate & Research Assistant",
+          "ana_silva": "Doctoral Candidate & Research Assistant",
+          "tharles": "Development Analyst",
+          "felipe": "Research Fellow in Geoprocessing and Remote Sensing",
+          "guilherme": "Scientific Research Fellow in Environmental Analysis",
+          "ana_assuncao": "Research fellow in Geoprocessing and Visual Interpretation",
+          "tiago": "Development Analyst"
+        }
       }
     },
     "methods": {
