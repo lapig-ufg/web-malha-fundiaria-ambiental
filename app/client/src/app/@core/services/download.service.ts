@@ -22,6 +22,11 @@ class DownloadService {
 
   // TODO: Trazer o ErroMessageService para dentro do download.
   public downloadGeoFile(descriptorType: DescriptorType, fileType: string): Observable<any> {
+    if (descriptorType.download.url) {
+      window.open(descriptorType.download.url, '_blank');
+      return of({ status: 'success' });
+    }
+
     let regionFilter = this.regionFilterService.currentFilter;
 
     let params = {

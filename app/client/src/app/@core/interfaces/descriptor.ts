@@ -45,7 +45,8 @@ export interface DescriptorDownload {
   layerTypeName: string;
   raster: boolean | string;
   shp: boolean;
-  loading?:boolean;
+  loading?: boolean;
+  url?: string;
 }
 
 /**

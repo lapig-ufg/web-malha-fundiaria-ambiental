@@ -74,7 +74,8 @@ async def get_descriptor(lang: str = 'pt-br'):
             "shp": False,
             "gpkg": False,
             "raster": True,
-            "layerTypeName": "malha_fundiaria_cog"
+            "layerTypeName": "malha_fundiaria_cog",
+            "url": "https://s3.lapig.iesa.ufg.br/malha-fundiaria/brasil_malhafundiaria_ambiental_10m_v2_cog.tif"
         },
         "regionFilter": False,
         "visible": True,
