@@ -90,6 +90,13 @@ def get_queries(params: dict = None):
                         COALESCE(SUM("CLASSE_1_HA"), 0) as value 
                     FROM app_brazil_coverage_2024_reclassificado_rl_projetado 
                     WHERE {region_filter_coverage}
+                    UNION ALL
+                    SELECT 
+                        'Malha Fundiária' as label, 
+                        '#4169E1' as color, 
+                        COALESCE(SUM("CLASSE_1_HA"), 0) as value 
+                    FROM app_brazil_coverage_2024_reclassificado_mfa_projetado 
+                    WHERE {region_filter_coverage}
                 """,
                 'mantain': True
             },
@@ -111,6 +118,17 @@ def get_queries(params: dict = None):
                     SELECT UPPER({comparison_col_coverage}) as label, 'Natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM app_brazil_coverage_2024_reclassificado_rl_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     UNION ALL
                     SELECT UPPER({comparison_col_coverage}) as label, 'Não Natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM app_brazil_coverage_2024_reclassificado_rl_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    ORDER BY 1, 2
+                """,
+                'mantain': True
+            },
+            {
+                'source': 'lapig',
+                'id': 'coverage_comparison_mfa',
+                'sql': f"""
+                    SELECT UPPER({comparison_col_coverage}) as label, 'Natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM app_brazil_coverage_2024_reclassificado_mfa_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    UNION ALL
+                    SELECT UPPER({comparison_col_coverage}) as label, 'Não Natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM app_brazil_coverage_2024_reclassificado_mfa_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     ORDER BY 1, 2
                 """,
                 'mantain': True

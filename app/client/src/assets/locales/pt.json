@@ -361,6 +361,7 @@
       "coverage_natural_title": "Distribuição de Áreas Naturais",
       "coverage_comparison_app_title": "Cobertura por Região: APP",
       "coverage_comparison_rl_title": "Cobertura por Região: Reserva Legal",
+      "coverage_comparison_mfa_title": "Cobertura por Região: Malha Fundiária",
       "chart_labels": {
         "app": "Áreas de Preservação Permanente",
         "rl": "Reserva Legal",

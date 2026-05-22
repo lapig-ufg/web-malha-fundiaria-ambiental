@@ -3,7 +3,7 @@
 <div class="statistics-container" style="padding: 0 4px;">
   <div *ngIf="summaryData.get('coverage_natural'); else loadingSpinner">
     
-    <p-accordion [multiple]="true" [activeIndex]="[0, 1, 2]" styleClass="modern-accordion">
+    <p-accordion [multiple]="true" [activeIndex]="[0, 1, 2, 3]" styleClass="modern-accordion">
       
       <!-- Section: Geral -->
       <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_natural_title' | translate">
@@ -30,6 +30,16 @@
         <div class="chart-section">
           <div class="chart-container" style="height: 650px; padding: 10px;">
             <p-chart type="bar" [data]="coverageComparisonRlChartData" [options]="stackedBarOptions" height="630px">
+            </p-chart>
+          </div>
+        </div>
+      </p-accordionTab>
+
+      <!-- Section: Malha Fundiária -->
+      <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_comparison_mfa_title' | translate" *ngIf="coverageComparisonMfaChartData">
+        <div class="chart-section">
+          <div class="chart-container" style="height: 650px; padding: 10px;">
+            <p-chart type="bar" [data]="coverageComparisonMfaChartData" [options]="stackedBarOptions" height="630px">
             </p-chart>
           </div>
         </div>
