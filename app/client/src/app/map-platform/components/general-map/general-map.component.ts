@@ -1315,7 +1315,16 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   public getAttributeValue(type: any, value: any) {
     let formattedValue: string | number | null = '';
     const lang = this.localizationService.currentLang();
-    switch (type) {
+
+    let columnType = type;
+    let label = '';
+
+    if (typeof type === 'object' && type !== null) {
+      columnType = type.columnType;
+      label = type.label || '';
+    }
+
+    switch (columnType) {
       case 'integer':
         if (lang === 'pt') {
           formattedValue = this.decimalPipe.transform(value, '', 'pt-BR');
@@ -1324,10 +1333,20 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
         }
         break;
       case 'double':
+        let format = '1.0-2';
+
+        if (
+          label.toLowerCase().includes('(ha)') ||
+          label.toLowerCase().includes(' ha') ||
+          label.toLowerCase().includes('hectares')
+        ) {
+          format = '1.0-0';
+        }
+
         if (lang === 'pt') {
-          formattedValue = this.decimalPipe.transform(value, '1.0-2', 'pt-BR');
+          formattedValue = this.decimalPipe.transform(value, format, 'pt-BR');
         } else {
-          formattedValue = this.decimalPipe.transform(value, '1.0-2', 'en-US');
+          formattedValue = this.decimalPipe.transform(value, format, 'en-US');
         }
         break;
       case 'date':
