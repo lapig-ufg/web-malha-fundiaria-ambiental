@@ -46,7 +46,7 @@ export class ArticlesComponent implements OnInit {
       }
     },
     {
-      "doi": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12651.htm",
+      "doi": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12651.html",
       "authors": "Presidência da República, Brasil",
       "published": "2012-05-25",
       "image": "assets/hotsite/images/articles/lei_12651_codigo_florestal.png",
@@ -60,7 +60,49 @@ export class ArticlesComponent implements OnInit {
       }
     },
     {
-      "doi": "",
+      "doi": "https://doi.org/10.1111/gcb.14011",
+      "authors": "Freitas, F. L. M., Guidotti, V., Sparovek, G., & Hamamura, C.",
+      "published": "2018",
+      "image": "assets/hotsite/images/articles/nota_tecnica_malha_fundiaria_do_brasil.png",
+      "pt": {
+        "title": "Nota técnica: Malha fundiária do Brasil, v.1812",
+        "abstract": "A malha fundiária do Brasil é resultado de uma colaboração entre o Imaflora, o GeoLab da Esalq/USP, o Royal Institute of Technology (KTH-Suécia) e o Instituto Federal de Educação, Ciência e Tecnologia de São Paulo. Esta base de dados georreferenciada possui abrangência nacional, oferecendo aberta e publicamente uma visão do conjunto das terras públicas e dos imóveis privados do país. Essa malha fundiária é uma atualização de estudos anteriores realizados pela equipe do Professor Gerd Sparovek - GeoLab da Esalq / USP, além do desenvolvimento de novas funcionalidades e a codificação de uma rotina que permite a atualização permanente desta base."
+      },
+      "en": {
+        "title": "Technical note: Land tenure dataset of Brazil, v.1812",
+        "abstract": "The land tenure dataset of Brazil is the result of a collaboration between Imaflora, GeoLab from Esalq/USP, the Royal Institute of Technology (KTH-Sweden), and the Federal Institute of Education, Science, and Technology of São Paulo. This georeferenced database has a national scope, offering an open and public view of the set of public lands and private properties in the country. This land tenure grid is an update of previous studies conducted by Professor Gerd Sparovek's team - GeoLab from Esalq / USP, in addition to developing new functionalities and coding a routine that allows permanent updates to this database."
+      }
+    },
+    {
+      "doi": "https://www.cartasdaterra.com.br/post/malha-fundiaria-2025",
+      "authors": "Coutinho, P. A. Q., Scarabello, M. C., & Fernandes, P. G.",
+      "published": "2026",
+      "image": "assets/hotsite/images/articles/malha_fundiaria_nota_tecnica_2025_2a_edicao.png",
+      "pt": {
+        "title": "Malha Fundiária: Nota Técnica 2025, 2ª Edição",
+        "abstract": "A Malha Fundiária do Brasil é uma base de dados geoespacial de abrangência nacional desenvolvida em colaboração entre o Grupo de Políticas Públicas da ESALQ/USP (GPP), o Instituto para Governança Territorial e Políticas Públicas (iGPP) e o Imaflora. O mapeamento organiza o território a partir de dimensões de uso, acesso e domínio, subdividindo o país em categorias fundiárias e integrando o cruzamento espacial com o Cadastro Ambiental Rural (CAR). Esta segunda edição introduz a transição metodológica para o modelo vetorial em PostGIS, otimizando a precisão geométrica e o rastreamento completo de sobreposições territoriais para subsidiar políticas públicas."
+      },
+      "en": {
+        "title": "Land Tenure Dataset: Technical Note 2025, 2nd Edition",
+        "abstract": "The Land Tenure Dataset of Brazil is a nationwide geospatial database developed through a collaboration between the Public Policy Group at ESALQ/USP (GPP), the Institute for Territorial Governance and Public Policies (iGPP), and Imaflora. This mapping structures the national territory based on land use, access, and tenure dimensions, subdividing the country into land tenure categories while integrating spatial cross-referencing with the Rural Environmental Registry (CAR). This second edition introduces a methodological transition to a PostGIS vector model, optimizing geometric precision and the complete tracking of territorial overlaps to support public policies."
+      }
+    },
+    {
+      "doi": "https://www.cartasdaterra.com.br/post/modelagem-espacial-da-lpvn",
+      "authors": "Alves dos Santos, H. L. R., Fernandes, P. G., Scarabello, M. C., Coutinho, P. A. Q., & Marinho, J. V. L.",
+      "published": "2025",
+      "image": "assets/hotsite/images/articles/lei_de_protecao_da_vegetacao_nativa_modelagem_espacial_de_alta_resolucao_2025.png",
+      "pt": {
+        "title": "Lei de Proteção da Vegetação Nativa: modelagem espacial de alta resolução - Nota técnica e metodológica atualização 2025",
+        "abstract": "Esta nota técnica apresenta conceitos, métodos e resultados das estimativas sobre o cumprimento da Lei de Proteção da Vegetação Nativa (LPVN - Lei nº 12.651/2012) nos imóveis rurais do Brasil através de uma modelagem espacial vetorial de alta resolução baseada no CAR. Os resultados indicam que a área agregada de déficit de Áreas de Preservação Permanente (APP) e Reserva Legal (RL) representa cerca de 3,7% da área total ocupada por imóveis rurais, um valor cinco vezes menor que o excedente de vegetação nativa calculado. Além disso, as análises revelam uma alta concentração geográfica dos passivos e ativos ambientais, demonstrando que os problemas de sobreposições de cadastros não impedem o avanço na implementação da lei."
+      },
+      "en": {
+        "title": "Native Vegetation Protection Law: high-resolution spatial modeling - Technical and methodological note 2025 update",
+        "abstract": "This technical note presents the concepts, methods, and results of estimated compliance with the Native Vegetation Protection Law (LPVN - Law No. 12,651/2012) across Brazilian rural properties using a high-resolution vector spatial modeling based on the CAR database. The results show that the aggregate deficit area of Permanent Preservation Areas (APP) and Legal Reserves (RL) represents approximately 3.7% of the total land occupied by rural properties, a magnitude five times lower than the calculated native vegetation surplus. Furthermore, the analysis reveals a high geographical concentration of both environmental liabilities and assets, demonstrating that topological registry overlaps in the CAR system are not a barrier to accelerating the implementation of the law."
+      }
+    },
+    {
+      "doi": "https://admin.imaflora.org/public/media/biblioteca/nota_tecnica_-_final.pdf",
       "authors": "Cerignoni, F.",
       "published": "2023-09-01",
       "image": "assets/hotsite/images/articles/malha_car_livre_de_sobreposicao.png",
