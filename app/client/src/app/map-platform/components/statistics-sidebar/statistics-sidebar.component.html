@@ -1,31 +1,13 @@
 <h4 class="sidebar-title">{{ "right_sidebar.title" | translate }}</h4>
 
 <div class="statistics-container" style="padding: 0 4px;">
-  <div *ngIf="summaryData.get('pasture_quality') && summaryData.get('pasture_quality_comparison'); else loadingSpinner">
+  <div *ngIf="summaryData.get('coverage_natural') && summaryData.get('coverage_comparison'); else loadingSpinner">
     
-    <!-- Comparison Chart (Stacked Bar) -->
-    <div class="chart-section" style="margin-bottom: 2rem;">
-      <h5 class="section-title">{{ 'right_sidebar.resumo_card.pasture_quality_comparison' | translate }}</h5>
-      <div class="chart-container" style="height: 350px; padding: 10px;">
-        <p-chart type="bar" [data]="pastureQualityComparisonChartData" [options]="stackedBarOptions" height="330px">
-        </p-chart>
-      </div>
-    </div>
-
     <!-- Coverage Comparison Chart (Stacked Bar) -->
     <div class="chart-section" style="margin-bottom: 2rem;" *ngIf="coverageComparisonChartData">
       <h5 class="section-title">{{ 'right_sidebar.resumo_card.coverage_comparison_title' | translate }}</h5>
       <div class="chart-container" style="height: 350px; padding: 10px;">
         <p-chart type="bar" [data]="coverageComparisonChartData" [options]="stackedBarOptions" height="330px">
-        </p-chart>
-      </div>
-    </div>
-
-    <!-- Doughnut Chart -->
-    <div class="chart-section">
-      <h5 class="section-title">{{ 'right_sidebar.resumo_card.pasture_quality_title' | translate }} ({{summaryData.get('pasture_quality').year}})</h5>
-      <div class="chart-container" style="height: 250px; padding: 10px;">
-        <p-chart type="doughnut" [data]="pastureQualityChartData" [options]="doughnutOptions" height="230px">
         </p-chart>
       </div>
     </div>

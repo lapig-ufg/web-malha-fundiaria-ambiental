@@ -32,16 +32,12 @@ class StatisticsSidebarComponent implements OnDestroy {
   private regionFilterSubscription: Subscription = new Subscription();
 
   public summaryKeys: string[] = [
-    'pasture_quality_comparison',
-    'pasture_quality',
     'coverage_natural',
     'coverage_comparison',
   ];
 
   public summaryData: Map<string, any> = new Map<string, any>();
 
-  public pastureQualityChartData: any = null;
-  public pastureQualityComparisonChartData: any = null;
   public coverageNaturalChartData: any = null;
   public coverageComparisonChartData: any = null;
 
@@ -164,21 +160,7 @@ class StatisticsSidebarComponent implements OnDestroy {
     }
   };
 
-  // TODO: Estatisticas foram setadas para 1 ano antes do correto. DB não esta retornando dados para o ano certo.
-  public layersForStatistics: any = {
-    pasture_quality: {
-      layer: 'pasture_quality',
-      group: 'pasture_general',
-      year: 2023,
-      switch: true,
-    },
-    pasture_quality_comparison: {
-      layer: 'pasture_quality',
-      group: 'pasture_general',
-      year: 2023,
-      switch: true,
-    }
-  };
+  public layersForStatistics: any = {};
 
   public regionFilter: RegionFilter = DEFAULT_REGION;
 
@@ -267,76 +249,7 @@ class StatisticsSidebarComponent implements OnDestroy {
   }
 
   private updateChartData(key: string): void {
-    if (key === 'pasture_quality') {
-      const summary = this.summaryData.get('pasture_quality');
-      if (!summary || !summary.data || !Array.isArray(summary.data)) {
-        this.pastureQualityChartData = null;
-        return;
-      }
-
-      const labels = summary.data.map((item: any) => item.classe);
-      const data = summary.data.map((item: any) => item.value);
-      const backgroundColor = summary.data.map((item: any) => item.color);
-
-      this.pastureQualityChartData = {
-        labels: labels,
-        datasets: [
-          {
-            data: data,
-            backgroundColor: backgroundColor,
-            hoverBackgroundColor: backgroundColor,
-            borderWidth: 2,
-            borderColor: '#ffffff',
-            hoverOffset: 20
-          }
-        ]
-      };
-    } else if (key === 'pasture_quality_comparison') {
-      const summary = this.summaryData.get('pasture_quality_comparison');
-      if (!summary || !summary.data || !Array.isArray(summary.data)) {
-        this.pastureQualityComparisonChartData = null;
-        return;
-      }
-
-      const rawData = summary.data;
-      
-      const totalAreaPerLabel = new Map<string, number>();
-      rawData.forEach((item: any) => {
-        const current = totalAreaPerLabel.get(item.label) || 0;
-        totalAreaPerLabel.set(item.label, current + item.value);
-      });
-
-      const sortedLabels = Array.from(totalAreaPerLabel.entries())
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 15)
-        .map(entry => entry[0]);
-
-      const classesMap = new Map<string, string>();
-      rawData.forEach((item: any) => {
-        if (!classesMap.has(item.classe)) {
-          classesMap.set(item.classe, item.color);
-        }
-      });
-
-      const datasets = Array.from(classesMap.entries()).map(([classe, color]) => {
-        const data = sortedLabels.map(label => {
-          const found = rawData.find((item: any) => item.label === label && item.classe === classe);
-          return found ? found.value : 0;
-        });
-
-        return {
-          label: classe,
-          data: data,
-          backgroundColor: color,
-          hoverBackgroundColor: color
-        };
-      });
-
-      this.pastureQualityComparisonChartData = {
-        labels: sortedLabels,
-        datasets: datasets
-      };
-    } else if (key === 'coverage_natural') {
+    if (key === 'coverage_natural') {
       const summary = this.summaryData.get('coverage_natural');
       if (!summary || !summary.data || !Array.isArray(summary.data)) {
         this.coverageNaturalChartData = null;
