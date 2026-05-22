@@ -59,6 +59,7 @@ class StatisticsSidebarComponent implements OnDestroy {
       tooltip: {
         mode: 'index',
         intersect: false,
+        axis: 'y',
         callbacks: {
           label: (context: any) => {
             let label = context.dataset.label || '';
@@ -97,7 +98,8 @@ class StatisticsSidebarComponent implements OnDestroy {
     maintainAspectRatio: false,
     hover: {
       mode: 'index',
-      intersect: false
+      intersect: false,
+      axis: 'y'
     }
   };
 
