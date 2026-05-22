@@ -9,8 +9,7 @@
 
       <ul class="nav-list">
         <li *ngFor="let menu of menus">
-          <div pRipple 
-               class="nav-list-element" 
+          <div class="nav-list-element" 
                [ngClass]="{'nav-list-element-active': menu.show}" 
                (click)="onMenuClick(menu)"
                [pTooltip]="'menu.' + menu.key | translate"

@@ -104,7 +104,7 @@
       }
 
       .nav-list-element {
-        color: rgba(255, 255, 255, 0.5); // More subtle base color
+        color: rgba(255, 255, 255, 0.5); 
         width: 80px;
         height: 80px;
         padding: 0;
@@ -117,16 +117,17 @@
         gap: 4px;
         border-left: 4px solid transparent;
         cursor: pointer;
+        background-color: #4d451900; // Explicitly set to transparent primary as requested
 
         &-active {
-          color: #fff !important;
-          background: rgba(255, 255, 255, 0.12) !important;
+          color: $accent !important;
+          background: rgba(255, 255, 255, 0.1) !important;
           border-left-color: $accent !important;
         }
 
         &:hover {
           color: #fff;
-          background: rgba(255, 255, 255, 0.08);
+          background: rgba(255, 255, 255, 0.05);
         }
 
         i {
