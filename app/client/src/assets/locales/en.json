@@ -394,7 +394,10 @@
       },
       "footer": {
         "contact": "Contact us",
-        "copyright": "Malha Fundiária Ambiental. All rights reserved."
+        "copyright": "Malha Fundiária Ambiental. All rights reserved.",
+        "partners": "Partners",
+        "go_to_top": "Go to top",
+        "build": "Build:"
       }
     },
     "home": {
@@ -432,7 +435,39 @@
     },
     "methods": {
       "page_title": "Methodology",
-      "title": "Methodology"
+      "title": "Methodology",
+      "subtitle": "Learn about the technical rigor and fundamental processes that underpin Malha Fundiária Ambiental.",
+      "cta": {
+        "title": "Explore the Full Methodology",
+        "subtitle": "For a detailed analysis of technical criteria, data sources, and validation processes, access our full technical documentation.",
+        "button": "Access Methodology"
+      },
+      "items": {
+        "1": {
+          "title": "Data Ingestion",
+          "description": "Collection and organization of land and territorial bases, including private properties, indigenous lands and conservation units"
+        },
+        "2": {
+          "title": "Pre-processing",
+          "description": "Correction of geometric inconsistencies, standardization of bases and removal of duplications and invalid records"
+        },
+        "3": {
+          "title": "Hierarchization",
+          "description": "Definition of priorities between territorial layers through multi-criteria analysis, ensuring coherence in cases of overlap"
+        },
+        "4": {
+          "title": "Layer Reclassification",
+          "description": "The land layers are converted to raster format, organized in a continuous grid where each pixel represents the priority defined by the AHP method"
+        },
+        "5": {
+          "title": "Overlap Analysis",
+          "description": "Conflicts between layers are resolved by keeping, in each pixel, the highest priority land class. Then, the original vectors are recovered to compose the final mesh"
+        },
+        "6": {
+          "title": "Environmental Integration",
+          "description": "Environmental assets are incorporated into the land tenure mesh, allowing for compliance analysis and the generation of environmental statistics associated with the territory"
+        }
+      }
     },
     "articles": {
       "page_title": "Articles",

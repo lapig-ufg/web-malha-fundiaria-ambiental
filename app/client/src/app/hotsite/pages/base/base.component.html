@@ -74,7 +74,7 @@
     <!-- partners -->
     <div class="partners-section py-4">
       <div class="container">
-        <h5 class="partners-title mb-4">{{ lang === 'pt' ? 'Realização' : 'Partners' }}</h5>
+        <h5 class="partners-title mb-4">{{ 'hotsite.base.footer.partners' | translate }}</h5>
         <div class="partners-logos">
           <a href="https://lapig.iesa.ufg.br/" target="_blank" class="partner-item">
             <img
@@ -105,7 +105,7 @@
   </footer>
   <!-- //footer -->
 
-  <button (click)="topFunction()" id="movetop" title="Go to top">
+  <button (click)="topFunction()" id="movetop" [title]="'hotsite.base.footer.go_to_top' | translate">
     <i class="bx bx-up-arrow-alt"></i>
   </button>
 </section>

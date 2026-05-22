@@ -60,45 +60,33 @@ export class MethodsComponent implements OnInit {
     this.staticMethodologies = [
       {
         number: '01.',
-        title_pt: 'Ingestão dos Dados',
-        title_en: 'Ingestão dos Dados',
-        desc_pt: 'Coleta e organização de bases fundiárias e territoriais, incluindo propriedades privadas, terras indígenas e unidades de conservação',
-        desc_en: 'Coleta e organização de bases fundiárias e territoriais, incluindo propriedades privadas, terras indígenas e unidades de conservação'
+        title_key: 'hotsite.methods.items.1.title',
+        desc_key: 'hotsite.methods.items.1.description'
       },
       {
         number: '02.',
-        title_pt: 'Pré-processamento',
-        title_en: 'Pré-processamento',
-        desc_pt: 'Correção de inconsistências geométricas, padronização das bases e remoção de duplicidades e registros inválidos',
-        desc_en: 'Correção de inconsistências geométricas, padronização das bases e remoção de duplicidades e registros inválidos'
+        title_key: 'hotsite.methods.items.2.title',
+        desc_key: 'hotsite.methods.items.2.description'
       },
       {
         number: '03.',
-        title_pt: 'Hierarquização',
-        title_en: 'Hierarquização',
-        desc_pt: 'Definição de prioridades entre as camadas territoriais por meio de análise multicritério, garantindo coerência em casos de sobreposição',
-        desc_en: 'Definição de prioridades entre as camadas territoriais por meio de análise multicritério, garantindo coerência em casos de sobreposição'
+        title_key: 'hotsite.methods.items.3.title',
+        desc_key: 'hotsite.methods.items.3.description'
       },
       {
         number: '04.',
-        title_pt: 'Reclassificação das camadas',
-        title_en: 'Reclassificação das camadas',
-        desc_pt: 'As camadas fundiárias são convertidas para formato raster, organizadas em uma grade contínua onde cada pixel representa a prioridade definida pelo método AHP',
-        desc_en: 'As camadas fundiárias são convertidas para formato raster, organizadas em uma grade contínua onde cada pixel representa a prioridade definida pelo método AHP'
+        title_key: 'hotsite.methods.items.4.title',
+        desc_key: 'hotsite.methods.items.4.description'
       },
       {
         number: '05.',
-        title_pt: 'Análise de sobreposição',
-        title_en: 'Análise de sobreposição',
-        desc_pt: 'Os conflitos entre camadas são resolvidos mantendo, em cada pixel, a classe fundiária de maior prioridade. Em seguida, os vetores originais são recuperados para compor a malha final',
-        desc_en: 'Os conflitos entre camadas são resolvidos mantendo, em cada pixel, a classe fundiária de maior prioridade. Em seguida, os vetores originais foram recuperados para compor a malha final'
+        title_key: 'hotsite.methods.items.5.title',
+        desc_key: 'hotsite.methods.items.5.description'
       },
       {
         number: '06.',
-        title_pt: 'Integração Ambiental',
-        title_en: 'Integração Ambiental',
-        desc_pt: 'Os ativos ambientais são incorporados à malha fundiária, permitindo análises de conformidade e a geração de estatísticas ambientais associadas ao território',
-        desc_en: 'Os ativos ambientais são incorporados à malha fundiária, permitindo análises de conformidade e a geração de estatísticas ambientais associadas ao território'
+        title_key: 'hotsite.methods.items.6.title',
+        desc_key: 'hotsite.methods.items.6.description'
       }
     ];
   }

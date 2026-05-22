@@ -18,7 +18,7 @@ export class BaseComponent implements AfterViewInit {
   public checked = false;
   public menu: Menu[] = [];
   public lang: string = '';
-  public COMMIT_ID = `Build: ${environment.COMMIT_ID}`;
+  public COMMIT_ID = '';
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -46,6 +46,8 @@ export class BaseComponent implements AfterViewInit {
         selected: false,
       }
     });
+
+    this.COMMIT_ID = `${this.localizationService.translate('hotsite.base.footer.build')} ${environment.COMMIT_ID}`;
   }
 
   ngAfterViewInit(): void {
@@ -57,6 +59,8 @@ export class BaseComponent implements AfterViewInit {
         itemMenu.selected = false;
       }
     });
+
+    this.COMMIT_ID = `${this.localizationService.translate('hotsite.base.footer.build')} ${environment.COMMIT_ID}`;
     // @ts-ignore
     document.getElementById('movetop').style.display = 'none';
     const currentTheme = localStorage.getItem('theme');
@@ -87,6 +91,8 @@ export class BaseComponent implements AfterViewInit {
           'hotsite.base.header.menu.' + item.key
         );
       });
+
+      this.COMMIT_ID = `${this.localizationService.translate('hotsite.base.footer.build')} ${environment.COMMIT_ID}`;
     });
   }
 

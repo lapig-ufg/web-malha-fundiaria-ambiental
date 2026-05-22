@@ -394,7 +394,10 @@
       },
       "footer": {
         "contact": "Entre em contato",
-        "copyright": "Malha Fundiária Ambiental. Todos os direitos reservados."
+        "copyright": "Malha Fundiária Ambiental. Todos os direitos reservados.",
+        "partners": "Realização",
+        "go_to_top": "Ir para o topo",
+        "build": "Versão:"
       }
     },
     "home": {
@@ -432,7 +435,39 @@
     },
     "methods": {
       "page_title": "Metodologia",
-      "title": "Metodologia"
+      "title": "Metodologia",
+      "subtitle": "Conheça o rigor técnico e os processos fundamentais que sustentam a Malha Fundiária Ambiental.",
+      "cta": {
+        "title": "Explore a Metodologia Completa",
+        "subtitle": "Para uma análise detalhada dos critérios técnicos, fontes de dados e processos de validação, acesse nossa documentação técnica completa.",
+        "button": "Acesse a Metodologia"
+      },
+      "items": {
+        "1": {
+          "title": "Ingestão dos Dados",
+          "description": "Coleta e organização de bases fundiárias e territoriais, incluindo propriedades privadas, terras indígenas e unidades de conservação"
+        },
+        "2": {
+          "title": "Pré-processamento",
+          "description": "Correção de inconsistências geométricas, padronização das bases e remoção de duplicidades e registros inválidos"
+        },
+        "3": {
+          "title": "Hierarquização",
+          "description": "Definição de prioridades entre as camadas territoriais por meio de análise multicritério, garantindo coerência em casos de sobreposição"
+        },
+        "4": {
+          "title": "Reclassificação das camadas",
+          "description": "As camadas fundiárias são convertidas para formato raster, organizadas em uma grade contínua onde cada pixel representa a prioridade definida pelo método AHP"
+        },
+        "5": {
+          "title": "Análise de sobreposição",
+          "description": "Os conflitos entre camadas são resolvidos mantendo, em cada pixel, a classe fundiária de maior prioridade. Em seguida, os vetores originais são recuperados para compor a malha final"
+        },
+        "6": {
+          "title": "Integração Ambiental",
+          "description": "Os ativos ambientais são incorporados à malha fundiária, permitindo análises de conformidade e a geração de estatísticas ambientais associadas ao território"
+        }
+      }
     },
     "articles": {
       "page_title": "Artigos",

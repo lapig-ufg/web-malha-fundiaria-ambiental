@@ -7,7 +7,7 @@
           {{ "hotsite.methods.page_title" | translate }}
         </h4>
         <ul class="breadcrumbs-custom-path">
-          <li><a href="/">Home</a></li>
+          <li><a href="/">{{ 'hotsite.base.header.menu.home' | translate }}</a></li>
           <li class="active">
             <i class="bx bx-chevron-right"></i>{{ "hotsite.base.header.menu.methods" | translate }}
           </li>
@@ -22,7 +22,7 @@
       <div class="header-section text-center mb-5">
         <h3 class="title-style-2 mb-3">{{ "hotsite.methods.title" | translate }}</h3>
         <p class="subtitle">
-          {{ lang === 'pt' ? 'Conheça o rigor técnico e os processos fundamentais que sustentam a Malha Fundiária Ambiental.' : 'Learn about the technical rigor and fundamental processes that underpin Malha Fundiária Ambiental.' }}
+          {{ "hotsite.methods.subtitle" | translate }}
         </p>
       </div>
 
@@ -33,10 +33,10 @@
           <div class="method-card h-100 p-3" style="background-color: #d4edda; border-radius: 15px;">
             <div class="number mb-2 font-weight-bold" style="font-size: 1.5rem;">{{ item.number }}</div>
             <h4 class="card-title mb-2 font-weight-bold">
-              {{ lang === 'pt' ? item.title_pt : item.title_en }}
+              {{ item.title_key | translate }}
             </h4>
             <p class="card-text" style="font-size: 0.9rem;">
-              {{ lang === 'pt' ? item.desc_pt : item.desc_en }}
+              {{ item.desc_key | translate }}
             </p>
           </div>
         </div>
@@ -59,13 +59,13 @@
     <div class="container py-md-5 py-4">
       <div class="cta-section text-center p-5 mb-5" style="background: #e9ecef; border-radius: 20px;">
         <h3 class="title-style-2 mb-3">
-          {{ lang === 'pt' ? 'Explore a Metodologia Completa' : 'Explore the Full Methodology' }}
+          {{ "hotsite.methods.cta.title" | translate }}
         </h3>
         <p class="subtitle mb-4">
-          {{ lang === 'pt' ? 'Para uma análise detalhada dos critérios técnicos, fontes de dados e processos de validação, acesse nossa documentação técnica completa.' : 'For a detailed analysis of technical criteria, data sources, and validation processes, access our full technical documentation.' }}
+          {{ "hotsite.methods.cta.subtitle" | translate }}
         </p>
         <a href="https://lapig-ufg.github.io/malha-fundiaria-ambiental/" target="_blank" class="btn btn-primary btn-lg">
-          {{ lang === 'pt' ? 'Acesse a Metodologia' : 'Access Methodology' }}
+          {{ "hotsite.methods.cta.button" | translate }}
           <i class="bx bx-link-external ml-2"></i>
         </a>
       </div>
