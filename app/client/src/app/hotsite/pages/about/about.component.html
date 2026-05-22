@@ -36,4 +36,31 @@
   </section>
   <!-- //single post -->
 
+  <!-- team section -->
+  <section class="team-section">
+    <div class="container py-md-5 py-4">
+      <div class="row align-items-center mb-5">
+        <div class="col-md-6 section-heading">
+          <h3 class="title-style">{{'hotsite.about.team.title' | translate}}</h3>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div *ngFor="let member of team" class="col-lg-3 col-md-4 col-sm-6 mb-4">
+          <a [href]="member.lattes" target="_blank" class="team-card-link">
+            <div class="team-card">
+              <div class="team-card-image">
+                <img [src]="member.image" [alt]="member.name">
+              </div>
+              <div class="team-card-info">
+                <h5 class="team-card-name">{{ member.name }}</h5>
+                <p class="team-card-role">{{ member.role }}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- //team section -->
+
   </app-site-base>
