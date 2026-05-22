@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import OlMap from 'ol/Map';
-import { Graticule, MapEvent, View } from 'ol';
+import { MapEvent, View } from 'ol';
 import * as Proj from 'ol/proj';
 import { register } from 'ol/proj/proj4';
 import proj4 from 'proj4';
@@ -22,13 +22,6 @@ const ZOOM_DEFAULT: number = 4.6;
 const DEFAULT_LAT = -16.6958288;
 const DEFAULT_LON = -49.4443537;
 
-const GRATICULE = new Graticule({
-  visible: false,
-  zIndex: 100,
-  wrapX: false,
-  showLabels: true
-});
-
 export { MapService, ZOOM_LIMIT }
 
 @Injectable({
@@ -36,7 +29,7 @@ export { MapService, ZOOM_LIMIT }
 })
 class MapService {
   private _map: OlMap = new OlMap({
-    layers: [ GRATICULE ],
+    layers: [ ],
     view: new View({
       center: Proj.fromLonLat([DEFAULT_LON, DEFAULT_LAT]),
       zoom: ZOOM_DEFAULT,
@@ -55,10 +48,6 @@ class MapService {
   get map() { return this._map; }
 
   get layers() { return this._map.getLayers().getArray(); }
-
-  public updateGraticule(visible: boolean) {
-    this.layers[0].setVisible(visible);
-  }
 
   public addLayer(layer: BaseLayer): void {
     if ((layer.get('key') != undefined) && !this.layers.every(element => element.get('key') != layer.get('key'))) return;

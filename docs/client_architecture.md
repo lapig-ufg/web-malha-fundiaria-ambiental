@@ -27,7 +27,7 @@ The application is organized into several key modules:
 - `LayersSidebarComponent`: Allows users to toggle layer visibility and change layer types.
 - `AreaSidebarComponent`: Provides tools for selecting and filtering areas of interest.
 - `StatisticsSidebarComponent`: Displays charts and data summaries for the selected area.
-- `OptionsSidebarComponent`: Contains general map settings (e.g., graticule, scale).
+- `OptionsSidebarComponent`: Contains general map settings (e.g., scale).
 
 ## State Management
 

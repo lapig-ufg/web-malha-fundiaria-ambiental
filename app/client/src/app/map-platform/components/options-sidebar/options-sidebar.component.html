@@ -13,19 +13,6 @@
       </div>
     </div>
   </div>
-
-  <div>
-    <h5 style="font-size: 14px; font-weight: 600; color: #7f8c8d; margin-bottom: 1rem; padding-left: 4px;">{{ 'options.options' | translate }}</h5>
-    <div *ngIf="options.length != 0; else loading">
-      <div *ngFor="let option of options" class="options-card">
-        <span>{{ "options." + option.key | translate }}</span>
-        <p-inputSwitch
-          (onChange)="onChangeOption(option.key, $event)"
-          [(ngModel)]="option.checked"
-        ></p-inputSwitch>
-      </div>
-    </div>
-  </div>
 </div>
 
 <ng-template #loading>

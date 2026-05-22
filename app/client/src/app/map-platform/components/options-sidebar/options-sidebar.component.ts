@@ -47,13 +47,6 @@ class OptionsSidebarComponent {
 
   public limits: any = [];
   public bmaps: any = [];
-  public options = [
-    {
-      key: 'graticule',
-      checked: false,
-      onChange: (checked: boolean) => this.onChangeGraticule(checked)
-    },
-  ];
 
   constructor(
     private mapService: MapService,
@@ -164,28 +157,6 @@ class OptionsSidebarComponent {
     }
 
     this.descriptorService.updateBasemapVisibility(bmap.key, bmap.checked);
-  }
-
-  /**
-   * Atualiza o atributo [checked] do elemento representado pela key para true,
-   * enquanto atualiza os outros elementos para false, na lista de options.
-   * @param key
-   * @param event
-   */
-  public onChangeOption(key: string, event: InputSwitchChangeEvent): void {
-    this.options.forEach((option: any) => {
-      if (option.key === key) {
-        option.onChange(event.checked);
-      }
-
-      option.checked = false;
-    });
-
-    //this.mapService.updateGraticule(this.options.checked)
-  }
-
-  public onChangeGraticule(checked: boolean) {
-    this.mapService.updateGraticule(checked);
   }
 }
 

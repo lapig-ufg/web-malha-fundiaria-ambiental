@@ -654,8 +654,7 @@
     "legend": "Legend",
     "limits": "Limits",
     "options": "Other Options",
-    "compass": "Compass",
-    "graticule": "Graticule"
+    "compass": "Compass"
   },
   "primeng": {
     "startsWith": "Starts with",
