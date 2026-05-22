@@ -154,6 +154,10 @@ async def handle_resumo(lang: str = 'pt', card_resume: str = '', query_result: d
         return result
     elif card_resume == 'pasture_quality_comparison':
         return query_result.get('pasture_quality_comparison', [])
+    elif card_resume == 'coverage_natural':
+        return query_result.get('coverage_natural', [])
+    elif card_resume == 'coverage_comparison':
+        return query_result.get('coverage_comparison', [])
     else:
         return {"data": "Invalid argument"}
 

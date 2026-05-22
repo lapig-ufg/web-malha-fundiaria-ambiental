@@ -357,6 +357,8 @@
       "complement_text": "do(a)",
       "pasture_quality_title": "Vigor da Pastagem",
       "pasture_quality_comparison": "Comparativo Regional de Vigor",
+      "coverage_natural_title": "Proporção de Áreas Naturais",
+      "coverage_comparison_title": "Comparativo Regional de Cobertura",
       "complement_text_pasture_quality": "da área de Pastagem do(a)",
       "obs_text": "*A diferença entre a área de pastagem aqui apresentada e a área mapeada, é explicada pelo ajuste de área a partir da análise de acurácia, detalhada em Parente et al. 2019 (<a target='_blank' class='link-details' href='https://doi.org/10.1016/j.rse.2019.111301'> https://doi.org/10.1016/j.rse.2019.111301</a>)",
       "pasture_quality": {

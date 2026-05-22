@@ -31,7 +31,11 @@ class MapAPIService {
   constructor(private httpClient: HttpClient, private localizationService: LocalizationService) {}
 
   public getMunicipalitiesAtributes(): any {
-    const url = `${environment.OWS_API}/map/layerfromname?lang=${this.localizationService.currentLang()}&layertype=municipios_info`;
+    return this.getLayerAttributes('municipios_info');
+  }
+
+  public getLayerAttributes(layerType: string): any {
+    const url = `${environment.OWS_API}/map/layerfromname?lang=${this.localizationService.currentLang()}&layertype=${layerType}`;
 
     return this.httpClient.get(url).pipe(map(response => {
       let descriptorType: DescriptorType = response as DescriptorType

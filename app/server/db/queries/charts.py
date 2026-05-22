@@ -19,6 +19,18 @@ def get_region_filter(type_reg, key):
             return "arcodesmat = 1"
     return "true"
 
+def get_region_filter_coverage(type_reg, key):
+    key_lower = str(key).lower()
+    if type_reg == 'country':
+        return "true"
+    elif type_reg == 'city':
+        return f"\"CD_MUN\"='{key_lower}'"
+    elif type_reg == 'state':
+        return f"\"UF\"='{key_lower}'"
+    elif type_reg == 'biome':
+        return f"lower(bioma) = '{key_lower}'"
+    return "true"
+
 def get_year_filter(year):
     if year:
         return f"year = {year}"
@@ -29,6 +41,7 @@ def get_queries(params: dict = None):
         params = {}
     
     region_filter = get_region_filter(params.get('typeRegion'), params.get('valueRegion'))
+    region_filter_coverage = get_region_filter_coverage(params.get('typeRegion'), params.get('valueRegion'))
     year_filter = get_year_filter(params.get('year'))
 
     type_region = params.get('typeRegion')
@@ -57,6 +70,42 @@ def get_queries(params: dict = None):
                 'source': 'lapig',
                 'id': 'pasture_quality_comparison',
                 'sql': f" SELECT upper({comparison_col}) as label, b.name as classe, b.color, CAST(sum(a.st_area_ha) as double precision) as value FROM pasture_vigor_col9 a INNER JOIN graphic_colors as b on cast(a.classe as varchar) = b.class_number AND b.table_rel = 'pasture_quality' WHERE {region_filter} AND {year_filter} GROUP BY 1,2,3 ORDER BY 1, 2",
+                'mantain': True
+            },
+            {
+                'source': 'lapig',
+                'id': 'coverage_natural',
+                'sql': f"""
+                    SELECT 
+                        'Áreas de Preservação Permanente' as label, 
+                        '#228B22' as color, 
+                        COALESCE(SUM("CLASSE_1_HA"), 0) as value 
+                    FROM app_brazil_coverage_2024_reclassificado_app_projetado 
+                    WHERE {region_filter_coverage}
+                    UNION ALL
+                    SELECT 
+                        'Reserva Legal' as label, 
+                        '#006400' as color, 
+                        COALESCE(SUM("CLASSE_1_HA"), 0) as value 
+                    FROM app_brazil_coverage_2024_reclassificado_rl_projetado 
+                    WHERE {region_filter_coverage}
+                """,
+                'mantain': True
+            },
+            {
+                'source': 'lapig',
+                'id': 'coverage_comparison',
+                'sql': f"""
+                    WITH combined AS (
+                        SELECT "UF" as uf, "MUNICIPIO" as municipio, "CLASSE_1_HA", "CLASSE_2_HA" FROM app_brazil_coverage_2024_reclassificado_app_projetado WHERE {region_filter_coverage}
+                        UNION ALL
+                        SELECT "UF" as uf, "MUNICIPIO" as municipio, "CLASSE_1_HA", "CLASSE_2_HA" FROM app_brazil_coverage_2024_reclassificado_rl_projetado WHERE {region_filter_coverage}
+                    )
+                    SELECT UPPER({comparison_col}) as label, 'Natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM combined GROUP BY 1, 2, 3
+                    UNION ALL
+                    SELECT UPPER({comparison_col}) as label, 'Não Natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM combined GROUP BY 1, 2, 3
+                    ORDER BY 1, 2
+                """,
                 'mantain': True
             },
             {

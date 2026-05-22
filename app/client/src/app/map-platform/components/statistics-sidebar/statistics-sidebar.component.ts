@@ -34,12 +34,16 @@ class StatisticsSidebarComponent implements OnDestroy {
   public summaryKeys: string[] = [
     'pasture_quality_comparison',
     'pasture_quality',
+    'coverage_natural',
+    'coverage_comparison',
   ];
 
   public summaryData: Map<string, any> = new Map<string, any>();
 
   public pastureQualityChartData: any = null;
   public pastureQualityComparisonChartData: any = null;
+  public coverageNaturalChartData: any = null;
+  public coverageComparisonChartData: any = null;
 
   public stackedBarOptions: any = {
     indexAxis: 'y',
@@ -329,6 +333,75 @@ class StatisticsSidebarComponent implements OnDestroy {
       });
 
       this.pastureQualityComparisonChartData = {
+        labels: sortedLabels,
+        datasets: datasets
+      };
+    } else if (key === 'coverage_natural') {
+      const summary = this.summaryData.get('coverage_natural');
+      if (!summary || !summary.data || !Array.isArray(summary.data)) {
+        this.coverageNaturalChartData = null;
+        return;
+      }
+
+      const labels = summary.data.map((item: any) => item.label);
+      const data = summary.data.map((item: any) => item.value);
+      const backgroundColor = summary.data.map((item: any) => item.color);
+
+      this.coverageNaturalChartData = {
+        labels: labels,
+        datasets: [
+          {
+            data: data,
+            backgroundColor: backgroundColor,
+            hoverBackgroundColor: backgroundColor,
+            borderWidth: 2,
+            borderColor: '#ffffff',
+            hoverOffset: 20
+          }
+        ]
+      };
+    } else if (key === 'coverage_comparison') {
+      const summary = this.summaryData.get('coverage_comparison');
+      if (!summary || !summary.data || !Array.isArray(summary.data)) {
+        this.coverageComparisonChartData = null;
+        return;
+      }
+
+      const rawData = summary.data;
+      
+      const totalAreaPerLabel = new Map<string, number>();
+      rawData.forEach((item: any) => {
+        const current = totalAreaPerLabel.get(item.label) || 0;
+        totalAreaPerLabel.set(item.label, current + item.value);
+      });
+
+      const sortedLabels = Array.from(totalAreaPerLabel.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 15)
+        .map(entry => entry[0]);
+
+      const classesMap = new Map<string, string>();
+      rawData.forEach((item: any) => {
+        if (!classesMap.has(item.classe)) {
+          classesMap.set(item.classe, item.color);
+        }
+      });
+
+      const datasets = Array.from(classesMap.entries()).map(([classe, color]) => {
+        const data = sortedLabels.map(label => {
+          const found = rawData.find((item: any) => item.label === label && item.classe === classe);
+          return found ? found.value : 0;
+        });
+
+        return {
+          label: classe,
+          data: data,
+          backgroundColor: color,
+          hoverBackgroundColor: color
+        };
+      });
+
+      this.coverageComparisonChartData = {
         labels: sortedLabels,
         datasets: datasets
       };

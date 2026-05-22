@@ -12,11 +12,29 @@
       </div>
     </div>
 
+    <!-- Coverage Comparison Chart (Stacked Bar) -->
+    <div class="chart-section" style="margin-bottom: 2rem;" *ngIf="coverageComparisonChartData">
+      <h5 class="section-title">{{ 'right_sidebar.resumo_card.coverage_comparison_title' | translate }}</h5>
+      <div class="chart-container" style="height: 350px; padding: 10px;">
+        <p-chart type="bar" [data]="coverageComparisonChartData" [options]="stackedBarOptions" height="330px">
+        </p-chart>
+      </div>
+    </div>
+
     <!-- Doughnut Chart -->
     <div class="chart-section">
       <h5 class="section-title">{{ 'right_sidebar.resumo_card.pasture_quality_title' | translate }} ({{summaryData.get('pasture_quality').year}})</h5>
       <div class="chart-container" style="height: 250px; padding: 10px;">
         <p-chart type="doughnut" [data]="pastureQualityChartData" [options]="doughnutOptions" height="230px">
+        </p-chart>
+      </div>
+    </div>
+
+    <!-- Coverage Natural Chart -->
+    <div class="chart-section" style="margin-top: 2rem;" *ngIf="coverageNaturalChartData">
+      <h5 class="section-title">{{ 'right_sidebar.resumo_card.coverage_natural_title' | translate }}</h5>
+      <div class="chart-container" style="height: 250px; padding: 10px;">
+        <p-chart type="doughnut" [data]="coverageNaturalChartData" [options]="doughnutOptions" height="230px">
         </p-chart>
       </div>
     </div>

@@ -269,21 +269,6 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   public lon!: number;
   public classes!: string;
 
-  private malhaAttributes: any[] = [
-    { column: 'landternure_code', label: 'Código', columnType: 'string' },
-    { column: 'landternure_class', label: 'Classe', columnType: 'string' },
-    { column: 'municipality', label: 'Município', columnType: 'string' },
-    { column: 'state', label: 'Estado', columnType: 'string' },
-    { column: 'area_hectare', label: 'Área (ha)', columnType: 'double' },
-    { column: 'legal_reserves_hectare', label: 'Reserva Legal (ha)', columnType: 'double' },
-    { column: 'permanent_preservation_area_hectare', label: 'APP (ha)', columnType: 'double' },
-    { column: 'has_asset', label: 'Ativo', columnType: 'string' },
-    { column: 'source_data', label: 'Fonte', columnType: 'string' },
-    { column: 'gid', label: 'GID', columnType: 'string' },
-    { column: 'municipality_code', label: 'Cód. Município', columnType: 'string' },
-    { column: 'state_code', label: 'Cód. Estado', columnType: 'string' }
-  ];
-
   public popupOverlay!: Overlay;
 
   public featureCollections: any[] = [];
@@ -1229,11 +1214,16 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
                 ),
                 wfsMapCard: {
                   show: true,
-                  attributes: this.malhaAttributes,
+                  attributes: [],
                 },
               };
               this.featureCollections.push(featureCollection);
-              this.popupRegion.attributes = this.malhaAttributes;
+              this.mapAPIService.getLayerAttributes('malha_fundiaria_ambiental').subscribe({
+                next: (response: any) => {
+                  featureCollection.layerType.wfsMapCard.attributes = response;
+                  this.popupRegion.attributes = response;
+                }
+              });
             } else if (featureCollection.hasOwnProperty('layerType')) {
               this.featureCollections.push(featureCollection);
             } else {
