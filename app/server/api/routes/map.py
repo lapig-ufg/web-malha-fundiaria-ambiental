@@ -91,7 +91,7 @@ async def get_descriptor(lang: str = 'pt-br'):
         "origin": {
             "sourceService": "internal",
             "typeOfTMS": "cog",
-            "url": "https://s3.lapig.iesa.ufg.br/malha-fundiaria/brasil_malhafundiaria_ambiental_10m_v2_cog.tif",
+            "url": "https://s3.lapig.iesa.ufg.br/malha-fundiaria/v3/brasil_malhafundiaria_ambiental_10m_v3_cog.tif",
             "epsg": "ESRI:102033"
         },
         "typeLayer": "raster",
