@@ -32,18 +32,22 @@
         </div>
       </div>
 
-      <!-- Static Beautiful Cards -->
+      <!-- Methodology Cards -->
       <div class="row">
-        <div *ngFor="let item of staticMethodologies; let i = index" 
+        <div *ngFor="let item of staticMethodologies; let i = index"
              class="col-lg-4 col-md-6 col-sm-12 mb-4">
-          <div class="method-card h-100 p-3" style="background-color: #d4edda; border-radius: 15px;">
-            <div class="number mb-2 font-weight-bold" style="font-size: 1.5rem;">{{ item.number }}</div>
-            <h4 class="card-title mb-2 font-weight-bold">
+          <div class="method-card h-100" [style.animation-delay]="(i * 0.12) + 's'">
+            <span class="card-number">{{ item.number }}</span>
+            <div class="icon-wrapper">
+              <i class="bx {{ item.icon }}"></i>
+            </div>
+            <h4 class="card-title">
               {{ item.title_key | translate }}
             </h4>
-            <p class="card-text" style="font-size: 0.9rem;">
+            <p class="card-text">
               {{ item.desc_key | translate }}
             </p>
+            <div class="card-footer-glow"></div>
           </div>
         </div>
       </div>

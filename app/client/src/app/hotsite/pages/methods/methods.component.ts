@@ -59,34 +59,40 @@ export class MethodsComponent implements OnInit {
   private initStaticData() {
     this.staticMethodologies = [
       {
-        number: '01.',
+        number: '01',
         title_key: 'hotsite.methods.items.1.title',
-        desc_key: 'hotsite.methods.items.1.description'
+        desc_key: 'hotsite.methods.items.1.description',
+        icon: 'bx-cloud-download'
       },
       {
-        number: '02.',
+        number: '02',
         title_key: 'hotsite.methods.items.2.title',
-        desc_key: 'hotsite.methods.items.2.description'
+        desc_key: 'hotsite.methods.items.2.description',
+        icon: 'bx-cog'
       },
       {
-        number: '03.',
+        number: '03',
         title_key: 'hotsite.methods.items.3.title',
-        desc_key: 'hotsite.methods.items.3.description'
+        desc_key: 'hotsite.methods.items.3.description',
+        icon: 'bx-layer'
       },
       {
-        number: '04.',
+        number: '04',
         title_key: 'hotsite.methods.items.4.title',
-        desc_key: 'hotsite.methods.items.4.description'
+        desc_key: 'hotsite.methods.items.4.description',
+        icon: 'bx-grid-alt'
       },
       {
-        number: '05.',
+        number: '05',
         title_key: 'hotsite.methods.items.5.title',
-        desc_key: 'hotsite.methods.items.5.description'
+        desc_key: 'hotsite.methods.items.5.description',
+        icon: 'bx-intersect'
       },
       {
-        number: '06.',
+        number: '06',
         title_key: 'hotsite.methods.items.6.title',
-        desc_key: 'hotsite.methods.items.6.description'
+        desc_key: 'hotsite.methods.items.6.description',
+        icon: 'bx-world'
       }
     ];
   }
