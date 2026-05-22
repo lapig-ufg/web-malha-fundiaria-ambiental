@@ -1025,6 +1025,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
         `${environment.OWS}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=${typeName}&outputFormat=application/json&bbox=${bbox},EPSG:4326${msFilter}`.trim();
       this.mapAPIService.getFeatures(url).subscribe(
         (features) => {
+          features['typeName'] = typeName;
           if (typeof layer === 'string') {
             //do nothing
           } else {
@@ -1147,7 +1148,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     if (currentLevel === 0) {
       promises.push(this.getFeatures('estados', bbox));
     } else if (currentLevel === 1) {
-      promises.push(this.getFeatures('municipios', bbox));
+      promises.push(this.getFeatures('municipios_info', bbox));
     } else {
       // Always query malha fundiaria at level 2
       promises.push(this.getFeatures('malha_fundiaria_ambiental', bbox));
@@ -1167,6 +1168,22 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     }
 
     Promise.all(promises).then((layersFeatures) => {
+        console.log('--- MAP FEATURE INFO ---');
+        console.log('Current DrillDown Level:', currentLevel);
+        
+        layersFeatures.forEach((featureCollection, index) => {
+          if (featureCollection && featureCollection.features && featureCollection.features.length > 0) {
+            const layerName = featureCollection.layerType ? featureCollection.layerType.viewValueType : (featureCollection.typeName || 'Unknown Layer');
+            console.log(`Layer [${index}]: ${layerName} (${featureCollection.typeName})`);
+            console.log('Features found:', featureCollection.features.length);
+            featureCollection.features.forEach((f, i) => {
+               console.log(`  Feature [${i}] Properties:`, f.properties);
+            });
+          }
+        });
+        
+        console.log('Full Data:', layersFeatures);
+        
         if (Array.isArray(layersFeatures) && layersFeatures.length <= 0) {
           console.error("No features found.")
           return;
@@ -1178,6 +1195,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
           if (featureCollection.features.length <= 0) return;
 
           if (currentLevel < 2) {
+            this.featureCollections.push(featureCollection);
             if (!hasIncremented) {
               const feature = featureCollection.features[0];
               const olFeature = new GeoJSON().readFeature(feature, {
@@ -1254,8 +1272,22 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
             const vectorLayer = new VectorLayer({
               source: vectorSource,
               // @ts-ignore
-              style: (feature) =>
-                this.geoJsonStyles[feature.getGeometry()!.getType()],
+              style: (feature) => {
+                const type = feature.getGeometry()!.getType();
+                const baseStyle = this.geoJsonStyles[type];
+                if (currentLevel < 2 && (type === 'Polygon' || type === 'MultiPolygon')) {
+                  return new Style({
+                    stroke: new Stroke({
+                      color: PRIMARY_COLOR,
+                      width: 2,
+                    }),
+                    fill: new Fill({
+                      color: 'rgba(0, 0, 0, 0)',
+                    }),
+                  });
+                }
+                return baseStyle;
+              },
               properties: {
                 key: 'popup-vector',
               },
@@ -1279,8 +1311,22 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
           const vectorLayer = new VectorLayer({
             source: vectorSource,
             // @ts-ignore
-            style: (feature) =>
-              this.geoJsonStyles[feature.getGeometry()!.getType()],
+            style: (feature) => {
+              const type = feature.getGeometry()!.getType();
+              const baseStyle = this.geoJsonStyles[type];
+              if (currentLevel < 2 && (type === 'Polygon' || type === 'MultiPolygon')) {
+                return new Style({
+                  stroke: new Stroke({
+                    color: PRIMARY_COLOR,
+                    width: 2,
+                  }),
+                  fill: new Fill({
+                    color: 'rgba(0, 0, 0, 0)',
+                  }),
+                });
+              }
+              return baseStyle;
+            },
             properties: {
               key: 'popup-vector',
             },
@@ -1290,8 +1336,12 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
           this.mapService.addLayer(vectorLayer);
         }
 
-        if (currentLevel < 2 || this.featureCollections.length === 0) {
+        if (this.featureCollections.length === 0) {
           this.closePopup();
+          return;
+        }
+
+        if (currentLevel < 2) {
           return;
         }
 

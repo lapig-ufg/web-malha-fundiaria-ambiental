@@ -141,12 +141,12 @@
         </div>
         <div class="popup-body" *ngIf="featureCollections.length > 0">
           <div *ngFor="let featureCollection of featureCollections">
-            <div class="details-inner">
+            <div class="details-inner" *ngIf="featureCollection.layerType">
               <div
                 class="details-row"
                 *ngFor="
-                  let attribute of featureCollection.layerType.wfsMapCard
-                    .attributes
+                  let attribute of featureCollection.layerType?.wfsMapCard
+                    ?.attributes
                 "
               >
                 <div class="details-row-header">{{ attribute.label }}:</div>
