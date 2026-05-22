@@ -1,0 +1,77 @@
+name: Build and Deploy Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      APPLICATION_NAME: ${{ steps.creat_env.outputs.APPLICATION_NAME }}
+      DOCKER_PATH: ${{ steps.creat_env.outputs.DOCKER_PATH }}
+      LAST_COMMIT_HASH: ${{ steps.creat_env.outputs.LAST_COMMIT_HASH }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Define environment variables
+        id: creat_env
+        run: |
+          set_var() {
+            echo "$1=$2" >> $GITHUB_ENV
+            echo "$1=$2" >> $GITHUB_OUTPUT
+          }
+          REPO_NAME="${{ github.event.repository.name }}"
+          set_var "DOCKER_PATH" "prod"
+          set_var "APPLICATION_NAME" "$REPO_NAME"
+          set_var "LAST_COMMIT_HASH" "$(git log --pretty=format:%h -n 1)"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Build Frontend
+        run: |
+          cd app/client
+          npm install
+          npm run build -- --configuration production
+
+      - name: Create version.json
+        run: |
+          echo "{\"commitId\":\"$LAST_COMMIT_HASH\",\"repository\":\"$APPLICATION_NAME\",\"dockerPath\":\"$DOCKER_PATH\"}" > app/client/dist/malha-fundiaria-ambiental/assets/version.json
+          cat app/client/dist/malha-fundiaria-ambiental/assets/version.json
+
+      - name: Login to Docker Registry
+        uses: docker/login-action@v2
+        with:
+          username: lapig
+          password: ${{ secrets.DOCKERHUB_PASS }}
+
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: docker/prod/Dockerfile
+          push: true
+          tags: |
+            lapig/${{ env.APPLICATION_NAME }}:${{ env.DOCKER_PATH }}_${{ env.LAST_COMMIT_HASH }}
+            lapig/${{ env.APPLICATION_NAME }}:${{ env.DOCKER_PATH }}_latest
+          build-args: |
+            GIT_COMMIT=${{ env.LAST_COMMIT_HASH }}
+            BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+  deploy:
+    needs: build
+    runs-on: vm1
+
+    steps:
+      - name: Restart Application
+        run: |
+          zelador ${{ needs.build.outputs.APPLICATION_NAME }} ${{ needs.build.outputs.DOCKER_PATH }} \
+            --title="Malha Fundiária Ambiental" \
+            --commit=${{ needs.build.outputs.LAST_COMMIT_HASH }} \
+            --repo=${{ github.repository }}

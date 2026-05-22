@@ -12,27 +12,27 @@ The project is a comprehensive geospatial platform for visualizing and analyzing
 ### Tech Stack
 
 - **Frontend:**
-  - **Framework:** Angular 16
+  - **Framework:** Angular 20
   - **Mapping:** OpenLayers (`ol`, `ol-ext`), Turf.js (client-side analysis)
   - **UI Components:** PrimeNG, Angular Material, PrimeFlex
   - **Charts:** Chart.js
   - **Internationalization:** `ngx-translate`
 - **Backend:**
-  - **Runtime:** Node.js
-  - **Framework:** Express.js
-  - **Databases:** PostgreSQL with PostGIS extension (Primary spatial data), MongoDB (Sessions/Metadata)
-  - **Dependency Injection:** `express-load`
-  - **Tools:** `ogr2ogr` (data conversion), `duckdb` (via Python scripts for ingestion)
+  - **Runtime:** Python 3.14+
+  - **Framework:** FastAPI
+  - **Package Manager:** `uv`
+  - **Databases:** PostgreSQL with PostGIS extension (Primary spatial data), MongoDB (Metadata)
+  - **Tools:** `gdal` (data manipulation), `duckdb` (via Python scripts for ingestion)
 - **Data Ingestion:**
   - **Language:** Python 3.12+
   - **Tools:** `uv` (package management), `DuckDB`, `psycopg2`, `geopandas`
-- **Infrastructure:** Docker (separate Dockerfiles for dev and prod)
+- **Infrastructure:** Docker (Docker Swarm with Traefik), GitHub Actions
 
 ## Directory Structure
 
 - `/app/client`: Angular frontend application. (See [client_architecture.md](docs/client_architecture.md))
-- `/app/server`: Node.js backend application. (See [server_architecture.md](docs/server_architecture.md))
-- `/scripts`: Python scripts for data ingestion. (See [data_ingestion.md](docs/data_ingestion.md))
+- `/app/server`: Python/FastAPI backend application. (See [server_architecture.md](docs/server_architecture.md))
+- `/tools`: Python scripts for data ingestion and utilities.
 - `/data`: Source data files. (See [dataset_metadata.md](docs/dataset_metadata.md))
 - `/docs`: Detailed architectural and metadata documentation. (See [app_overview.md](docs/app_overview.md))
 - `/docker`: Docker configuration files.
@@ -41,15 +41,28 @@ The project is a comprehensive geospatial platform for visualizing and analyzing
 
 ### Backend Setup (Server)
 1.  Navigate to `app/server`.
-2.  Install dependencies: `npm install`.
-3.  Configure environment: Copy `.env.example` to `.env` and fill in the database credentials.
-4.  Run the server: `npm start` or `node app.js`.
+2.  Install `uv` (https://github.com/astral-sh/uv).
+3.  Install dependencies: `uv sync`.
+4.  Configure environment: Copy `.env.example` to `.env` and fill in the database credentials.
+5.  Run the server: `uv run python main.py`.
 
 ### Frontend Setup (Client)
 1.  Navigate to `app/client`.
 2.  Install dependencies: `npm install`.
 3.  Run the dev server: `npm start` (serves on `http://localhost:4200` with proxy to backend).
 4.  Build for production: `npm run build`.
+
+## Deployment
+
+The project uses GitHub Actions for CI/CD.
+1.  **Build:** The workflow builds the Angular app and packages everything into a Docker image.
+2.  **Registry:** Images are pushed to Docker Hub (`lapig/web-malha-fundiaria-ambiental`).
+3.  **Deploy:** The `zelador` tool is used to update the service on the production Swarm cluster.
+
+Files involved:
+- `.github/workflows/deploy-prod.yml`
+- `docker/prod/Dockerfile`
+- `web-malha-fundiaria-ambiental.compose.yml`
 
 ### Data Ingestion (Python)
 1.  Navigate to `scripts`.
