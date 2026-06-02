@@ -180,32 +180,47 @@
 
     <!-- Malha Fundiaria Search Bar (Positioned outside app-ol-map for better stacking) -->
     <div class="malha-search-container">
-      <p-autoComplete
-        [(ngModel)]="malhaSearchValue"
-        [appendTo]="'body'"
-        placeholder="{{ 'controls.search_malha' | translate }}"
-        [suggestions]="malhaSearchSuggestions"
-        [showEmptyMessage]="true"
-        (completeMethod)="onSearchMalha($event)"
-        (onSelect)="onSelectMalha($event)"
-        (keyup)="onKeyUpMalha($event)"
-        field="text"
-        styleClass="wid100"
-      >
-        <ng-template let-result pTemplate="item">
-          <div>{{ result.text }}</div>
-        </ng-template>
-        <ng-template pTemplate="footer">
-          <div *ngIf="malhaSearchLoading" class="search-loader">
-            <i class="pi pi-spin pi-spinner"></i> {{ "controls.loading" | translate }}
-          </div>
-        </ng-template>
-      </p-autoComplete>
-      <i
-        *ngIf="malhaSearchValue?.text"
-        class="close bx bx-x-circle"
-        (click)="onClearMalhaSearch()"
-      ></i>
+      <div class="search-category-selector">
+        <p-selectButton style="width: stretch;"
+          [options]="searchCategoryOptions"
+          [(ngModel)]="searchCategory"
+          optionValue="value"
+          (onChange)="onClearMalhaSearch()"
+        >
+          <ng-template let-option pTemplate="item">
+            <i class="material-icons">{{ option.icon }}</i>
+            <span>{{ option.label | translate }}</span>
+          </ng-template>
+        </p-selectButton>
+      </div>
+      <div class="search-input-wrapper">
+        <p-autoComplete
+          [(ngModel)]="malhaSearchValue"
+          [appendTo]="'body'"
+          placeholder="{{ 'controls.search_placeholders.' + searchCategory | translate }}"
+          [suggestions]="malhaSearchSuggestions"
+          [showEmptyMessage]="true"
+          (completeMethod)="onSearchMalha($event)"
+          (onSelect)="onSelectMalha($event)"
+          (keyup)="onKeyUpMalha($event)"
+          field="text"
+          styleClass="wid100"
+        >
+          <ng-template let-result pTemplate="item">
+            <div>{{ result.text }}</div>
+          </ng-template>
+          <ng-template pTemplate="footer">
+            <div *ngIf="malhaSearchLoading" class="search-loader">
+              <i class="pi pi-spin pi-spinner"></i> {{ "controls.loading" | translate }}
+            </div>
+          </ng-template>
+        </p-autoComplete>
+        <i
+          *ngIf="malhaSearchValue?.text"
+          class="close bx bx-x-circle"
+          (click)="onClearMalhaSearch()"
+        ></i>
+      </div>
     </div>
 
     <!-- Navigation controls: Reset drilldown navigation -->

@@ -90,6 +90,16 @@ class MapAPIService {
       .pipe(catchError(this.errorHandler));
   }
 
+  public getSearchCategory(category: string, term: string): Observable<any> {
+    if (term === "") {
+      return of([]);
+    }
+
+    return this.httpClient.get<any>(API_URL + '/' + category, { params: this.PARAMS.set("key", term) })
+      .pipe(map(response => response))
+      .pipe(catchError(this.errorHandler));
+  }
+
   public getRegions(term: string): Observable<any> {
     if (term === "") {
       return of([]);

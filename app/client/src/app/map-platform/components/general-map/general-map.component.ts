@@ -371,6 +371,13 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   public malhaSearchValue: any = { text: '' };
   public malhaSearchSuggestions: any[] = [];
   public malhaSearchLoading: boolean = false;
+  public searchCategory: string = 'malha';
+  public searchCategoryOptions: any[] = [
+    { label: 'controls.search_categories.malha', value: 'malha', icon: 'home' },
+    { label: 'controls.search_categories.estado', value: 'estado', icon: 'map' },
+    { label: 'controls.search_categories.municipio', value: 'municipio', icon: 'location_city' },
+    { label: 'controls.search_categories.bioma', value: 'bioma', icon: 'nature_people' },
+  ];
   private malhaVectorLayer: any;
 
   public displayFormJob: boolean = false;
@@ -1429,7 +1436,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
 
   public onSearchMalha(event: any): void {
     this.malhaSearchLoading = true;
-    this.mapAPIService.getMalha(event.query).subscribe((res) => {
+    this.mapAPIService.getSearchCategory(this.searchCategory, event.query).subscribe((res) => {
       this.malhaSearchSuggestions = res.search;
       this.malhaSearchLoading = false;
     });
@@ -1483,22 +1490,24 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     let extent = this.malhaVectorLayer.getSource().getExtent();
     this.mapService.map.getView().fit(extent, { duration: 1000 });
 
-    // Force drill down level to 2 for property search results
-    this.drillDownLevel = 2;
-    this.refreshDrillDownLimits();
+    if (this.searchCategory === 'malha') {
+      // Force drill down level to 2 for property search results
+      this.drillDownLevel = 2;
+      this.refreshDrillDownLimits();
 
-    // Use centroid to fetch full information by simulating a click
-    const centroid = turfCentroid(geojson);
-    const coord3857 = transform(centroid.geometry.coordinates, 'EPSG:4326', 'EPSG:3857');
-    
-    this.onDisplayFeatureInfo({
-      coordinate: coord3857,
-      fromSearch: true,
-      originalEvent: {
-        clientX: 0,
-        clientY: 0
-      }
-    });
+      // Use centroid to fetch full information by simulating a click
+      const centroid = turfCentroid(geojson);
+      const coord3857 = transform(centroid.geometry.coordinates, 'EPSG:4326', 'EPSG:3857');
+      
+      this.onDisplayFeatureInfo({
+        coordinate: coord3857,
+        fromSearch: true,
+        originalEvent: {
+          clientX: 0,
+          clientY: 0
+        }
+      });
+    }
   }
 
   public onClearMalhaSearch(): void {

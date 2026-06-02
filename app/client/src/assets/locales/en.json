@@ -25,6 +25,18 @@
     "search": "Map Filters",
     "search_malha": "Search Property Code",
     "loading": "Loading...",
+    "search_categories": {
+      "malha": "Land Tenure",
+      "estado": "State",
+      "municipio": "Municipality",
+      "bioma": "Biome"
+    },
+    "search_placeholders": {
+      "malha": "Search Property Code",
+      "estado": "Search State",
+      "municipio": "Search Municipality",
+      "bioma": "Search Biome"
+    },
     "reset_zoom": "Back to Initial Zoom",
     "reset_navigation": "Reset Navigation",
     "point": "Insert Point",

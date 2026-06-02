@@ -62,6 +62,30 @@ def get_queries(params: dict = None):
                 'mantain': True
             }
         ],
+        'estado': lambda p: [
+            {
+                'source': 'general',
+                'id': 'search',
+                'sql': "SELECT estado as text, uf as value, 'estado' as type, ST_AsGeoJSON(geom) as geojson FROM estados WHERE unaccent(estado) ILIKE unaccent(${key}%) LIMIT 10",
+                'mantain': True
+            }
+        ],
+        'municipio': lambda p: [
+            {
+                'source': 'general',
+                'id': 'search',
+                'sql': "SELECT municipios as text, cd_geocmu as value, 'municipio' as type, ST_AsGeoJSON(geom) as geojson FROM municipios WHERE unaccent(municipios) ILIKE unaccent(${key}%) LIMIT 10",
+                'mantain': True
+            }
+        ],
+        'bioma': lambda p: [
+            {
+                'source': 'general',
+                'id': 'search',
+                'sql': "SELECT bioma as text, bioma as value, 'bioma' as type, ST_AsGeoJSON(geom) as geojson FROM biomas WHERE unaccent(bioma) ILIKE unaccent(${key}%) LIMIT 10",
+                'mantain': True
+            }
+        ],
         'ucs': lambda p: [
             {
                 'source': 'general',

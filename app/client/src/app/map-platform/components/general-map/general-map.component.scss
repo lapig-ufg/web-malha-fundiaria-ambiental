@@ -683,16 +683,95 @@
   transform: translateX(-50%);
   z-index: 2000; // Above OpenLayers and everything else
   display: flex;
-  align-items: center;
+  flex-direction: column;
   background: white;
-  padding: 0 15px;
-  border-radius: 8px;
+  padding: 15px; // Restored standard padding
+  border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   border: 1px solid #ddd;
-  width: 500px;
-  max-width: 90vw;
+  width: 600px;
+  max-width: 95vw;
   transition: all 0.2s ease-in-out;
-  min-height: 48px;
+
+  .search-category-selector {
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    width: 100%; // Fill available space within padding
+
+    ::ng-deep .p-selectbutton {
+      background: #f5f5f5;
+      padding: 3px;
+      border-radius: 8px;
+      display: flex !important;
+      width: 100% !important;
+      flex-wrap: nowrap !important;
+      align-items: stretch !important;
+      justify-content: stretch !important;
+
+      .p-button {
+        flex: 1 1 0 !important;
+        width: 100% !important;
+        background: #eeeeee !important; // Neutral gray for unselected
+        border: none;
+        color: #777 !important;
+        font-size: 11px;
+        padding: 8px 2px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        min-width: 0; // Allow shrinking
+        white-space: nowrap;
+        margin: 0; // Seamless edge-to-edge buttons
+
+        &:first-child {
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+
+        &:last-child {
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+
+        span {
+          font-weight: 500;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        &:hover {
+          background: #e5e5e5 !important;
+          color: #555 !important;
+        }
+
+        &.p-highlight {
+          background: white !important;
+          color: $primary !important;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+          z-index: 1;
+
+          i {
+              color: $primary;
+          }
+        }
+
+        &:focus {
+          box-shadow: none;
+        }
+      }
+    }
+  }
+
+  .search-input-wrapper {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      position: relative;
+  }
 
   &:focus-within {
     border-color: $primary;
@@ -736,9 +815,10 @@
     // Direct extension of the search bar
     .p-autocomplete-panel {
       position: absolute !important;
-      top: 48px !important; // Align exactly at the bottom of the bar
-      left: 0px !important; 
-      width: 500px !important; // Match bar width exactly
+      top: 100% !important; // Align exactly at the bottom of the bar
+      left: -1px !important; // Compensate for container border
+      width: 600px !important; // Match bar width exactly
+      min-width: 600px !important;
       background: white !important;
       border: 1px solid #ddd !important;
       border-top: none !important;

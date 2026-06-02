@@ -261,11 +261,11 @@ html, body {
 // Global Force Anchor for Malha Search (Override PrimeNG dynamic positioning)
 body > .p-autocomplete-panel:has(.search-loader),
 body > .p-autocomplete-panel:has(.p-autocomplete-item) {
-    top: 63px !important; // 15px (top) + 48px (height)
+    top: 120px !important; // 15px (top) + ~105px (expanded height)
     left: 50% !important;
     transform: translateX(-50%) !important;
-    width: 500px !important;
-    min-width: 500px !important;
+    width: 600px !important;
+    min-width: 600px !important;
     border-top: none !important;
     border-bottom-left-radius: 8px !important;
     border-bottom-right-radius: 8px !important;
