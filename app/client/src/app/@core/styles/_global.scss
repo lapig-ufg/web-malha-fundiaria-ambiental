@@ -258,6 +258,22 @@ html, body {
   font-family: 'Montserrat', sans-serif;
 }
 
+// Global Force Anchor for Malha Search (Override PrimeNG dynamic positioning)
+body > .p-autocomplete-panel:has(.search-loader),
+body > .p-autocomplete-panel:has(.p-autocomplete-item) {
+    top: 63px !important; // 15px (top) + 48px (height)
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 500px !important;
+    min-width: 500px !important;
+    border-top: none !important;
+    border-bottom-left-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+    border: 1px solid #ddd !important;
+    z-index: 10000 !important;
+}
+
 .mat-tab-label-active{
   background: rgba($primary, 0.05);
 }

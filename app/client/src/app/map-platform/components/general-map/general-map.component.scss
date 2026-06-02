@@ -681,38 +681,135 @@
   top: 15px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000;
+  z-index: 2000; // Above OpenLayers and everything else
   display: flex;
   align-items: center;
   background: white;
-  padding: 5px 10px;
+  padding: 0 15px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   border: 1px solid #ddd;
-  width: 350px;
+  width: 500px;
+  max-width: 90vw;
+  transition: all 0.2s ease-in-out;
+  min-height: 48px;
+
+  &:focus-within {
+    border-color: $primary;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  }
+
+  // Flatten bottom corners only when the panel is actually active
+  &:has(.p-autocomplete-panel:not([style*="display: none"])) {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-color: $primary;
+
+      ::ng-deep .p-autocomplete-panel {
+          border-color: $primary !important;
+      }
+  }
 
   ::ng-deep p-autocomplete {
+    flex: 1;
+    display: flex;
     width: 100%;
+    
+    .p-autocomplete {
+      width: 100%;
+      position: static; // panel will be relative to .malha-search-container
+    }
+
     .p-autocomplete-input {
       width: 100%;
       border: none;
       box-shadow: none;
-      padding: 8px;
-      font-size: 14px;
+      padding: 12px 0;
+      font-size: 15px;
+      color: #333;
+      background: transparent;
       &:focus {
         box-shadow: none;
+      }
+    }
+
+    // Direct extension of the search bar
+    .p-autocomplete-panel {
+      position: absolute !important;
+      top: 48px !important; // Align exactly at the bottom of the bar
+      left: 0px !important; 
+      width: 500px !important; // Match bar width exactly
+      background: white !important;
+      border: 1px solid #ddd !important;
+      border-top: none !important;
+      border-bottom-left-radius: 8px !important;
+      border-bottom-right-radius: 8px !important;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      z-index: 2001 !important;
+      transform: none !important;
+      overflow: hidden !important;
+    }
+
+    .p-autocomplete-items {
+      padding: 5px 0 !important;
+      
+      .p-autocomplete-item {
+        padding: 12px 20px !important;
+        font-size: 14px !important;
+        color: #444 !important;
+        border-left: 3px solid transparent;
+        transition: all 0.15s ease;
+
+        &:hover, &.p-highlight {
+          background-color: #f5f7f8 !important;
+          color: $primary !important;
+          border-left-color: $primary !important;
+        }
+      }
+
+      .p-autocomplete-empty-message {
+          padding: 15px 20px !important;
+          color: #888 !important;
+          font-size: 14px;
+      }
+    }
+
+    .search-loader {
+      padding: 12px 20px;
+      color: $primary;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      background: #fafafa;
+      border-top: 1px solid #eee;
+      i {
+          margin-right: 10px;
+          font-size: 14px;
       }
     }
   }
 
   .close {
     cursor: pointer;
-    margin-left: 8px;
-    font-size: 22px;
+    margin-left: 10px;
+    font-size: 20px;
     color: #999;
     transition: color 0.2s;
     &:hover {
-      color: #e74c3c;
+      color: #666;
     }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

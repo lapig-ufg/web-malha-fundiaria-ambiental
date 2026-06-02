@@ -370,6 +370,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
 
   public malhaSearchValue: any = { text: '' };
   public malhaSearchSuggestions: any[] = [];
+  public malhaSearchLoading: boolean = false;
   private malhaVectorLayer: any;
 
   public displayFormJob: boolean = false;
@@ -1427,9 +1428,17 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   }
 
   public onSearchMalha(event: any): void {
+    this.malhaSearchLoading = true;
     this.mapAPIService.getMalha(event.query).subscribe((res) => {
       this.malhaSearchSuggestions = res.search;
+      this.malhaSearchLoading = false;
     });
+  }
+
+  public onKeyUpMalha(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && this.malhaSearchSuggestions.length > 0) {
+      this.onSelectMalha(this.malhaSearchSuggestions[0]);
+    }
   }
 
   public onSelectMalha(event: any): void {

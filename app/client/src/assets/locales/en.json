@@ -24,6 +24,7 @@
     "filter": "Filter",
     "search": "Map Filters",
     "search_malha": "Search Property Code",
+    "loading": "Loading...",
     "reset_zoom": "Back to Initial Zoom",
     "reset_navigation": "Reset Navigation",
     "point": "Insert Point",

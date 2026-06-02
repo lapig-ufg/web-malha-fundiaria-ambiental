@@ -24,6 +24,7 @@
     "filter": "Filtrar",
     "search": "Filtros do Mapa",
     "search_malha": "Pesquisar Código da Propriedade",
+    "loading": "Carregando...",
     "reset_zoom": "Voltar ao Zoom Inicial",
     "reset_navigation": "Resetar Navegação",
     "point": "Inserir Ponto",
