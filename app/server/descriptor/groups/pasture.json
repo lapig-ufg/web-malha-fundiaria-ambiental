@@ -1,0 +1,18 @@
+[
+  {
+      "idGroup": "pasture",
+      "labelGroup": "translate",
+      "groupExpanded": true,
+      "layers": [
+          {
+              "idLayer": "pasture_2024",
+              "labelLayer": "Pasture 2024",
+              "visible": false,
+              "selectedType": "pasture_2024",
+              "types": [
+                  "pasture_2024"
+              ]
+          }
+      ]
+  }
+]

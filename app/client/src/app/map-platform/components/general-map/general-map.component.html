@@ -1,6 +1,30 @@
 <section id="map-platform">
   <div class="map-container">
     <app-ol-map>
+      <!-- Malha Fundiaria Search Bar -->
+      <div class="malha-search-container">
+        <p-autoComplete
+          [(ngModel)]="malhaSearchValue"
+          [appendTo]="'body'"
+          placeholder="{{ 'controls.search_malha' | translate }}"
+          [suggestions]="malhaSearchSuggestions"
+          [showEmptyMessage]="true"
+          (completeMethod)="onSearchMalha($event)"
+          (onSelect)="onSelectMalha($event)"
+          field="text"
+          styleClass="wid100"
+        >
+          <ng-template let-result pTemplate="item">
+            <div>{{ result.text }}</div>
+          </ng-template>
+        </p-autoComplete>
+        <i
+          *ngIf="malhaSearchValue?.text"
+          class="close bx bx-x-circle"
+          (click)="onClearMalhaSearch()"
+        ></i>
+      </div>
+
       <!-- Layer Legend Section: Displays the active layers, their legend graphics, and controls (reorder, download SLD, toggle visibility) -->
       <div
         *ngIf="this.layersLegend.length > 0"

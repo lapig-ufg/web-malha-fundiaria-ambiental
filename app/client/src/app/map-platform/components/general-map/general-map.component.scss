@@ -675,3 +675,44 @@
   background-color: rgba(74, 74, 74, 0.4);
   z-index: 99999;
 }
+
+.malha-search-container {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 5px 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border: 1px solid #ddd;
+  width: 350px;
+
+  ::ng-deep p-autocomplete {
+    width: 100%;
+    .p-autocomplete-input {
+      width: 100%;
+      border: none;
+      box-shadow: none;
+      padding: 8px;
+      font-size: 14px;
+      &:focus {
+        box-shadow: none;
+      }
+    }
+  }
+
+  .close {
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 22px;
+    color: #999;
+    transition: color 0.2s;
+    &:hover {
+      color: #e74c3c;
+    }
+  }
+}

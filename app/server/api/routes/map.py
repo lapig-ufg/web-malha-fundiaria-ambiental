@@ -211,6 +211,25 @@ async def get_search(query_result: dict = Depends(get_map_data)):
             result.append(item)
 
     return {"search": result}
+
+@router.get("/malha")
+async def get_malha(query_result: dict = Depends(get_map_data)):
+    search_data = query_result.get('search', [])
+    ini_results = []
+    for row in search_data:
+        row.pop('priority', None)
+        ini_results.append(row)
+
+    # Deduplicate based on 'value'
+    seen = set()
+    result = []
+    for item in ini_results:
+        if item['value'] not in seen:
+            seen.add(item['value'])
+            result.append(item)
+
+    return {"search": result}
+
 @router.get("/getowsdomain")
 async def get_host():
     return [f"{settings.OWS_HOST}/ows"]
