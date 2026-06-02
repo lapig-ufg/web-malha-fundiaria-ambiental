@@ -484,28 +484,28 @@
       },
       "items": {
         "1": {
-          "title": "Ingestão dos Dados",
-          "description": "Coleta e organização de bases fundiárias e territoriais, incluindo propriedades privadas, terras indígenas e unidades de conservação"
+          "title": "Ingestão de Dados",
+          "description": "Coleta e organização de dados fundiários e territoriais, incluindo propriedades privadas, terras indígenas e unidades de conservação."
         },
         "2": {
           "title": "Pré-processamento",
-          "description": "Correção de inconsistências geométricas, padronização das bases e remoção de duplicidades e registros inválidos"
+          "description": "Correção de inconsistências geométricas, padronização de bancos de dados e remoção de duplicatas e registros inválidos."
         },
         "3": {
           "title": "Hierarquização",
-          "description": "Definição de prioridades entre as camadas territoriais por meio de análise multicritério, garantindo coerência em casos de sobreposição"
+          "description": "Definição de prioridades entre camadas territoriais por meio de análise multicritério, garantindo consistência em casos de sobreposição."
         },
         "4": {
-          "title": "Reclassificação das camadas",
-          "description": "As camadas fundiárias são convertidas para formato raster, organizadas em uma grade contínua onde cada pixel representa a prioridade definida pelo método AHP"
+          "title": "Reclassificação de Camadas",
+          "description": "As camadas fundiárias são convertidas para o formato raster, organizadas em uma grade contínua onde cada pixel representa a prioridade definida pelo método AHP."
         },
         "5": {
-          "title": "Análise de sobreposição",
-          "description": "Os conflitos entre camadas são resolvidos mantendo, em cada pixel, a classe fundiária de maior prioridade. Em seguida, os vetores originais são recuperados para compor a malha final"
+          "title": "Análise de Sobreposição",
+          "description": "Conflitos entre camadas são resolvidos mantendo a classe fundiária de maior prioridade em cada pixel. Em seguida, os vetores originais são recuperados para compor a Malha Fundiária Ambiental final."
         },
         "6": {
           "title": "Integração Ambiental",
-          "description": "Os ativos ambientais são incorporados à malha fundiária, permitindo análises de conformidade e a geração de estatísticas ambientais associadas ao território"
+          "description": "Ativos ambientais são incorporados ao registro de terras, permitindo análises de conformidade e a geração de estatísticas ambientais associadas ao território."
         }
       }
     },

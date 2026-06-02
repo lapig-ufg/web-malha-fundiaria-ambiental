@@ -485,27 +485,27 @@
       "items": {
         "1": {
           "title": "Data Ingestion",
-          "description": "Collection and organization of land and territorial bases, including private properties, indigenous lands and conservation units"
+          "description": "Collection and organization of land and territorial data, including private properties, indigenous lands, and conservation units."
         },
         "2": {
-          "title": "Pre-processing",
-          "description": "Correction of geometric inconsistencies, standardization of bases and removal of duplications and invalid records"
+          "title": "Preprocessing",
+          "description": "Correction of geometric inconsistencies, standardization of databases, and removal of duplicates and invalid records."
         },
         "3": {
-          "title": "Hierarchization",
-          "description": "Definition of priorities between territorial layers through multi-criteria analysis, ensuring coherence in cases of overlap"
+          "title": "Hierarchical",
+          "description": "Defining priorities among territorial layers through multi-criteria analysis, ensuring consistency in cases of overlap."
         },
         "4": {
           "title": "Layer Reclassification",
-          "description": "The land layers are converted to raster format, organized in a continuous grid where each pixel represents the priority defined by the AHP method"
+          "description": "Land layers are converted to raster format, organized in a continuous grid where each pixel represents the priority defined by the AHP method."
         },
         "5": {
           "title": "Overlap Analysis",
-          "description": "Conflicts between layers are resolved by keeping, in each pixel, the highest priority land class. Then, the original vectors are recovered to compose the final mesh"
+          "description": "Conflicts between layers are resolved by maintaining the highest priority land class in each pixel. Then, the original vectors are recovered to compose the final Environmental Land Tenure Data."
         },
         "6": {
           "title": "Environmental Integration",
-          "description": "Environmental assets are incorporated into the land tenure mesh, allowing for compliance analysis and the generation of environmental statistics associated with the territory"
+          "description": "Environmental assets are incorporated into the land registry, allowing for compliance analyses and the generation of environmental statistics associated with the territory."
         }
       }
     },
