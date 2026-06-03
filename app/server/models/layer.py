@@ -64,6 +64,12 @@ class Layer:
                     if 'regionFilter' in self.params:
                         typed_ob['regionFilter'] = self.params['regionFilter']
 
+                    if 'download' in self.params:
+                        if 'download' in typed_ob:
+                            typed_ob['download'] = {**typed_ob['download'], **self.params['download']}
+                        else:
+                            typed_ob['download'] = self.params['download']
+
                     layertypes_v.append(typed_ob)
         return layertypes_v
 
@@ -79,7 +85,7 @@ class Layer:
 
         # Merge any extra parameters from the JSON descriptor
         for key, value in self.params.items():
-            if key not in ob and key not in ['labelLayer', 'types', 'filterHandler', 'regionFilter']:
+            if key not in ob and key not in ['labelLayer', 'types', 'filterHandler', 'regionFilter', 'download']:
                 ob[key] = value
 
         return remove_null_properties(ob)
