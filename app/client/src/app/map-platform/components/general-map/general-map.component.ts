@@ -1555,7 +1555,12 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     }
     this.closePopup();
 
-    // Reset statistics sidebar to national data when search is cleared
+    // Reset drill-down level and zoom to default Brazil view
+    this.drillDownLevel = 0;
+    this.mapService.resetZoom();
+    this.refreshDrillDownLimits();
+
+    // Reset region filter to national data
     this.regionFilterService.updateRegionFilter(DEFAULT_REGION);
   }
 }

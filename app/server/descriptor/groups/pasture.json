@@ -2,14 +2,13 @@
   {
       "idGroup": "pasture",
       "labelGroup": "translate",
-      "groupExpanded": true,
+      "groupExpanded": false,
       "layers": [
           {
               "idLayer": "pasture_2024",
               "labelLayer": "Pasture 2024",
               "visible": false,
               "selectedType": "pasture_2024",
-              "filterHandler": "msfilter",
               "regionFilter": true,
               "types": [
                   "pasture_2024"
