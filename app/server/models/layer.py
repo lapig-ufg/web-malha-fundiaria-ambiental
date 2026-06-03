@@ -57,7 +57,13 @@ class Layer:
 
                     if 'legend' in self.params:
                         typed_ob['legend'] = self.params['legend']
-                    
+
+                    if 'filterHandler' in self.params:
+                        typed_ob['filterHandler'] = self.params['filterHandler']
+
+                    if 'regionFilter' in self.params:
+                        typed_ob['regionFilter'] = self.params['regionFilter']
+
                     layertypes_v.append(typed_ob)
         return layertypes_v
 
@@ -73,7 +79,7 @@ class Layer:
 
         # Merge any extra parameters from the JSON descriptor
         for key, value in self.params.items():
-            if key not in ob and key not in ['labelLayer', 'types']:
+            if key not in ob and key not in ['labelLayer', 'types', 'filterHandler', 'regionFilter']:
                 ob[key] = value
 
         return remove_null_properties(ob)

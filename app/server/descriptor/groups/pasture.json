@@ -9,6 +9,8 @@
               "labelLayer": "Pasture 2024",
               "visible": false,
               "selectedType": "pasture_2024",
+              "filterHandler": "msfilter",
+              "regionFilter": true,
               "types": [
                   "pasture_2024"
               ]

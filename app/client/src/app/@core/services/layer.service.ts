@@ -223,12 +223,18 @@ class LayerService {
   private parseMsFilter(descriptorType: DescriptorType): string[] {
     let filters: string[] = [];
 
+    const usesMsFilter = descriptorType.filterHandler === 'msfilter' || descriptorType.regionFilter === true;
+
     if (descriptorType.filterHandler === 'msfilter' && descriptorType.filterSelected) {
       filters.push(descriptorType.filterSelected);
     }
 
     if (descriptorType.regionFilter && this.regionFilterService.hasMsFilter) {
       filters.push(this.regionFilterService.currentMsFilter);
+    }
+
+    if (filters.length === 0 && usesMsFilter) {
+      filters.push('true');
     }
 
     return filters;
