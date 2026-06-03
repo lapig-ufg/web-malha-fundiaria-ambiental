@@ -78,6 +78,7 @@ class LayerService {
       wrapX: true,
       transition: 0,
       sources: [
+        
         {
           url: descriptorType.origin.url!,
         },
