@@ -74,7 +74,6 @@ class LayerService {
     const source = new GeoTIFF({
       normalize: false,
       interpolate: false,
-      loadMissingProjection: true,
       projection: descriptorType.projection || descriptorType.origin.epsg || 'EPSG:3857',
       wrapX: true,
       transition: 0,

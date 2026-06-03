@@ -364,6 +364,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   };
 
   public legendExpanded: boolean = true;
+  public searchBarVisible: boolean = true;
   public isMobile: boolean;
 
   public drillDownLevel: number = 0;

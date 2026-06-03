@@ -676,6 +676,26 @@
   z-index: 99999;
 }
 
+.ol-search-toggle {
+  position: absolute;
+  left: .75rem;
+  top: 9.5rem;
+  z-index: 101;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2em;
+    height: 1.8em;
+    font-size: 1.14em;
+
+    i {
+      font-size: 1.2em;
+    }
+  }
+}
+
 .malha-search-container {
   position: absolute;
   top: 15px;

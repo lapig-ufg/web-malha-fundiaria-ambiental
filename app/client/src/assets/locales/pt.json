@@ -56,7 +56,9 @@
       "search_failed_region": "Desculpe, região não encontrada.",
       "search_failed_car": "Desculpe, código da propriedade rural não encontrado.",
       "search_failed_uc": "Desculpe, nenhuma Unidade de Conservação encontrada."
-    }
+    },
+    "hide_search": "Ocultar Busca",
+    "show_search": "Mostrar Busca"
   },
   "left_sidebar": {
     "title": "Menu",

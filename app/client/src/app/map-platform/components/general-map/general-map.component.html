@@ -1,6 +1,18 @@
 <section id="map-platform">
   <div class="map-container">
     <app-ol-map>
+      <!-- Search Bar Toggle Button (top-left, below FullScreen control) -->
+      <div class="ol-control ol-search-toggle">
+        <button
+          type="button"
+          [pTooltip]="searchBarVisible ? ('controls.hide_search' | translate) : ('controls.show_search' | translate)"
+          (click)="searchBarVisible = !searchBarVisible"
+          [title]="searchBarVisible ? ('controls.hide_search' | translate) : ('controls.show_search' | translate)"
+        >
+          <i class="bx bx-search"></i>
+        </button>
+      </div>
+
       <!-- Layer Legend Section: Displays the active layers, their legend graphics, and controls (reorder, download SLD, toggle visibility) -->
       <div
         *ngIf="this.layersLegend.length > 0"
@@ -179,7 +191,7 @@
     </app-ol-map>
 
     <!-- Malha Fundiaria Search Bar (Positioned outside app-ol-map for better stacking) -->
-    <div class="malha-search-container">
+    <div class="malha-search-container" *ngIf="searchBarVisible">
       <div class="search-category-selector">
         <p-selectButton style="width: stretch;"
           [options]="searchCategoryOptions"

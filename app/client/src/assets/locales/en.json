@@ -56,7 +56,9 @@
       "search_failed_region": "Sorry, region not found.",
       "search_failed_car": "Sorry, rural property code not found.",
       "search_failed_uc": "Sorry, no Conservation Unit found."
-    }
+    },
+    "hide_search": "Hide Search",
+    "show_search": "Show Search"
   },
   "left_sidebar": {
     "title": "Menu",
