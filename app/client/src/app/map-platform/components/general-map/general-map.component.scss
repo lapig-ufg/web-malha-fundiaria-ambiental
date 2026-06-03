@@ -685,16 +685,16 @@
   display: flex;
   flex-direction: column;
   background: white;
-  padding: 15px; // Restored standard padding
-  border-radius: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   border: 1px solid #ddd;
-  width: 600px;
+  width: 420px;
   max-width: 95vw;
   transition: all 0.2s ease-in-out;
 
   .search-category-selector {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     display: flex;
     justify-content: center;
     width: 100%; // Fill available space within padding
@@ -716,7 +716,7 @@
         border: none;
         color: #777 !important;
         font-size: 11px;
-        padding: 8px 2px;
+        padding: 6px 2px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -803,8 +803,8 @@
       width: 100%;
       border: none;
       box-shadow: none;
-      padding: 12px 0;
-      font-size: 15px;
+      padding: 8px 0;
+      font-size: 14px;
       color: #333;
       background: transparent;
       &:focus {
@@ -817,8 +817,8 @@
       position: absolute !important;
       top: 100% !important; // Align exactly at the bottom of the bar
       left: -1px !important; // Compensate for container border
-      width: 600px !important; // Match bar width exactly
-      min-width: 600px !important;
+      width: 420px !important; // Match bar width exactly
+      min-width: 420px !important;
       background: white !important;
       border: 1px solid #ddd !important;
       border-top: none !important;
