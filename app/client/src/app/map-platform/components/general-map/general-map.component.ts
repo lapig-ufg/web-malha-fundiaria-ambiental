@@ -1228,6 +1228,22 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
               }
               this.drillDownLevel++;
               this.refreshDrillDownLimits();
+
+              // Apply region filter based on drill-down level
+              if (currentLevel === 0 && feature.properties?.uf) {
+                this.regionFilterService.updateRegionFilter({
+                  type: 'state',
+                  value: feature.properties.uf,
+                  text: feature.properties.estado || '',
+                });
+              } else if (currentLevel === 1 && feature.properties?.cd_geocmu) {
+                this.regionFilterService.updateRegionFilter({
+                  type: 'city',
+                  value: feature.properties.cd_geocmu,
+                  text: feature.properties.municipio || '',
+                });
+              }
+
               hasIncremented = true;
             }
           } else {
