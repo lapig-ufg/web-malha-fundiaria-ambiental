@@ -5,7 +5,7 @@ def get_region_filter(type_reg, key):
     elif type_reg == 'city':
         return f"cd_geocmu='{key_lower}'"
     elif type_reg == 'state':
-        return f"uf='{key_lower}'"
+        return f"lower(uf)='{key_lower}'"
     elif type_reg == 'region':
         return f"lower(regiao)='{key_lower}'"
     elif type_reg == 'biome':
@@ -26,7 +26,7 @@ def get_region_filter_coverage(type_reg, key):
     elif type_reg == 'city':
         return f"\"CD_MUN\"='{key_lower}'"
     elif type_reg == 'state':
-        return f"\"UF\"='{key_lower}'"
+        return f"lower(\"UF\")='{key_lower}'"
     elif type_reg == 'biome':
         return f"lower(bioma) = '{key_lower}'"
     return "true"

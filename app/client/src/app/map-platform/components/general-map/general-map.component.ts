@@ -470,6 +470,9 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     this.mapService.resetZoom();
     this.refreshDrillDownLimits();
     this.closePopup();
+
+    // Reset region filter when user resets drill-down navigation
+    this.regionFilterService.updateRegionFilter(DEFAULT_REGION);
   }
 
   private refreshDrillDownLimits(): void {
@@ -1434,6 +1437,15 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     }
   }
 
+  private mapSearchCategoryToRegionFilterType(searchType: string): string | null {
+    const typeMap: { [key: string]: string } = {
+      'estado': 'state',
+      'municipio': 'city',
+      'bioma': 'biome',
+    };
+    return typeMap[searchType] || null;
+  }
+
   public onSearchMalha(event: any): void {
     this.malhaSearchLoading = true;
     this.mapAPIService.getSearchCategory(this.searchCategory, event.query).subscribe((res) => {
@@ -1498,7 +1510,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
       // Use centroid to fetch full information by simulating a click
       const centroid = turfCentroid(geojson);
       const coord3857 = transform(centroid.geometry.coordinates, 'EPSG:4326', 'EPSG:3857');
-      
+
       this.onDisplayFeatureInfo({
         coordinate: coord3857,
         fromSearch: true,
@@ -1506,6 +1518,16 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
           clientX: 0,
           clientY: 0
         }
+      });
+    }
+
+    // Update statistics sidebar when a state, municipality, or biome is selected
+    const regionFilterType = this.mapSearchCategoryToRegionFilterType(item.type);
+    if (regionFilterType) {
+      this.regionFilterService.updateRegionFilter({
+        type: regionFilterType,
+        value: item.value,
+        text: item.text,
       });
     }
   }
@@ -1516,5 +1538,8 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
       this.mapService.removeLayer(this.malhaVectorLayer);
     }
     this.closePopup();
+
+    // Reset statistics sidebar to national data when search is cleared
+    this.regionFilterService.updateRegionFilter(DEFAULT_REGION);
   }
 }
