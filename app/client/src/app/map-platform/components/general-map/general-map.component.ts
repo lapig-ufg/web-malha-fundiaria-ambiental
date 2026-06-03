@@ -1186,10 +1186,12 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
       }
     }
 
+    let centroidCoordinate: number[] | null = null;
+
     Promise.all(promises).then((layersFeatures) => {
         console.log('--- MAP FEATURE INFO ---');
         console.log('Current DrillDown Level:', currentLevel);
-        
+
         layersFeatures.forEach((featureCollection, index) => {
           if (featureCollection && featureCollection.features && featureCollection.features.length > 0) {
             const layerName = featureCollection.layerType ? featureCollection.layerType.viewValueType : (featureCollection.typeName || 'Unknown Layer');
@@ -1200,7 +1202,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
             });
           }
         });
-        
+
         console.log('Full Data:', layersFeatures);
         
         if (Array.isArray(layersFeatures) && layersFeatures.length <= 0) {
@@ -1269,6 +1271,15 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
               this.popupRegion.geojson = featureCollection;
               this.popupRegion.properties =
                 featureCollection.features[0].properties;
+
+              // Calculate centroid of the feature for popup positioning
+              const featureGeoJSON = featureCollection.features[0];
+              const centroid = turfCentroid(featureGeoJSON);
+              centroidCoordinate = transform(
+                centroid.geometry.coordinates,
+                'EPSG:4326',
+                'EPSG:3857'
+              );
             }
 
             if (currentLevel === 2 && index === 0) {
@@ -1400,7 +1411,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
           element: container!,
           autoPan: false,
         });
-        this.popupOverlay.setPosition(event.coordinate);
+        this.popupOverlay.setPosition(centroidCoordinate || event.coordinate);
         map.addOverlay(this.popupOverlay);
       })
       .catch((error) => {
