@@ -390,6 +390,11 @@
         "Intermediário": "Intermediário",
         "Ausente": "Ausente"
       }
+    },
+    "malha_chart": {
+      "title": "Evolução da Vegetação Natural",
+      "loading": "Calculando a evolução da vegetação…",
+      "empty": "Nenhuma propriedade selecionada."
     }
   },
   "popup-info": {

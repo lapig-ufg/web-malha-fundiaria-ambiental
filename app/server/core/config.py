@@ -44,7 +44,13 @@ class Settings(BaseSettings):
 
     # Security
     RECAPTCHA_KEY: Optional[str] = None
-    
+
+    # Zonal statistics (per-property vegetation time series)
+    ZONAL_STATISTICS_RASTER_DIR: str = "/plataforms_files/rasters/malha_coverage"
+    ZONAL_STATISTICS_CLASS_VEGETACAO: int = 1
+    ZONAL_STATISTICS_JOB_TTL_SECONDS: int = 900
+    ZONAL_STATISTICS_MAX_PROPERTY_AREA_HA: float = 200_000.0
+
     APP_PRODUCAO: str = ""
     
     @property

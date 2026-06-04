@@ -9,6 +9,8 @@ import { Component, OnDestroy } from '@angular/core';
 import { DescriptorService, DEFAULT_REGION } from '../../../@core/services';
 import { ChartService, RegionFilterService } from '../../../@core/services';
 import { LocalizationService } from '@core/internationalization/localization.service';
+import { SelectedFeatureService, SelectedFeature } from '../../../@core/services';
+import { ZonalService } from '../../../@core/services';
 
 /**
  * Interfaces imports.
@@ -45,6 +47,39 @@ class StatisticsSidebarComponent implements OnDestroy {
   public coverageComparisonAppChartData: any = null;
   public coverageComparisonRlChartData: any = null;
   public coverageComparisonMfaChartData: any = null;
+
+  /**
+   * Per-property vegetation chart (bar): x = year, y = % of the property
+   * area classified as natural vegetation. Populated by polling the
+   * /service/zonal/jobs endpoint whenever a malha_fundiaria feature is
+   * selected on the map.
+   */
+  public malhaVegetationChartData: any = null;
+  public malhaVegetationLoading: boolean = false;
+  public currentJobId: string | null = null;
+  private selectedFeatureSubscription: Subscription = new Subscription();
+
+  public malhaBarOptions: any = {
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (context: any) =>
+            `${Number(context.parsed.y).toFixed(2)}%`,
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          callback: (value: any) => value + '%',
+        },
+      },
+    },
+    maintainAspectRatio: false,
+  };
 
   public stackedBarOptions: any = {
     indexAxis: 'y',
@@ -174,7 +209,9 @@ class StatisticsSidebarComponent implements OnDestroy {
     private descriptorService: DescriptorService,
     private regionFilterService: RegionFilterService,
     private chartService: ChartService,
-    private localizationService: LocalizationService
+    private localizationService: LocalizationService,
+    private selectedFeatureService: SelectedFeatureService,
+    private zonalService: ZonalService,
   ) {
     this.regionFilterSubscription.add(
       this.regionFilterService.getRegionFilter().subscribe({
@@ -201,11 +238,107 @@ class StatisticsSidebarComponent implements OnDestroy {
           this.updateLayersForStatistics(descriptor);
         })
     );
+
+    // Subscribe to the currently-selected map feature. Whenever a
+    // malha_fundiaria feature is picked (by map click or CAR search) we
+    // kick off a zonal job and render the vegetation bar chart.
+    this.selectedFeatureSubscription.add(
+      this.selectedFeatureService.getSelectedFeature().subscribe({
+        next: (feature: SelectedFeature | null) => {
+          if (!feature || feature.idLayer !== 'malha_fundiaria_ambiental') {
+            this.clearMalhaChart();
+            return;
+          }
+          this.loadMalhaChart(feature);
+        },
+      })
+    );
   }
 
   ngOnDestroy(): void {
     this.descriptorSubscription.unsubscribe();
     this.regionFilterSubscription.unsubscribe();
+    this.selectedFeatureSubscription.unsubscribe();
+  }
+
+  private clearMalhaChart(): void {
+    this.malhaVegetationChartData = null;
+    this.malhaVegetationLoading = false;
+    this.currentJobId = null;
+  }
+
+  private loadMalhaChart(feature: SelectedFeature): void {
+    this.malhaVegetationLoading = true;
+    this.malhaVegetationChartData = null;
+    this.currentJobId = null;
+
+    this.zonalService.startZonalJob(feature.geometry).subscribe({
+      next: (resp) => {
+        this.currentJobId = resp.job_id;
+        this.pollJobUntilDone(resp.job_id);
+      },
+      error: (err) => {
+        console.error('startZonalJob failed', err);
+        this.malhaVegetationLoading = false;
+      },
+    });
+  }
+
+  private pollJobUntilDone(jobId: string): void {
+    // Poll every 1.5s; bail out if the user changed selection in the
+    // meantime (the in-flight guard).
+    const tick = (): void => {
+      if (this.currentJobId !== jobId) return;
+
+      this.zonalService.pollZonalJob(jobId).subscribe({
+        next: (resp) => {
+          if (this.currentJobId !== jobId) return;
+
+          if (resp.status === 'pending') {
+            setTimeout(tick, 1500);
+            return;
+          }
+          if (resp.status === 'error') {
+            console.error('zonal job error', resp.error);
+            this.malhaVegetationLoading = false;
+            return;
+          }
+          this.malhaVegetationChartData = this.buildMalhaChartData(
+            resp.result || [],
+          );
+          this.malhaVegetationLoading = false;
+        },
+        error: (err) => {
+          console.error('poll failed', err);
+          this.malhaVegetationLoading = false;
+        },
+      });
+    };
+    setTimeout(tick, 800);
+  }
+
+  private buildMalhaChartData(rows: any[]): any {
+    const sorted = [...rows].sort(
+      (a, b) => (a.ano ?? 0) - (b.ano ?? 0),
+    );
+    const labels = sorted.map((r) =>
+      r.ano != null ? String(r.ano) : r.ano_arquivo,
+    );
+    const data = sorted.map((r) =>
+      Number(Number(r.percent_vegetacao ?? 0).toFixed(2)),
+    );
+    return {
+      labels,
+      datasets: [
+        {
+          label: '% vegetação',
+          data,
+          backgroundColor: '#2e8b57',
+          borderColor: '#1f5e3a',
+          borderWidth: 1,
+        },
+      ],
+    };
   }
 
   private updateLayersForStatistics(descriptor: Descriptor): void {

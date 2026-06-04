@@ -1,7 +1,7 @@
 /**
  * Angular imports.
  */
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, EventEmitter, Output } from '@angular/core';
 
 /**
  * Interfaces imports.
@@ -15,6 +15,7 @@ import {
   RegionFilterService,
   DEFAULT_REGION,
   MapAPIService,
+  SelectedFeatureService,
 } from '@core/services';
 import { MapService } from '@core/services/map.service';
 
@@ -50,6 +51,13 @@ const PRIMARY_COLOR = window
 })
 export class FilterComponent implements OnInit, OnDestroy {
   @Input() onClose!: Observable<void>;
+
+  /**
+   * Emitted when a CAR result is selected from the autocomplete, so the
+   * parent (general-map) can forward to MainComponent to open the
+   * statistics sidebar.
+   */
+  @Output() openStatisticsSidebar = new EventEmitter<void>();
 
   public regionsLimits: any;
 
@@ -99,6 +107,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private regionFilterService: RegionFilterService,
     private mapAPIService: MapAPIService,
+    private selectedFeatureService: SelectedFeatureService,
   ) {}
 
   public ngOnInit(): void {
@@ -281,7 +290,18 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.mapService.addLayer(this.otherLayerFromFilters.layer);
 
     let extent = this.otherLayerFromFilters.layer.getSource().getExtent();
-    
+
     this.mapService.map.getView().fit(extent, { duration: 1800 });
+
+    // Publish the selected CAR feature and ask the parent to open the
+    // statistics sidebar so the per-property chart kicks off.
+    if (event && event.geojson) {
+      this.selectedFeatureService.set({
+        idLayer: 'malha_fundiaria_ambiental',
+        properties: event.geojson.properties ?? null,
+        geometry: event.geojson,
+      });
+      this.openStatisticsSidebar.emit();
+    }
   }
 }

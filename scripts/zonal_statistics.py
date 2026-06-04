@@ -113,30 +113,7 @@ def pipeline_raster_codificado(parquet_path, id_propriedade, raster_dir, classe_
         
     return pd.DataFrame(resultados)
 
-# --- EXECUÇÃO ---
-if __name__ == "__main__":
-    CAMINHO_PARQUET = "/home/tiago/Documents/Github/web-malha-fundiaria-ambiental/data/balanco_ativo_ambiental_final.parquet"
-    DIRETORIO_RASTERS = "/home/tiago/Documents/Github/web-malha-fundiaria-ambiental/data"
-    
-    ID_DA_PROPRIEDADE_ALVO = '7d981ebc-3bf2-4485-89ac-1c7e038f3db1'   
-    VALOR_CLASSE_VEGETACAO = 1  
-    
-    startproc = datetime.datetime.now()
-    print("Iniciando processamento via codificação binária...", startproc)
-    
-    df_areas_anuais = pipeline_raster_codificado(
-        parquet_path=CAMINHO_PARQUET,
-        id_propriedade=ID_DA_PROPRIEDADE_ALVO,
-        raster_dir=DIRETORIO_RASTERS,
-        classe_vegetacao=VALOR_CLASSE_VEGETACAO
-    )
-    
-    endproc = datetime.datetime.now()
-   
-    
-    if not df_areas_anuais.empty:
-        print(f"\n[+] Evolução Temporal Baseada na Imagem Codificada Única ({ID_DA_PROPRIEDADE_ALVO}):")
-        print(df_areas_anuais.to_string(index=False))
-    
-    print("Finalizando processamento...", endproc)
-    print("Tempo total de processamento...", endproc - startproc)
+# NOTE: the __main__ block has been removed. The canonical implementation
+# lives at app/server/utils/zonal_statistics.py (compute_zonal_history) and
+# is invoked via the /service/zonal/jobs endpoint. The scripts folder will
+# be deleted in production.

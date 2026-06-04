@@ -1,8 +1,8 @@
 <h4 class="sidebar-title">{{ "right_sidebar.title" | translate }}</h4>
 
 <div class="statistics-container" style="padding: 0 4px;">
-  <div *ngIf="summaryData.get('coverage_natural'); else loadingSpinner">
-    
+  <div *ngIf="summaryData.get('coverage_natural') || malhaVegetationLoading || malhaVegetationChartData; else loadingSpinner">
+
     <p-accordion [multiple]="true" [activeIndex]="[0, 1, 2, 3]" styleClass="modern-accordion">
       
       <!-- Section: Geral -->
@@ -43,6 +43,28 @@
             </div>
           </p-tabPanel>
         </p-tabView>
+      </p-accordionTab>
+
+      <!-- Section: Per-property vegetation evolution (malha_fundiaria) -->
+      <p-accordionTab
+          [header]="'right_sidebar.malha_chart.title' | translate"
+          *ngIf="malhaVegetationChartData || malhaVegetationLoading">
+        <div class="chart-section">
+          <ng-container *ngIf="malhaVegetationChartData; else malhaLoadingTpl">
+            <div class="chart-container" style="height: 380px; padding: 10px;">
+              <p-chart type="bar" [data]="malhaVegetationChartData" [options]="malhaBarOptions" height="360px">
+              </p-chart>
+            </div>
+          </ng-container>
+          <ng-template #malhaLoadingTpl>
+            <div class="loader-container">
+              <app-loading-spinner></app-loading-spinner>
+              <p style="text-align: center; color: #666; margin-top: 8px;">
+                {{ 'right_sidebar.malha_chart.loading' | translate }}
+              </p>
+            </div>
+          </ng-template>
+        </div>
       </p-accordionTab>
 
     </p-accordion>

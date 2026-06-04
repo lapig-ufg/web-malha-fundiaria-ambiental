@@ -390,6 +390,11 @@
         "class_2": "Intermediary",
         "class_3": "Absent"
       }
+    },
+    "malha_chart": {
+      "title": "Natural Vegetation Evolution",
+      "loading": "Calculating vegetation evolution…",
+      "empty": "No property selected."
     }
   },
   "popup-info": {

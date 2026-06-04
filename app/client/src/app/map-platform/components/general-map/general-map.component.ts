@@ -5,7 +5,7 @@
  */
 import { OnDestroy } from '@angular/core';
 import { ElementRef, HostListener } from '@angular/core';
-import { OnInit, ViewChild, Component } from '@angular/core';
+import { EventEmitter, OnInit, Output, ViewChild, Component } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
@@ -58,6 +58,7 @@ import {
 import { RegionFilterService, DEFAULT_REGION } from '../../../@core/services';
 import { GoogleAnalyticsService } from '../../../@core/services';
 import { DescriptorService } from '../../../@core/services';
+import { SelectedFeatureService } from '../../../@core/services';
 
 import { MapService } from '@core/services/map.service';
 
@@ -132,6 +133,13 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   @ViewChild('wfsCard') wfsCard!: ElementRef;
 
   @ViewChild(OlMapComponent) olMap!: OlMapComponent;
+
+  /**
+   * Emitted when a malha_fundiaria feature is selected on the map (level-2
+   * click) so the parent (MainComponent) can auto-open the right-hand
+   * statistics sidebar.
+   */
+  @Output() openStatisticsSidebar = new EventEmitter<void>();
 
   public features: any[] = [];
 
@@ -383,7 +391,8 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     private mapAPIService: MapAPIService,
     private messageService: MessageService,
     private primengConfig: PrimeNGConfig,
-    private googleAnalyticsService: GoogleAnalyticsService
+    private googleAnalyticsService: GoogleAnalyticsService,
+    private selectedFeatureService: SelectedFeatureService,
   ) {
     this.action = this.initDescriptor;
 
@@ -1249,6 +1258,22 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
                   this.popupRegion.attributes = response;
                 }
               });
+
+              // Publish the selected malha_fundiaria feature so the
+              // statistics sidebar can fetch its vegetation time series,
+              // and ask the parent to auto-open the sidebar.
+              if (
+                featureCollection.features &&
+                featureCollection.features.length > 0
+              ) {
+                const selectedFeature = featureCollection.features[0];
+                this.selectedFeatureService.set({
+                  idLayer: 'malha_fundiaria_ambiental',
+                  properties: selectedFeature.properties ?? null,
+                  geometry: selectedFeature,
+                });
+                this.openStatisticsSidebar.emit();
+              }
             } else if (featureCollection.hasOwnProperty('layerType')) {
               this.featureCollections.push(featureCollection);
             } else {

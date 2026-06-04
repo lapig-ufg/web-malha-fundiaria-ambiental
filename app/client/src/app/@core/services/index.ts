@@ -43,3 +43,14 @@ export { RegionFilterService, DEFAULT_REGION } from './region-filter.service';
  */
 export { LayerService } from './layer.service';
 
+/**
+ * SelectedFeatureService exports.
+ */
+export { SelectedFeatureService } from './selected-feature.service';
+export { SelectedFeature } from './selected-feature.service';
+
+/**
+ * ZonalService exports.
+ */
+export { ZonalService } from './zonal.service';
+

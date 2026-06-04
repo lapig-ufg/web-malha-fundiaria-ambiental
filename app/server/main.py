@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse
 from core.config import settings
 
 from db.session import db
-from api.routes import charts, map, proxy, contact, http
+from api.routes import charts, map, proxy, contact, http, zonal
 
 from contextlib import asynccontextmanager
 
@@ -35,6 +35,7 @@ app.include_router(charts.router, prefix="/service/charts")
 app.include_router(proxy.router)
 app.include_router(contact.router, prefix="/service/contact")
 app.include_router(http.router, prefix="/service/http")
+app.include_router(zonal.router, prefix="/service/zonal")
 
 # Mount angular client static files
 client_dir = os.path.join(settings.app_root, settings.CLIENT_DIR)

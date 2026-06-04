@@ -76,5 +76,5 @@
     <app-statistics-sidebar></app-statistics-sidebar>
   </p-sidebar>
 
-  <app-general-map class='{{ (menus[0].show || menus[2].show ? "left-sidebar-open " : "" ) + (menus[1].show ? "right-sidebar-open" : "") }}'></app-general-map>
+  <app-general-map class='{{ (menus[0].show || menus[2].show ? "left-sidebar-open " : "" ) + (menus[1].show ? "right-sidebar-open" : "") }}' (openStatisticsSidebar)="openStatisticsSidebar()"></app-general-map>
 </section>

@@ -67,6 +67,19 @@ export class MainComponent {
   }
 
   /**
+   * Open the right-hand statistics sidebar. Triggered by the map (or the
+   * filter) when a malha_fundiaria feature is selected, so the user is
+   * taken straight to the per-property zonal chart.
+   */
+  public openStatisticsSidebar(): void {
+    this.menus[1].show = true;
+  }
+
+  public closeStatisticsSidebar(): void {
+    this.menus[1].show = false;
+  }
+
+  /**
    * Executado quando a barra lateral esquerda é fechado. Reponsável por
    * fechar todos os menus alocados na barra lateral esquerda.
    */
