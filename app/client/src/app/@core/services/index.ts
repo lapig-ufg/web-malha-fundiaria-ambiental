@@ -47,7 +47,7 @@ export { LayerService } from './layer.service';
  * SelectedFeatureService exports.
  */
 export { SelectedFeatureService } from './selected-feature.service';
-export { SelectedFeature } from './selected-feature.service';
+export { SelectedFeature, SelectedFeatureAttribute } from './selected-feature.service';
 
 /**
  * ZonalService exports.

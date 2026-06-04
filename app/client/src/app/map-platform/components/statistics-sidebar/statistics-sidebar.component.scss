@@ -48,6 +48,52 @@ h4.sidebar-title {
   align-items: center;
 }
 
+.malha-intro,
+.region-intro {
+  background: rgba($primary, 0.04);
+  border-left: 3px solid $primary;
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin: 0 4px 12px 4px;
+
+  p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #495057;
+  }
+}
+
+.malha-attributes {
+  padding: 8px 4px 4px 4px;
+
+  .details-row {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .details-row-header {
+    font-size: 11px;
+    font-weight: 600;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
+  }
+
+  .details-row-content {
+    font-size: 13px;
+    color: #2c3e50;
+    word-break: break-word;
+  }
+}
+
 .modern-accordion {
   ::ng-deep {
     .p-accordion-header-link {

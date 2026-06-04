@@ -2,6 +2,7 @@
  * Angular imports.
  */
 import { Component, OnDestroy } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 
 /**
  * Services imports.
@@ -58,6 +59,14 @@ class StatisticsSidebarComponent implements OnDestroy {
   public malhaVegetationLoading: boolean = false;
   public currentJobId: string | null = null;
   private selectedFeatureSubscription: Subscription = new Subscription();
+
+  /**
+   * True when the sidebar is showing the per-property (malha_fundiaria)
+   * panel — the two region-based charts and the description are hidden
+   * in this mode; the property attributes + vegetation chart are shown.
+   */
+  public malhaMode: boolean = false;
+  public malhaFeature: SelectedFeature | null = null;
 
   public malhaBarOptions: any = {
     plugins: {
@@ -212,6 +221,7 @@ class StatisticsSidebarComponent implements OnDestroy {
     private localizationService: LocalizationService,
     private selectedFeatureService: SelectedFeatureService,
     private zonalService: ZonalService,
+    private decimalPipe: DecimalPipe,
   ) {
     this.regionFilterSubscription.add(
       this.regionFilterService.getRegionFilter().subscribe({
@@ -241,14 +251,20 @@ class StatisticsSidebarComponent implements OnDestroy {
 
     // Subscribe to the currently-selected map feature. Whenever a
     // malha_fundiaria feature is picked (by map click or CAR search) we
-    // kick off a zonal job and render the vegetation bar chart.
+    // enter "malha mode" and kick off a zonal job to render the
+    // vegetation bar chart; otherwise we return to the region mode
+    // (two main charts + description).
     this.selectedFeatureSubscription.add(
       this.selectedFeatureService.getSelectedFeature().subscribe({
         next: (feature: SelectedFeature | null) => {
           if (!feature || feature.idLayer !== 'malha_fundiaria_ambiental') {
+            this.malhaMode = false;
+            this.malhaFeature = null;
             this.clearMalhaChart();
             return;
           }
+          this.malhaMode = true;
+          this.malhaFeature = feature;
           this.loadMalhaChart(feature);
         },
       })
@@ -259,6 +275,43 @@ class StatisticsSidebarComponent implements OnDestroy {
     this.descriptorSubscription.unsubscribe();
     this.regionFilterSubscription.unsubscribe();
     this.selectedFeatureSubscription.unsubscribe();
+  }
+
+  /**
+   * Format an attribute value for display. Mirrors the logic used by the
+   * map popup (general-map.component.ts:getAttributeValue): integers
+   * are rounded, decimals are formatted with 2 fraction digits, and
+   * strings/dates are passed through.
+   */
+  public getAttributeValue(type: any, value: any): string {
+    if (value === null || value === undefined || value === '') return '';
+
+    const lang = this.localizationService.currentLang();
+    const locale = lang === 'pt' ? 'pt-BR' : 'en-US';
+
+    let columnType = type;
+    if (typeof type === 'object' && type !== null) {
+      columnType = type.columnType;
+    }
+
+    const numValue =
+      typeof value === 'string' && value.trim() !== ''
+        ? Number(value.replace(',', '.'))
+        : value;
+    const isNumeric = typeof numValue === 'number' && !isNaN(numValue);
+
+    if (isNumeric && columnType !== 'integer') {
+      return this.decimalPipe.transform(numValue, '1.0-2', locale) || String(value);
+    }
+
+    switch (columnType) {
+      case 'integer':
+        return this.decimalPipe.transform(numValue, '1.0-0', locale) || String(value);
+      case 'date':
+      case 'string':
+      default:
+        return String(value);
+    }
   }
 
   private clearMalhaChart(): void {

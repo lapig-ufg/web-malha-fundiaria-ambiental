@@ -410,8 +410,11 @@
     "malha_chart": {
       "title": "Natural Vegetation Evolution",
       "loading": "Calculating vegetation evolution…",
-      "empty": "No property selected."
-    }
+      "empty": "No property selected.",
+      "intro": "Select a property of the land tenure (by clicking on the map or by searching for a CAR code) to see its detailed information and the annual evolution of natural vegetation cover between 1985 and 2024.",
+      "attributes_title": "Property Information"
+    },
+    "region_description": "Select a state, municipality or biome to see regional statistics for vegetation cover, permanent preservation areas (APP), legal reserve (RL) and environmental land tenure (MFA)."
   },
   "popup-info": {
     "title": "Region Information",

@@ -1122,6 +1122,69 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    // Clear the per-property zonal selection so the statistics sidebar
+    // returns to its default (region-based) state.
+    this.selectedFeatureService.clear();
+  }
+
+  /**
+   * Highlight the selected malha_fundiaria property on the map. The
+   * popup used to do this implicitly via the featureCollections list;
+   * since we now skip the popup for the malha layer, we draw the
+   * highlight explicitly so the user can see which property is
+   * currently being analysed in the statistics sidebar.
+   *
+   * The layer is tagged with `key: 'popup-vector'` so that the existing
+   * `closePopup()` cleanup tears it down on the next click/selection.
+   */
+  private addMalhaHighlight(feature: any): void {
+    // Defensively remove any existing popup-vector layer before adding
+    // the new one. Two reasons:
+    //   1. `mapService.addLayer` refuses to add a layer whose `key`
+    //      already exists on the map. `closePopup` *should* have cleared
+    //      it, but if it didn't (e.g. the call site passed
+    //      `fromSearch: true` and skipped `closePopup`), the new layer
+    //      would be silently dropped and the user would see no highlight.
+    //   2. Older `malhaVectorLayer` instances (created by the top
+    //      search bar) also use `key: 'popup-vector'`. We want a single
+    //      highlight at a time.
+    const stale: any[] = [];
+    this.mapService.layers.forEach((layer: any) => {
+      if (layer && layer.get('key') === 'popup-vector') {
+        stale.push(layer);
+      }
+    });
+    stale.forEach((layer) => this.mapService.removeLayer(layer));
+
+    const featureCollection = {
+      type: 'FeatureCollection',
+      features: [feature],
+    };
+
+    const vectorSource = new VectorSource({
+      features: new GeoJSON().readFeatures(featureCollection, {
+        dataProjection: 'EPSG:4326',
+        featureProjection: 'EPSG:3857',
+      }),
+    });
+
+    const vectorLayer = new VectorLayer({
+      source: vectorSource,
+      // @ts-ignore
+      style: (feature) => {
+        const type = feature.getGeometry()!.getType();
+        return this.geoJsonStyles[type];
+      },
+      properties: {
+        key: 'popup-vector',
+        type: 'malha-highlight',
+      },
+      visible: true,
+      zIndex: 100000,
+    });
+
+    this.mapService.addLayer(vectorLayer);
   }
 
   // TODO: Não esta mostrando info do ponto quando clicado, apenas do municipio.
@@ -1277,7 +1340,12 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
               }
             }
 
-            if (index === 0) {
+            // Skip the popup bookkeeping for the malha_fundiaria branch
+            // (currentLevel === 2 && index === 0): its details are now
+            // rendered in the statistics sidebar, not in the map popup.
+            const isMalhaSelection = currentLevel === 2 && index === 0;
+
+            if (index === 0 && !isMalhaSelection) {
               this.popupRegion.geojson = featureCollection;
               this.popupRegion.properties =
                 featureCollection.features[0].properties;
@@ -1293,35 +1361,40 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
             }
 
             if (currentLevel === 2 && index === 0) {
-              featureCollection.layerType = {
-                viewValueType: this.localizationService.translate(
-                  'popup-info.malha_fundiaria'
-                ),
-                wfsMapCard: {
-                  show: true,
-                  attributes: [],
-                },
-              };
-              this.featureCollections.push(featureCollection);
-              this.mapAPIService.getLayerAttributes('malha_fundiaria_ambiental').subscribe({
-                next: (response: any) => {
-                  featureCollection.layerType.wfsMapCard.attributes = response;
-                  this.popupRegion.attributes = response;
-                }
-              });
-
-              // Publish the selected malha_fundiaria feature so the
-              // statistics sidebar can fetch its vegetation time series,
-              // and ask the parent to auto-open the sidebar.
+              // The malha_fundiaria branch: do NOT push to featureCollections
+              // (the popup is suppressed for this layer — its details are now
+              // rendered in the statistics sidebar). Publish the feature to
+              // SelectedFeatureService so the sidebar can pick it up, and
+              // fetch the wfsMapCard attributes to publish alongside.
               if (
                 featureCollection.features &&
                 featureCollection.features.length > 0
               ) {
                 const selectedFeature = featureCollection.features[0];
+
+                // Highlight the selected property on the map. The popup
+                // used to do this via featureCollections; we now do it
+                // explicitly so the polygon is still drawn (the sidebar
+                // is the new home for the click details).
+                this.addMalhaHighlight(selectedFeature);
+
                 this.selectedFeatureService.set({
                   idLayer: 'malha_fundiaria_ambiental',
                   properties: selectedFeature.properties ?? null,
                   geometry: selectedFeature,
+                });
+                this.mapAPIService.getLayerAttributes('malha_fundiaria_ambiental').subscribe({
+                  next: (response: any) => {
+                    // Update the published selection with the attribute metadata
+                    // so the sidebar can render the same key/value list that
+                    // the popup used to show.
+                    this.selectedFeatureService.set({
+                      idLayer: 'malha_fundiaria_ambiental',
+                      properties: selectedFeature.properties ?? null,
+                      geometry: selectedFeature,
+                      attributes: response,
+                    });
+                  },
                 });
                 this.openStatisticsSidebar.emit();
               }

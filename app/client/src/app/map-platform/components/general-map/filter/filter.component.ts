@@ -264,7 +264,9 @@ export class FilterComponent implements OnInit, OnDestroy {
     });
 
     this.otherLayerFromFilters.layer = new VectorLayer({
-      zIndex: 99,
+      // Bump above the basemap/limit/cog layers (basemap=0, limit=1000,
+      // cog=10) so the selected property outline is not hidden by them.
+      zIndex: 100000,
       source: vectorSource,
       properties: {
         key: 'filter',

@@ -1,51 +1,40 @@
 <h4 class="sidebar-title">{{ "right_sidebar.title" | translate }}</h4>
 
 <div class="statistics-container" style="padding: 0 4px;">
-  <div *ngIf="summaryData.get('coverage_natural') || malhaVegetationLoading || malhaVegetationChartData; else loadingSpinner">
 
-    <p-accordion [multiple]="true" [activeIndex]="[0, 1, 2, 3]" styleClass="modern-accordion">
-      
-      <!-- Section: Geral -->
-      <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_natural_title' | translate">
-        <div class="chart-section">
-          <div class="chart-container" style="height: 250px; padding: 10px;">
-            <p-chart type="doughnut" [data]="coverageNaturalChartData" [options]="doughnutOptions" height="230px">
-            </p-chart>
+  <!-- ============================== -->
+  <!-- MALHA MODE (a property is selected) -->
+  <!-- ============================== -->
+  <ng-container *ngIf="malhaMode">
+    <div class="malha-intro">
+      <p>{{ "right_sidebar.malha_chart.intro" | translate }}</p>
+    </div>
+
+    <p-accordion [multiple]="true" [activeIndex]="[0, 1]" styleClass="modern-accordion">
+
+      <!-- Property attributes (was the popup) -->
+      <p-accordionTab
+          [header]="'right_sidebar.malha_chart.attributes_title' | translate"
+          *ngIf="malhaFeature && malhaFeature.attributes && malhaFeature.attributes.length > 0">
+        <div class="malha-attributes">
+          <div
+            class="details-row"
+            *ngFor="let attribute of malhaFeature.attributes"
+          >
+            <div class="details-row-header">{{ attribute.label }}:</div>
+            <div class="details-row-content">
+              {{
+                getAttributeValue(
+                  attribute,
+                  malhaFeature.properties?.[attribute.column]
+                )
+              }}
+            </div>
           </div>
         </div>
       </p-accordionTab>
 
-      <!-- Section: Cobertura por Região (Tabs) -->
-      <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_comparison_title' | translate" *ngIf="coverageComparisonAppChartData || coverageComparisonRlChartData || coverageComparisonMfaChartData">
-        <p-tabView>
-          <p-tabPanel [header]="'right_sidebar.resumo_card.chart_labels.app' | translate" *ngIf="coverageComparisonAppChartData">
-            <div class="chart-section">
-              <div class="chart-container" style="height: 600px; padding: 10px;">
-                <p-chart type="bar" [data]="coverageComparisonAppChartData" [options]="stackedBarOptions" height="580px">
-                </p-chart>
-              </div>
-            </div>
-          </p-tabPanel>
-          <p-tabPanel [header]="'right_sidebar.resumo_card.chart_labels.rl' | translate" *ngIf="coverageComparisonRlChartData">
-            <div class="chart-section">
-              <div class="chart-container" style="height: 600px; padding: 10px;">
-                <p-chart type="bar" [data]="coverageComparisonRlChartData" [options]="stackedBarOptions" height="580px">
-                </p-chart>
-              </div>
-            </div>
-          </p-tabPanel>
-          <p-tabPanel [header]="'right_sidebar.resumo_card.chart_labels.mfa' | translate" *ngIf="coverageComparisonMfaChartData">
-            <div class="chart-section">
-              <div class="chart-container" style="height: 600px; padding: 10px;">
-                <p-chart type="bar" [data]="coverageComparisonMfaChartData" [options]="stackedBarOptions" height="580px">
-                </p-chart>
-              </div>
-            </div>
-          </p-tabPanel>
-        </p-tabView>
-      </p-accordionTab>
-
-      <!-- Section: Per-property vegetation evolution (malha_fundiaria) -->
+      <!-- Vegetation evolution chart -->
       <p-accordionTab
           [header]="'right_sidebar.malha_chart.title' | translate"
           *ngIf="malhaVegetationChartData || malhaVegetationLoading">
@@ -68,8 +57,65 @@
       </p-accordionTab>
 
     </p-accordion>
+  </ng-container>
 
-  </div>
+  <!-- ============================== -->
+  <!-- REGION MODE (no property selected) -->
+  <!-- ============================== -->
+  <ng-container *ngIf="!malhaMode">
+    <div class="region-intro">
+      <p>{{ "right_sidebar.region_description" | translate }}</p>
+    </div>
+
+    <div *ngIf="summaryData.get('coverage_natural'); else loadingSpinner">
+
+      <p-accordion [multiple]="true" [activeIndex]="[0, 1]" styleClass="modern-accordion">
+
+        <!-- Section: Geral -->
+        <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_natural_title' | translate">
+          <div class="chart-section">
+            <div class="chart-container" style="height: 250px; padding: 10px;">
+              <p-chart type="doughnut" [data]="coverageNaturalChartData" [options]="doughnutOptions" height="230px">
+              </p-chart>
+            </div>
+          </div>
+        </p-accordionTab>
+
+        <!-- Section: Cobertura por Região (Tabs) -->
+        <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_comparison_title' | translate" *ngIf="coverageComparisonAppChartData || coverageComparisonRlChartData || coverageComparisonMfaChartData">
+          <p-tabView>
+            <p-tabPanel [header]="'right_sidebar.resumo_card.chart_labels.app' | translate" *ngIf="coverageComparisonAppChartData">
+              <div class="chart-section">
+                <div class="chart-container" style="height: 600px; padding: 10px;">
+                  <p-chart type="bar" [data]="coverageComparisonAppChartData" [options]="stackedBarOptions" height="580px">
+                  </p-chart>
+                </div>
+              </div>
+            </p-tabPanel>
+            <p-tabPanel [header]="'right_sidebar.resumo_card.chart_labels.rl' | translate" *ngIf="coverageComparisonRlChartData">
+              <div class="chart-section">
+                <div class="chart-container" style="height: 600px; padding: 10px;">
+                  <p-chart type="bar" [data]="coverageComparisonRlChartData" [options]="stackedBarOptions" height="580px">
+                  </p-chart>
+                </div>
+              </div>
+            </p-tabPanel>
+            <p-tabPanel [header]="'right_sidebar.resumo_card.chart_labels.mfa' | translate" *ngIf="coverageComparisonMfaChartData">
+              <div class="chart-section">
+                <div class="chart-container" style="height: 600px; padding: 10px;">
+                  <p-chart type="bar" [data]="coverageComparisonMfaChartData" [options]="stackedBarOptions" height="580px">
+                  </p-chart>
+                </div>
+              </div>
+            </p-tabPanel>
+          </p-tabView>
+        </p-accordionTab>
+
+      </p-accordion>
+
+    </div>
+  </ng-container>
+
 </div>
 
 <ng-template #loadingSpinner>
