@@ -6,7 +6,7 @@
       "layers": [
           {
               "idLayer": "pasture_2024",
-              "labelLayer": "Pasture 2024",
+              "labelLayer": "translate",
               "visible": false,
               "selectedType": "pasture_2024",
               "regionFilter": true,
