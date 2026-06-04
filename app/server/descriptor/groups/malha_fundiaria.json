@@ -12,7 +12,16 @@
         "types": [
           "malha_fundiaria_cog"
         ],
-        "projection": "ESRI:102033"
+        "projection": "ESRI:102033",
+        "download": {
+          "csv": false,
+          "shp": false,
+          "gpkg": false,
+          "raster": true,
+          "urls": {
+            "raster": "https://s3.lapig.iesa.ufg.br/malha-fundiaria/brasil_malhafundiaria_ambiental_10m_v3b_.tif"
+          }
+        }
       }
     ]
   }

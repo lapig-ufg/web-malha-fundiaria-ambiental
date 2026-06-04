@@ -1,18 +1,19 @@
 [
-    {
-        "idGroup": "pasture",
-        "labelGroup": "translate",
-        "groupExpanded": false,
-        "layers": [
-            {
-                "idLayer": "pasture_2024",
-                "labelLayer": "translate",
-                "visible": false,
-                "selectedType": "pasture_2024",
-                "types": [
-                    "pasture_2024"
-                ]
-            }
-        ]
-    }
+  {
+      "idGroup": "pasture",
+      "labelGroup": "translate",
+      "groupExpanded": false,
+      "layers": [
+          {
+              "idLayer": "pasture_2024",
+              "labelLayer": "Pasture 2024",
+              "visible": false,
+              "selectedType": "pasture_2024",
+              "regionFilter": true,
+              "types": [
+                  "pasture_2024"
+              ]
+          }
+      ]
+  }
 ]

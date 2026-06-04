@@ -54,6 +54,38 @@ def get_queries(params: dict = None):
                 'mantain': True
             }
         ],
+        'malha': lambda p: [
+            {
+                'source': 'lapig',
+                'id': 'search',
+                'sql': "SELECT landternure_code as text, landternure_code as value, 'malha_fundiaria' as type, ST_AsGeoJSON(geom) as geojson FROM malha_fundiaria_ambiental WHERE unaccent(landternure_code) ILIKE unaccent(${key}) || '%' LIMIT 5",
+                'mantain': True
+            }
+        ],
+        'estado': lambda p: [
+            {
+                'source': 'lapig',
+                'id': 'search',
+                'sql': "SELECT estado as text, uf as value, 'estado' as type, ST_AsGeoJSON(geom) as geojson FROM estados WHERE unaccent(estado) ILIKE unaccent(${key}) || '%' LIMIT 5",
+                'mantain': True
+            }
+        ],
+        'municipio': lambda p: [
+            {
+                'source': 'lapig',
+                'id': 'search',
+                'sql': "SELECT municipio as text, cd_geocmu as value, 'municipio' as type, ST_AsGeoJSON(geom) as geojson FROM municipios WHERE unaccent(municipio) ILIKE unaccent(${key}) || '%' LIMIT 5",
+                'mantain': True
+            }
+        ],
+        'bioma': lambda p: [
+            {
+                'source': 'lapig',
+                'id': 'search',
+                'sql': "SELECT bioma as text, bioma as value, 'bioma' as type, ST_AsGeoJSON(geom) as geojson FROM biomas WHERE unaccent(bioma) ILIKE unaccent(${key}%) LIMIT 10",
+                'mantain': True
+            }
+        ],
         'ucs': lambda p: [
             {
                 'source': 'general',

@@ -23,6 +23,20 @@
   "controls": {
     "filter": "Filtrar",
     "search": "Filtros do Mapa",
+    "search_malha": "Pesquisar Código da Propriedade",
+    "loading": "Carregando...",
+    "search_categories": {
+      "malha": "Malha Fundiária",
+      "estado": "Estado",
+      "municipio": "Município",
+      "bioma": "Bioma"
+    },
+    "search_placeholders": {
+      "malha": "Pesquisar Código da Propriedade",
+      "estado": "Pesquisar Estado",
+      "municipio": "Pesquisar Município",
+      "bioma": "Pesquisar Bioma"
+    },
     "reset_zoom": "Voltar ao Zoom Inicial",
     "reset_navigation": "Resetar Navegação",
     "point": "Inserir Ponto",
@@ -42,7 +56,9 @@
       "search_failed_region": "Desculpe, região não encontrada.",
       "search_failed_car": "Desculpe, código da propriedade rural não encontrado.",
       "search_failed_uc": "Desculpe, nenhuma Unidade de Conservação encontrada."
-    }
+    },
+    "hide_search": "Ocultar Busca",
+    "show_search": "Mostrar Busca"
   },
   "left_sidebar": {
     "title": "Menu",

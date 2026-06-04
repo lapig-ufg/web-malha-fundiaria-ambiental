@@ -675,3 +675,241 @@
   background-color: rgba(74, 74, 74, 0.4);
   z-index: 99999;
 }
+
+.ol-search-toggle {
+  position: absolute;
+  left: .75rem;
+  top: 9.5rem;
+  z-index: 101;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2em;
+    height: 1.8em;
+    font-size: 1.14em;
+
+    i {
+      font-size: 1.2em;
+    }
+  }
+}
+
+.malha-search-container {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000; // Above OpenLayers and everything else
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 10px 12px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #ddd;
+  width: 420px;
+  max-width: 95vw;
+  transition: all 0.2s ease-in-out;
+
+  .search-category-selector {
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: center;
+    width: 100%; // Fill available space within padding
+
+    ::ng-deep .p-selectbutton {
+      background: #f5f5f5;
+      padding: 3px;
+      border-radius: 8px;
+      display: flex !important;
+      width: 100% !important;
+      flex-wrap: nowrap !important;
+      align-items: stretch !important;
+      justify-content: stretch !important;
+
+      .p-button {
+        flex: 1 1 0 !important;
+        width: 100% !important;
+        background: #eeeeee !important; // Neutral gray for unselected
+        border: none;
+        color: #777 !important;
+        font-size: 11px;
+        padding: 6px 2px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        min-width: 0; // Allow shrinking
+        white-space: nowrap;
+        margin: 0; // Seamless edge-to-edge buttons
+
+        &:first-child {
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+
+        &:last-child {
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+
+        span {
+          font-weight: 500;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        &:hover {
+          background: #e5e5e5 !important;
+          color: #555 !important;
+        }
+
+        &.p-highlight {
+          background: white !important;
+          color: $primary !important;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+          z-index: 1;
+
+          i {
+              color: $primary;
+          }
+        }
+
+        &:focus {
+          box-shadow: none;
+        }
+      }
+    }
+  }
+
+  .search-input-wrapper {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      position: relative;
+  }
+
+  &:focus-within {
+    border-color: $primary;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  }
+
+  // Flatten bottom corners only when the panel is actually active
+  &:has(.p-autocomplete-panel:not([style*="display: none"])) {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-color: $primary;
+
+      ::ng-deep .p-autocomplete-panel {
+          border-color: $primary !important;
+      }
+  }
+
+  ::ng-deep p-autocomplete {
+    flex: 1;
+    display: flex;
+    width: 100%;
+    
+    .p-autocomplete {
+      width: 100%;
+      position: static; // panel will be relative to .malha-search-container
+    }
+
+    .p-autocomplete-input {
+      width: 100%;
+      border: none;
+      box-shadow: none;
+      padding: 8px 0;
+      font-size: 14px;
+      color: #333;
+      background: transparent;
+      &:focus {
+        box-shadow: none;
+      }
+    }
+
+    // Direct extension of the search bar
+    .p-autocomplete-panel {
+      position: absolute !important;
+      top: 100% !important; // Align exactly at the bottom of the bar
+      left: -1px !important; // Compensate for container border
+      width: 420px !important; // Match bar width exactly
+      min-width: 420px !important;
+      background: white !important;
+      border: 1px solid #ddd !important;
+      border-top: none !important;
+      border-bottom-left-radius: 8px !important;
+      border-bottom-right-radius: 8px !important;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      z-index: 2001 !important;
+      transform: none !important;
+      overflow: hidden !important;
+    }
+
+    .p-autocomplete-items {
+      padding: 5px 0 !important;
+      
+      .p-autocomplete-item {
+        padding: 12px 20px !important;
+        font-size: 14px !important;
+        color: #444 !important;
+        border-left: 3px solid transparent;
+        transition: all 0.15s ease;
+
+        &:hover, &.p-highlight {
+          background-color: #f5f7f8 !important;
+          color: $primary !important;
+          border-left-color: $primary !important;
+        }
+      }
+
+      .p-autocomplete-empty-message {
+          padding: 15px 20px !important;
+          color: #888 !important;
+          font-size: 14px;
+      }
+    }
+
+    .search-loader {
+      padding: 12px 20px;
+      color: $primary;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      background: #fafafa;
+      border-top: 1px solid #eee;
+      i {
+          margin-right: 10px;
+          font-size: 14px;
+      }
+    }
+  }
+
+  .close {
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 20px;
+    color: #999;
+    transition: color 0.2s;
+    &:hover {
+      color: #666;
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

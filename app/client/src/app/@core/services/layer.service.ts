@@ -74,11 +74,11 @@ class LayerService {
     const source = new GeoTIFF({
       normalize: false,
       interpolate: false,
-      loadMissingProjection: true,
       projection: descriptorType.projection || descriptorType.origin.epsg || 'EPSG:3857',
       wrapX: true,
       transition: 0,
       sources: [
+        
         {
           url: descriptorType.origin.url!,
         },
@@ -223,12 +223,18 @@ class LayerService {
   private parseMsFilter(descriptorType: DescriptorType): string[] {
     let filters: string[] = [];
 
+    const usesMsFilter = descriptorType.filterHandler === 'msfilter' || descriptorType.regionFilter === true;
+
     if (descriptorType.filterHandler === 'msfilter' && descriptorType.filterSelected) {
       filters.push(descriptorType.filterSelected);
     }
 
     if (descriptorType.regionFilter && this.regionFilterService.hasMsFilter) {
       filters.push(this.regionFilterService.currentMsFilter);
+    }
+
+    if (filters.length === 0 && usesMsFilter) {
+      filters.push('true');
     }
 
     return filters;

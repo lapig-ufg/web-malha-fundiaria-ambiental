@@ -22,6 +22,13 @@ class DownloadService {
 
   // TODO: Trazer o ErroMessageService para dentro do download.
   public downloadGeoFile(descriptorType: DescriptorType, fileType: string): Observable<any> {
+    const formatUrl = descriptorType.download.urls?.[fileType];
+
+    if (formatUrl) {
+      window.open(formatUrl, '_blank');
+      return of({ status: 'success' });
+    }
+
     if (descriptorType.download.url) {
       window.open(descriptorType.download.url, '_blank');
       return of({ status: 'success' });

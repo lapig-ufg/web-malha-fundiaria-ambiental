@@ -43,6 +43,9 @@ export class RegionFilterService {
       case 'state':
         this.msFilterRegion = `uf ilike '${newFilter.value}'`;
         break;
+      case 'biome':
+        this.msFilterRegion = `lower(bioma) = '${newFilter.value.toLowerCase()}'`;
+        break;
       default:
         this.msFilterRegion = '';
         break;

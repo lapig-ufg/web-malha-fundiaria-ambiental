@@ -13,7 +13,7 @@ import { Types } from 'ol/MapEventType';
 // Register Brazilian projections
 proj4.defs('EPSG:4618', '+proj=longlat +ellps=aust_SA +towgs84=-66.87,4.37,-38.52,0,0,0,0 +no_defs');
 proj4.defs('EPSG:4674', '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs');
-proj4.defs('ESRI:102033', '+proj=aea +lat_1=-5 +lat_2=-42 +lat_0=-32 +lon_0=-60 +x_0=0 +y_0=0 +ellps=aust_SA +units=m +no_defs');
+proj4.defs('ESRI:102033', '+proj=aea +lat_1=-5 +lat_2=-42 +lat_0=-32 +lon_0=-60 +x_0=0 +y_0=0 +ellps=aust_SA +towgs84=-66.87,4.37,-38.52,0,0,0,0 +units=m +no_defs');
 register(proj4);
 
 const ZOOM_LIMIT: number = 9;

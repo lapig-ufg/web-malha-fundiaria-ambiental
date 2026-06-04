@@ -39,6 +39,13 @@ export interface DescriptorMapCard {
   attributes: DescriptorMapCardAttributes;
 }
 
+export interface DescriptorDownloadUrls {
+  csv?: string;
+  shp?: string;
+  gpkg?: string;
+  raster?: string;
+}
+
 export interface DescriptorDownload {
   csv: boolean;
   gpkg: boolean;
@@ -47,6 +54,7 @@ export interface DescriptorDownload {
   shp: boolean;
   loading?: boolean;
   url?: string;
+  urls?: DescriptorDownloadUrls;
 }
 
 /**

@@ -372,9 +372,22 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
   };
 
   public legendExpanded: boolean = true;
+  public searchBarVisible: boolean = true;
   public isMobile: boolean;
 
   public drillDownLevel: number = 0;
+
+  public malhaSearchValue: any = { text: '' };
+  public malhaSearchSuggestions: any[] = [];
+  public malhaSearchLoading: boolean = false;
+  public searchCategory: string = 'malha';
+  public searchCategoryOptions: any[] = [
+    { label: 'controls.search_categories.malha', value: 'malha', icon: 'home' },
+    { label: 'controls.search_categories.estado', value: 'estado', icon: 'map' },
+    { label: 'controls.search_categories.municipio', value: 'municipio', icon: 'location_city' },
+    { label: 'controls.search_categories.bioma', value: 'bioma', icon: 'nature_people' },
+  ];
+  private malhaVectorLayer: any;
 
   public displayFormJob: boolean = false;
   public job!: Job;
@@ -467,6 +480,9 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     this.mapService.resetZoom();
     this.refreshDrillDownLimits();
     this.closePopup();
+
+    // Reset region filter when user resets drill-down navigation
+    this.regionFilterService.updateRegionFilter(DEFAULT_REGION);
   }
 
   private refreshDrillDownLimits(): void {
@@ -1119,7 +1135,9 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     const currentLevel = this.drillDownLevel;
 
     // Resetando variveis de controle.
-    this.closePopup();
+    if (!event.fromSearch) {
+      this.closePopup();
+    }
 
     this.wfsCard.nativeElement.style.visibility = 'hidden';
 
@@ -1151,7 +1169,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
       'EPSG:4326'
     );
 
-    const pixel: Pixel = map.getEventPixel(event.originalEvent);
+    const pixel: any = event.originalEvent?.clientX !== 0 && event.originalEvent ? map.getEventPixel(event.originalEvent) : null;
     let promises: any[] = [];
 
     if (currentLevel === 0) {
@@ -1162,24 +1180,28 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
       // Always query malha fundiaria at level 2
       promises.push(this.getFeatures('malha_fundiaria_ambiental', bbox));
 
-      map.forEachFeatureAtPixel(pixel, function (layer: any) {
-        const layerType: DescriptorType = layer.get('descriptorType');
+      if (pixel) {
+        map.forEachFeatureAtPixel(pixel, function (layer: any) {
+          const layerType: DescriptorType = layer.get('descriptorType');
 
-        if (
-          layer.get('type') === 'layertype' &&
-          layerType.typeLayer === 'vectorial' &&
-          layer.getVisible() &&
-          layerType.wfsMapCard.show
-        ) {
-          promises.push(self.getFeatures(layer, bbox));
-        }
-      });
+          if (
+            layer.get('type') === 'layertype' &&
+            layerType.typeLayer === 'vectorial' &&
+            layer.getVisible() &&
+            layerType.wfsMapCard.show
+          ) {
+            promises.push(self.getFeatures(layer, bbox));
+          }
+        });
+      }
     }
+
+    let centroidCoordinate: number[] | null = null;
 
     Promise.all(promises).then((layersFeatures) => {
         console.log('--- MAP FEATURE INFO ---');
         console.log('Current DrillDown Level:', currentLevel);
-        
+
         layersFeatures.forEach((featureCollection, index) => {
           if (featureCollection && featureCollection.features && featureCollection.features.length > 0) {
             const layerName = featureCollection.layerType ? featureCollection.layerType.viewValueType : (featureCollection.typeName || 'Unknown Layer');
@@ -1190,7 +1212,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
             });
           }
         });
-        
+
         console.log('Full Data:', layersFeatures);
         
         if (Array.isArray(layersFeatures) && layersFeatures.length <= 0) {
@@ -1213,9 +1235,27 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
               }) as any;
               const extent = olFeature.getGeometry()!.getExtent();
 
-              map.getView().fit(extent, { duration: 1500 });
+              if (!event.fromSearch) {
+                map.getView().fit(extent, { duration: 1500 });
+              }
               this.drillDownLevel++;
               this.refreshDrillDownLimits();
+
+              // Apply region filter based on drill-down level
+              if (currentLevel === 0 && feature.properties?.uf) {
+                this.regionFilterService.updateRegionFilter({
+                  type: 'state',
+                  value: feature.properties.uf,
+                  text: feature.properties.estado || '',
+                });
+              } else if (currentLevel === 1 && feature.properties?.cd_geocmu) {
+                this.regionFilterService.updateRegionFilter({
+                  type: 'city',
+                  value: feature.properties.cd_geocmu,
+                  text: feature.properties.municipio || '',
+                });
+              }
+
               hasIncremented = true;
             }
           } else {
@@ -1232,13 +1272,24 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
                 featureProjection: 'EPSG:3857',
               }) as any;
               const extent = olFeature.getGeometry()!.getExtent();
-              map.getView().fit(extent, { duration: 1000 });
+              if (!event.fromSearch) {
+                map.getView().fit(extent, { duration: 1000 });
+              }
             }
 
             if (index === 0) {
               this.popupRegion.geojson = featureCollection;
               this.popupRegion.properties =
                 featureCollection.features[0].properties;
+
+              // Calculate centroid of the feature for popup positioning
+              const featureGeoJSON = featureCollection.features[0];
+              const centroid = turfCentroid(featureGeoJSON);
+              centroidCoordinate = transform(
+                centroid.geometry.coordinates,
+                'EPSG:4326',
+                'EPSG:3857'
+              );
             }
 
             if (currentLevel === 2 && index === 0) {
@@ -1386,7 +1437,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
           element: container!,
           autoPan: false,
         });
-        this.popupOverlay.setPosition(event.coordinate);
+        this.popupOverlay.setPosition(centroidCoordinate || event.coordinate);
         map.addOverlay(this.popupOverlay);
       })
       .catch((error) => {
@@ -1437,5 +1488,116 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
         player.load();
       }
     }
+  }
+
+  private mapSearchCategoryToRegionFilterType(searchType: string): string | null {
+    const typeMap: { [key: string]: string } = {
+      'estado': 'state',
+      'municipio': 'city',
+      'bioma': 'biome',
+    };
+    return typeMap[searchType] || null;
+  }
+
+  public onSearchMalha(event: any): void {
+    this.malhaSearchLoading = true;
+    this.mapAPIService.getSearchCategory(this.searchCategory, event.query).subscribe((res) => {
+      this.malhaSearchSuggestions = res.search;
+      this.malhaSearchLoading = false;
+    });
+  }
+
+  public onKeyUpMalha(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && this.malhaSearchSuggestions.length > 0) {
+      this.onSelectMalha(this.malhaSearchSuggestions[0]);
+    }
+  }
+
+  public onSelectMalha(event: any): void {
+    const item = event.value || event;
+    
+    // 1. Clear previous state BEFORE adding the new layer
+    this.closePopup();
+
+    if (this.malhaVectorLayer) {
+      this.mapService.removeLayer(this.malhaVectorLayer);
+    }
+
+    this.malhaSearchValue = item;
+    
+    if (!item || !item.geojson) return;
+
+    const geojson = typeof item.geojson === 'string' ? JSON.parse(item.geojson) : item.geojson;
+
+    let vectorSource = new VectorSource({
+      features: new GeoJSON().readFeatures(geojson, {
+        dataProjection: 'EPSG:4326',
+        featureProjection: 'EPSG:3857',
+      }),
+    });
+
+    this.malhaVectorLayer = new VectorLayer({
+      zIndex: 100001,
+      source: vectorSource,
+      properties: {
+        key: 'popup-vector',
+        type: 'search',
+      },
+      style: [
+        new Style({
+          stroke: new Stroke({ color: PRIMARY_COLOR, width: 4 }),
+          fill: new Fill({ color: 'rgba(0, 0, 0, 0)' }),
+        }),
+      ],
+    });
+
+    this.mapService.addLayer(this.malhaVectorLayer);
+    let extent = this.malhaVectorLayer.getSource().getExtent();
+    this.mapService.map.getView().fit(extent, { duration: 1000 });
+
+    if (this.searchCategory === 'malha') {
+      // Force drill down level to 2 for property search results
+      this.drillDownLevel = 2;
+      this.refreshDrillDownLimits();
+
+      // Use centroid to fetch full information by simulating a click
+      const centroid = turfCentroid(geojson);
+      const coord3857 = transform(centroid.geometry.coordinates, 'EPSG:4326', 'EPSG:3857');
+
+      this.onDisplayFeatureInfo({
+        coordinate: coord3857,
+        fromSearch: true,
+        originalEvent: {
+          clientX: 0,
+          clientY: 0
+        }
+      });
+    }
+
+    // Update statistics sidebar when a state, municipality, or biome is selected
+    const regionFilterType = this.mapSearchCategoryToRegionFilterType(item.type);
+    if (regionFilterType) {
+      this.regionFilterService.updateRegionFilter({
+        type: regionFilterType,
+        value: item.value,
+        text: item.text,
+      });
+    }
+  }
+
+  public onClearMalhaSearch(): void {
+    this.malhaSearchValue = { text: '' };
+    if (this.malhaVectorLayer) {
+      this.mapService.removeLayer(this.malhaVectorLayer);
+    }
+    this.closePopup();
+
+    // Reset drill-down level and zoom to default Brazil view
+    this.drillDownLevel = 0;
+    this.mapService.resetZoom();
+    this.refreshDrillDownLimits();
+
+    // Reset region filter to national data
+    this.regionFilterService.updateRegionFilter(DEFAULT_REGION);
   }
 }

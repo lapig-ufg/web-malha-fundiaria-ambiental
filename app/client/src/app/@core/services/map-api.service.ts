@@ -80,6 +80,26 @@ class MapAPIService {
     return this.httpClient.post(API_URL + "/download/csv", parameters, { responseType: 'blob' })
   }
 
+  public getMalha(term: string): Observable<any> {
+    if (term === "") {
+      return of([]);
+    }
+
+    return this.httpClient.get<any>(API_URL + '/malha', { params: this.PARAMS.set("key", term) })
+      .pipe(map(response => response))
+      .pipe(catchError(this.errorHandler));
+  }
+
+  public getSearchCategory(category: string, term: string): Observable<any> {
+    if (term === "") {
+      return of([]);
+    }
+
+    return this.httpClient.get<any>(API_URL + '/' + category, { params: this.PARAMS.set("key", term) })
+      .pipe(map(response => response))
+      .pipe(catchError(this.errorHandler));
+  }
+
   public getRegions(term: string): Observable<any> {
     if (term === "") {
       return of([]);
