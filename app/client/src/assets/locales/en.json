@@ -228,6 +228,14 @@
             "labelLayer": "Environmental Land Tenure"
           }
         }
+      },
+      "pasture": {
+        "labelGroup": "Pasture Maps",
+        "layers": {
+          "pasture_2024": {
+            "labelLayer": "Pasture"
+          }
+        }
       }
     }
   },

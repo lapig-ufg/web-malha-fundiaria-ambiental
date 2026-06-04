@@ -228,6 +228,14 @@
             "labelLayer": "Malha Fundiária Ambiental"
           }
         }
+      },
+      "pasture": {
+        "labelGroup": "Mapa de Pastagem",
+        "layers": {
+          "pasture_2024": {
+            "labelLayer": "Pastagem"
+          }
+        }
       }
     }
   },
