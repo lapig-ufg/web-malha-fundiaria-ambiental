@@ -1645,6 +1645,14 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
         value: item.value,
         text: item.text,
       });
+
+      // Sync drill-down level to match the selected region type
+      if (item.type === 'estado') {
+        this.drillDownLevel = 1;
+      } else if (item.type === 'municipio') {
+        this.drillDownLevel = 2;
+      }
+      this.refreshDrillDownLimits();
     }
   }
 
