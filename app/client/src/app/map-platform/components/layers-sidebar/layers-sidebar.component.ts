@@ -35,8 +35,8 @@ class LayersSidebarComponent implements OnDestroy {
     'shp': 'SHP',
     'gpkg': 'GPKG',
     'csv': 'CSV',
-    'raster': 'TIFF',
-    'parquet': 'PARQUET'
+    'raster': 'RASTER',
+    'parquet': 'VECTOR'
   };
 
   public selectedLayerToggle: boolean = false;
