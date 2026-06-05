@@ -413,8 +413,6 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
       descriptorService.getDescriptor().subscribe({
         next: (descriptor: Descriptor | null) => {
           if (descriptor == null) return;
-
-          console.log('Map Descriptor:', descriptor);
           this.action(descriptor);
         },
       })
@@ -1262,21 +1260,11 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     let centroidCoordinate: number[] | null = null;
 
     Promise.all(promises).then((layersFeatures) => {
-        console.log('--- MAP FEATURE INFO ---');
-        console.log('Current DrillDown Level:', currentLevel);
-
         layersFeatures.forEach((featureCollection, index) => {
           if (featureCollection && featureCollection.features && featureCollection.features.length > 0) {
             const layerName = featureCollection.layerType ? featureCollection.layerType.viewValueType : (featureCollection.typeName || 'Unknown Layer');
-            console.log(`Layer [${index}]: ${layerName} (${featureCollection.typeName})`);
-            console.log('Features found:', featureCollection.features.length);
-            featureCollection.features.forEach((f, i) => {
-               console.log(`  Feature [${i}] Properties:`, f.properties);
-            });
           }
         });
-
-        console.log('Full Data:', layersFeatures);
         
         if (Array.isArray(layersFeatures) && layersFeatures.length <= 0) {
           console.error("No features found.")

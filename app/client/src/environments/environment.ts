@@ -5,15 +5,6 @@ let commitId = ''
 
 console.debug = function() {};
 
-// TODO: Create LAPIG logo and version information.
-/*try{
-  const config = require('../../../version.json');
-  console.log(config)
-  commitId = config.commitId
-}catch{
-  console.log('Not version')
-}*/
-
 export const environment = {
   APP_NAME: 'Environmental Land Tenure',
   production: false,

@@ -178,8 +178,6 @@ class LayerService {
       return `${url}?layers=${layerName}&MSFILTER=&mode=tile&tile={x}+{y}+{z}&tilemode=gmap&map.imagetype=png`;
     })
 
-    console.log(parsedLimitUrl)
-
     return parsedLimitUrl;
   }
 
