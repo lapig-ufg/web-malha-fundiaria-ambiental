@@ -724,10 +724,10 @@
       padding: 3px;
       border-radius: 8px;
       display: flex !important;
-      width: 100% !important;
+      width: stretch !important;
       flex-wrap: nowrap !important;
       align-items: stretch !important;
-      justify-content: stretch !important;
+      justify-content: flex-start !important;
 
       .p-button {
         flex: 1 1 0 !important;

@@ -1474,7 +1474,9 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
         }
 
         if (this.featureCollections.length === 0) {
-          this.closePopup();
+          if (currentLevel < 2) {
+            this.closePopup();
+          }
           return;
         }
 
