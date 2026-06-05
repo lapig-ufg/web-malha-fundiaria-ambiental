@@ -70,6 +70,7 @@
       "down_gpkg": "Download Geopackage",
       "down_csv": "Download CSV",
       "down_raster": "Download TIFF",
+      "down_parquet": "Download PARQUET",
       "down_error_title": "Error",
       "down_error_msg": "It was not possible to download the file {{name}}, please try again.",
       "s3_file_empty": "There is no data for the selected filter.",

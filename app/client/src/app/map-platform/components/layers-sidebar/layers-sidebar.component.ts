@@ -30,12 +30,13 @@ class LayersSidebarComponent implements OnDestroy {
 
   public descriptorSubscription: Subscription = new Subscription();
 
-  public downloadFormats: Array<string> = ['shp', 'gpkg', 'csv', 'raster'];
+  public downloadFormats: Array<string> = ['shp', 'gpkg', 'csv', 'raster', 'parquet'];
   public downloadFormatsLabels: object = {
     'shp': 'SHP',
     'gpkg': 'GPKG',
     'csv': 'CSV',
-    'raster': 'TIFF'
+    'raster': 'TIFF',
+    'parquet': 'PARQUET'
   };
 
   public selectedLayerToggle: boolean = false;

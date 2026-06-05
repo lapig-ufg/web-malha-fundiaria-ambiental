@@ -44,6 +44,7 @@ export interface DescriptorDownloadUrls {
   shp?: string;
   gpkg?: string;
   raster?: string;
+  parquet?: string;
 }
 
 export interface DescriptorDownload {
@@ -52,6 +53,7 @@ export interface DescriptorDownload {
   layerTypeName: string;
   raster: boolean | string;
   shp: boolean;
+  parquet?: boolean;
   loading?: boolean;
   url?: string;
   urls?: DescriptorDownloadUrls;

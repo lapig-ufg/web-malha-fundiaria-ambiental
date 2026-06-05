@@ -106,8 +106,13 @@ async def get_descriptor(lang: str = 'pt-br'):
             "shp": False,
             "gpkg": False,
             "raster": True,
+            "parquet": True,
             "layerTypeName": "malha_fundiaria_cog",
-            "url": "https://s3.lapig.iesa.ufg.br/malha-fundiaria/brasil_malhafundiaria_ambiental_10m_v2_cog.tif"
+            "url": "https://s3.lapig.iesa.ufg.br/malha-fundiaria/brasil_malhafundiaria_ambiental_10m_v2_cog.tif",
+            "urls": {
+                "raster": "https://s3.lapig.iesa.ufg.br/malha-fundiaria/brasil_malhafundiaria_ambiental_10m_v3b_.tif",
+                "parquet": "https://s3.lapig.iesa.ufg.br/malha-fundiaria/brasil_malhafundiaria_ambiental_10m_v3b_{region}.parquet"
+            }
         },
         "regionFilter": False,
         "visible": True,

@@ -4,7 +4,16 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { catchError, map } from 'rxjs/operators';
 import { RegionFilterService } from './region-filter.service';
-import { DescriptorType } from '@core/interfaces';
+import { DescriptorType, RegionFilter } from '@core/interfaces';
+
+const IBGE_TO_STATE: { [prefix: string]: string } = {
+  '12': 'AC', '27': 'AL', '16': 'AP', '13': 'AM', '29': 'BA',
+  '23': 'CE', '53': 'DF', '32': 'ES', '52': 'GO', '21': 'MA',
+  '31': 'MG', '51': 'MT', '50': 'MS', '14': 'RR', '22': 'PI',
+  '41': 'PR', '24': 'RN', '43': 'RS', '11': 'RO', '33': 'RJ',
+  '15': 'PA', '25': 'PB', '26': 'PE', '28': 'SE', '35': 'SP',
+  '42': 'SC', '44': 'TO',
+};
 
 export { DownloadService };
 
@@ -20,9 +29,27 @@ class DownloadService {
     private regionFilterService: RegionFilterService
   ) {}
 
+  private resolveRegionCode(filter: RegionFilter): string {
+    switch (filter.type) {
+      case 'state':
+        return filter.value;
+      case 'city': {
+        const prefix = filter.value.substring(0, 2);
+        return IBGE_TO_STATE[prefix] || '';
+      }
+      default:
+        return '';
+    }
+  }
+
   // TODO: Trazer o ErroMessageService para dentro do download.
   public downloadGeoFile(descriptorType: DescriptorType, fileType: string): Observable<any> {
-    const formatUrl = descriptorType.download.urls?.[fileType];
+    let formatUrl = descriptorType.download.urls?.[fileType];
+
+    if (formatUrl && formatUrl.includes('{region}')) {
+      const regionCode = this.resolveRegionCode(this.regionFilterService.currentFilter);
+      formatUrl = formatUrl.replace('{region}', regionCode);
+    }
 
     if (formatUrl) {
       window.open(formatUrl, '_blank');
