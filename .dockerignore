@@ -1,0 +1,23 @@
+# Version control
+.git
+.gitignore
+
+# Local environment files (use Docker Compose env vars instead)
+app/server/.env
+app/server/.env.*
+
+# Node dev artifacts (client is built by CI)
+app/client/node_modules
+app/client/.angular
+
+# Python cache
+__pycache__
+*.pyc
+.venv
+
+# Data (mounted as volumes)
+data/
+
+# IDE
+.vscode
+.idea
