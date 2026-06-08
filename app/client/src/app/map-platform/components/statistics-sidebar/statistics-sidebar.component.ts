@@ -36,6 +36,7 @@ class StatisticsSidebarComponent implements OnDestroy {
   private regionFilterSubscription: Subscription = new Subscription();
 
   public summaryKeys: string[] = [
+    'property_count',
     'coverage_natural',
     'coverage_comparison_app',
     'coverage_comparison_rl',
@@ -43,6 +44,8 @@ class StatisticsSidebarComponent implements OnDestroy {
   ];
 
   public summaryData: Map<string, any> = new Map<string, any>();
+
+  public propertyCount: number | null = null;
 
   public coverageNaturalChartData: any = null;
   public coverageComparisonAppChartData: any = null;
@@ -479,6 +482,15 @@ class StatisticsSidebarComponent implements OnDestroy {
   };
 
   private updateChartData(key: string): void {
+    if (key === 'property_count') {
+      const summary = this.summaryData.get('property_count');
+      if (summary && summary.data && summary.data.property_count !== undefined) {
+        this.propertyCount = summary.data.property_count;
+      } else {
+        this.propertyCount = null;
+      }
+      return;
+    }
     if (key === 'coverage_natural') {
       const summary = this.summaryData.get('coverage_natural');
       if (!summary || !summary.data || !Array.isArray(summary.data)) {

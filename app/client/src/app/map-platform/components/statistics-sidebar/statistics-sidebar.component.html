@@ -67,6 +67,11 @@
       <p>{{ "right_sidebar.region_description" | translate }}</p>
     </div>
 
+    <div class="property-count-card" *ngIf="propertyCount !== null">
+      <div class="property-count-value">{{ propertyCount | number:'1.0-0':'pt-BR' }}</div>
+      <div class="property-count-label">{{ "right_sidebar.resumo_card.property_count_label" | translate }}</div>
+    </div>
+
     <div *ngIf="summaryData.get('coverage_natural'); else loadingSpinner">
 
       <p-accordion [multiple]="true" [activeIndex]="[0, 1]" styleClass="modern-accordion">

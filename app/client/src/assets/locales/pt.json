@@ -407,7 +407,8 @@
         "Severa": "Severa",
         "Intermediário": "Intermediário",
         "Ausente": "Ausente"
-      }
+      },
+      "property_count_label": "Propriedades na Malha Fundiária Ambiental"
     },
     "malha_chart": {
       "title": "Evolução da Vegetação Natural",

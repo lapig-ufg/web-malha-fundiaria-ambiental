@@ -64,6 +64,34 @@ h4.sidebar-title {
   }
 }
 
+.property-count-card {
+  text-align: center;
+  padding: 16px 12px;
+  margin: 0 4px 12px 4px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: $transition;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .property-count-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $primary;
+  }
+
+  .property-count-label {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 4px;
+  }
+}
+
 .malha-attributes {
   padding: 8px 4px 4px 4px;
 

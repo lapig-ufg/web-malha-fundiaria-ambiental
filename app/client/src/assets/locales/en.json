@@ -407,7 +407,8 @@
         "class_1": "Severe",
         "class_2": "Intermediary",
         "class_3": "Absent"
-      }
+      },
+      "property_count_label": "Properties in Environmental Land Tenure"
     },
     "malha_chart": {
       "title": "Natural Vegetation Evolution",

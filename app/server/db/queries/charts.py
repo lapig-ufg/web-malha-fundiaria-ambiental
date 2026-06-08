@@ -31,6 +31,27 @@ def get_region_filter_coverage(type_reg, key):
         return f"lower(bioma) = '{key_lower}'"
     return "true"
 
+def get_region_filter_mfa(type_reg, key):
+    key_lower = str(key).lower()
+    if type_reg == 'country':
+        return "true"
+    elif type_reg == 'city':
+        return f"municipality_code='{key_lower}'"
+    elif type_reg == 'state':
+        return f"municipality_code IN (SELECT DISTINCT cd_geocmu FROM new_regions WHERE lower(uf) = '{key_lower}')"
+    elif type_reg == 'biome':
+        return f"municipality_code IN (SELECT DISTINCT cd_geocmu FROM new_regions WHERE lower(bioma) = '{key_lower}')"
+    elif type_reg == 'region':
+        return f"municipality_code IN (SELECT DISTINCT cd_geocmu FROM new_regions WHERE lower(regiao) = '{key_lower}')"
+    elif type_reg == 'fronteira':
+        if key_lower == 'amz_legal':
+            return "municipality_code IN (SELECT DISTINCT cd_geocmu FROM new_regions WHERE amaz_legal = 1)"
+        elif key_lower == 'matopiba':
+            return "municipality_code IN (SELECT DISTINCT cd_geocmu FROM new_regions WHERE matopiba = 1)"
+        elif key_lower == 'arcodesmat':
+            return "municipality_code IN (SELECT DISTINCT cd_geocmu FROM new_regions WHERE arcodesmat = 1)"
+    return "true"
+
 def get_year_filter(year):
     if year:
         return f"year = {year}"
@@ -42,6 +63,7 @@ def get_queries(params: dict = None):
 
     region_filter = get_region_filter(params.get('typeRegion'), params.get('valueRegion'))
     region_filter_coverage = get_region_filter_coverage(params.get('typeRegion'), params.get('valueRegion'))
+    region_filter_mfa = get_region_filter_mfa(params.get('typeRegion'), params.get('valueRegion'))
     year_filter = get_year_filter(params.get('year'))
 
     type_region = params.get('typeRegion')
@@ -50,6 +72,11 @@ def get_queries(params: dict = None):
 
     queries = {
         'resumo': lambda p: [
+            {
+                'source': 'lapig',
+                'id': 'property_count',
+                'sql': f"SELECT COUNT(*) as property_count FROM malha_fundiaria_ambiental WHERE {region_filter_mfa}"
+            },
             {
                 'source': 'lapig',
                 'id': 'region',

@@ -132,7 +132,10 @@ def build_graph_result(all_queries_result, chart_description):
 
 @router.get("/resumo")
 async def handle_resumo(lang: str = 'pt', card_resume: str = '', query_result: dict = Depends(get_chart_data)):
-    if card_resume == 'region':
+    if card_resume == 'property_count':
+        property_count = query_result['property_count'][0]['property_count'] if query_result.get('property_count') else 0
+        return {"property_count": property_count}
+    elif card_resume == 'region':
         area = query_result['region'][0]['area_region'] if query_result.get('region') else 0
         return {"area": area}
     elif card_resume == 'pasture':
