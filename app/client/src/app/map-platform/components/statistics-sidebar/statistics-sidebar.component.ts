@@ -214,6 +214,23 @@ class StatisticsSidebarComponent implements OnDestroy {
 
   public regionFilter: RegionFilter = DEFAULT_REGION;
 
+  /**
+   * Dynamic title for the natural-coverage accordion tab. Returns the
+   * country-specific string when the region is Brazil, otherwise
+   * interpolates the current region name (state, municipality, biome).
+   */
+  public get coverageNaturalTitle(): string {
+    if (this.regionFilter.type === 'country') {
+      return this.localizationService.translate(
+        'right_sidebar.resumo_card.coverage_natural_title_country',
+      );
+    }
+    return this.localizationService.translate(
+      'right_sidebar.resumo_card.coverage_natural_title_region',
+      { region: this.regionFilter.text },
+    );
+  }
+
   constructor(
     private descriptorService: DescriptorService,
     private regionFilterService: RegionFilterService,

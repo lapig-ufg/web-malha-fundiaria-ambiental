@@ -72,7 +72,7 @@
       <p-accordion [multiple]="true" [activeIndex]="[0, 1]" styleClass="modern-accordion">
 
         <!-- Section: Geral -->
-        <p-accordionTab [header]="'right_sidebar.resumo_card.coverage_natural_title' | translate">
+        <p-accordionTab [header]="coverageNaturalTitle">
           <div class="chart-section">
             <div class="chart-container" style="height: 250px; padding: 10px;">
               <p-chart type="doughnut" [data]="coverageNaturalChartData" [options]="doughnutOptions" height="230px">
