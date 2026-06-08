@@ -247,7 +247,7 @@
         }
       },
       "pasture": {
-        "labelGroup": "Mapa de Pastagem",
+        "labelGroup": "Áreas de Pastagem",
         "layers": {
           "pasture_2024": {
             "labelLayer": "Pastagem"

@@ -247,7 +247,7 @@
         }
       },
       "pasture": {
-        "labelGroup": "Pasture Maps",
+        "labelGroup": "Pasture Areas",
         "layers": {
           "pasture_2024": {
             "labelLayer": "Pasture"
