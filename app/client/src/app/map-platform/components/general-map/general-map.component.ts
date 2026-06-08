@@ -1578,7 +1578,7 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
 
   public onSelectMalha(event: any): void {
     const item = event.value || event;
-    
+
     // 1. Clear previous state BEFORE adding the new layer
     this.closePopup();
 
@@ -1587,7 +1587,34 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     }
 
     this.malhaSearchValue = item;
-    
+
+    // 2. Update region filter early — before the geojson guard — so that
+    //    state, municipality, and biome selections always refresh the
+    //    statistics sidebar even when the search result has no geometry.
+    if (item) {
+      const regionFilterType = this.mapSearchCategoryToRegionFilterType(item.type);
+      if (regionFilterType) {
+        this.regionFilterService.updateRegionFilter({
+          type: regionFilterType,
+          value: item.value,
+          text: item.text,
+        });
+
+        // Sync drill-down level to match the selected region type
+        if (item.type === 'estado') {
+          this.drillDownLevel = 1;
+        } else if (item.type === 'municipio') {
+          this.drillDownLevel = 2;
+        } else if (item.type === 'bioma') {
+          // Biomes span multiple states — keep state boundaries visible
+          this.drillDownLevel = 0;
+        }
+        this.refreshDrillDownLimits();
+      }
+    }
+
+    // 3. Return early if there is no geometry to draw on the map.
+    //    The region filter (step 2) was already applied above.
     if (!item || !item.geojson) return;
 
     const geojson = typeof item.geojson === 'string' ? JSON.parse(item.geojson) : item.geojson;
@@ -1635,24 +1662,6 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
           clientY: 0
         }
       });
-    }
-
-    // Update statistics sidebar when a state, municipality, or biome is selected
-    const regionFilterType = this.mapSearchCategoryToRegionFilterType(item.type);
-    if (regionFilterType) {
-      this.regionFilterService.updateRegionFilter({
-        type: regionFilterType,
-        value: item.value,
-        text: item.text,
-      });
-
-      // Sync drill-down level to match the selected region type
-      if (item.type === 'estado') {
-        this.drillDownLevel = 1;
-      } else if (item.type === 'municipio') {
-        this.drillDownLevel = 2;
-      }
-      this.refreshDrillDownLimits();
     }
   }
 

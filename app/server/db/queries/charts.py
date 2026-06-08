@@ -24,9 +24,9 @@ def get_region_filter_coverage(type_reg, key):
     if type_reg == 'country':
         return "true"
     elif type_reg == 'city':
-        return f"\"CD_MUN\"='{key_lower}'"
+        return f"cd_mun='{key_lower}'"
     elif type_reg == 'state':
-        return f"lower(\"UF\")='{key_lower}'"
+        return f"lower(uf)='{key_lower}'"
     elif type_reg == 'biome':
         return f"lower(bioma) = '{key_lower}'"
     return "true"
@@ -39,14 +39,14 @@ def get_year_filter(year):
 def get_queries(params: dict = None):
     if params is None:
         params = {}
-    
+
     region_filter = get_region_filter(params.get('typeRegion'), params.get('valueRegion'))
     region_filter_coverage = get_region_filter_coverage(params.get('typeRegion'), params.get('valueRegion'))
     year_filter = get_year_filter(params.get('year'))
 
     type_region = params.get('typeRegion')
     comparison_col = 'uf' if type_region == 'country' else 'municipio'
-    comparison_col_coverage = '"UF"' if type_region == 'country' else '"MUNICIPIO"'
+    comparison_col_coverage = 'uf' if type_region == 'country' else 'municipio'
 
     queries = {
         'resumo': lambda p: [
@@ -59,25 +59,25 @@ def get_queries(params: dict = None):
                 'source': 'lapig',
                 'id': 'coverage_natural',
                 'sql': f"""
-                    SELECT 
-                        'app' as label, 
-                        '#228B22' as color, 
-                        COALESCE(SUM("CLASSE_1_HA"), 0) as value 
-                    FROM app_brazil_coverage_2024_reclassificado_app_projetado 
+                    SELECT
+                        'app' as label,
+                        '#228B22' as color,
+                        COALESCE(SUM(app_class_1), 0) as value
+                    FROM land_tenure_vegetation_2024
                     WHERE {region_filter_coverage}
                     UNION ALL
-                    SELECT 
-                        'rl' as label, 
-                        '#006400' as color, 
-                        COALESCE(SUM("CLASSE_1_HA"), 0) as value 
-                    FROM app_brazil_coverage_2024_reclassificado_rl_projetado 
+                    SELECT
+                        'rl' as label,
+                        '#006400' as color,
+                        COALESCE(SUM(rl_class_1), 0) as value
+                    FROM land_tenure_vegetation_2024
                     WHERE {region_filter_coverage}
                     UNION ALL
-                    SELECT 
-                        'mfa' as label, 
-                        '#4169E1' as color, 
-                        COALESCE(SUM("CLASSE_1_HA"), 0) as value 
-                    FROM app_brazil_coverage_2024_reclassificado_mfa_projetado 
+                    SELECT
+                        'mfa' as label,
+                        '#4169E1' as color,
+                        COALESCE(SUM(mfa_class_1), 0) as value
+                    FROM land_tenure_vegetation_2024
                     WHERE {region_filter_coverage}
                 """,
                 'mantain': True
@@ -86,9 +86,9 @@ def get_queries(params: dict = None):
                 'source': 'lapig',
                 'id': 'coverage_comparison_app',
                 'sql': f"""
-                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM app_brazil_coverage_2024_reclassificado_app_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM(app_class_1) as value FROM land_tenure_vegetation_2024 WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     UNION ALL
-                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM app_brazil_coverage_2024_reclassificado_app_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM(app_class_2) as value FROM land_tenure_vegetation_2024 WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     ORDER BY 1, 2
                 """,
                 'mantain': True
@@ -97,9 +97,9 @@ def get_queries(params: dict = None):
                 'source': 'lapig',
                 'id': 'coverage_comparison_rl',
                 'sql': f"""
-                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM app_brazil_coverage_2024_reclassificado_rl_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM(rl_class_1) as value FROM land_tenure_vegetation_2024 WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     UNION ALL
-                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM app_brazil_coverage_2024_reclassificado_rl_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM(rl_class_2) as value FROM land_tenure_vegetation_2024 WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     ORDER BY 1, 2
                 """,
                 'mantain': True
@@ -108,9 +108,9 @@ def get_queries(params: dict = None):
                 'source': 'lapig',
                 'id': 'coverage_comparison_mfa',
                 'sql': f"""
-                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM("CLASSE_1_HA") as value FROM app_brazil_coverage_2024_reclassificado_mfa_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM(mfa_class_1) as value FROM land_tenure_vegetation_2024 WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     UNION ALL
-                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM("CLASSE_2_HA") as value FROM app_brazil_coverage_2024_reclassificado_mfa_projetado WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM(mfa_class_2) as value FROM land_tenure_vegetation_2024 WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     ORDER BY 1, 2
                 """,
                 'mantain': True
