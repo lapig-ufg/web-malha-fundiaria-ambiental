@@ -141,7 +141,9 @@ def get_queries(params: dict = None):
                     ORDER BY 1, 2
                 """,
                 'mantain': True
-            },
+            }
+        ],
+        'vegetation_evolution': lambda p: [
             {
                 'source': 'lapig',
                 'id': 'vegetation_evolution',

@@ -41,7 +41,6 @@ class StatisticsSidebarComponent implements OnDestroy {
     'coverage_comparison_app',
     'coverage_comparison_rl',
     'coverage_comparison_mfa',
-    'vegetation_evolution',
   ];
 
   public summaryData: Map<string, any> = new Map<string, any>();
@@ -54,9 +53,10 @@ class StatisticsSidebarComponent implements OnDestroy {
   public coverageComparisonMfaChartData: any = null;
 
   /**
-   * Vegetation evolution line chart data (region-level):
+   * Vegetation evolution bar chart data (region-level):
    * x = year, y = percentage of natural vegetation (class_1 / (class_1 + class_2) * 100).
-   * Populated via the /service/charts/resumo?card_resume=vegetation_evolution endpoint.
+   * Populated via the /service/charts/vegetation-evolution endpoint (separate from resumo
+   * so that a missing table doesn't break the other summary cards).
    */
   public vegetationEvolutionChartData: any = null;
 
@@ -499,6 +499,33 @@ class StatisticsSidebarComponent implements OnDestroy {
     this.summaryKeys.forEach((key: string) => {
       this.getLayerSummaryData(key);
     });
+    this.getVegetationEvolutionData();
+  }
+
+  /**
+   * Fetch vegetation evolution data from the separate endpoint
+   * so that a missing table doesn't break the other summary cards.
+   */
+  private getVegetationEvolutionData(): void {
+    this.chartService
+      .getVegetationEvolution(this.regionFilter)
+      .subscribe({
+        next: (data: any) => {
+          if (Array.isArray(data) && data.length > 0) {
+            this.summaryData.set('vegetation_evolution', {
+              data: data,
+              year: null,
+            });
+            this.updateChartData('vegetation_evolution');
+          } else {
+            this.vegetationEvolutionChartData = null;
+          }
+        },
+        error: (error) => {
+          console.error('Vegetation evolution data unavailable:', error);
+          this.vegetationEvolutionChartData = null;
+        },
+      });
   }
 
   private getLayerSummaryData(summaryKey: string): void {

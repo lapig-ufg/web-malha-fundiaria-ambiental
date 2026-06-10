@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request, Depends
-from api.dependencies import get_chart_data
+from api.dependencies import get_chart_data, execute_queries
 from utils.language import language as lang_util
 
 router = APIRouter()
@@ -165,10 +165,22 @@ async def handle_resumo(lang: str = 'pt', card_resume: str = '', query_result: d
         return query_result.get('coverage_comparison_rl', [])
     elif card_resume == 'coverage_comparison_mfa':
         return query_result.get('coverage_comparison_mfa', [])
-    elif card_resume == 'vegetation_evolution':
-        return query_result.get('vegetation_evolution', [])
     else:
         return {"data": "Invalid argument"}
+
+@router.get("/vegetation-evolution")
+async def handle_vegetation_evolution(lang: str = 'pt', typeRegion: str = '', valueRegion: str = '', textRegion: str = ''):
+    params = {
+        'lang': lang,
+        'typeRegion': typeRegion,
+        'valueRegion': valueRegion,
+        'textRegion': textRegion,
+    }
+    try:
+        query_result = await execute_queries("charts", "vegetation_evolution", params)
+        return query_result.get('vegetation_evolution', [])
+    except Exception:
+        return []
 
 @router.get("/pastureGraph")
 async def handle_pasture_graph(lang: str = 'pt', typeRegion: str = '', textRegion: str = '', query_result: dict = Depends(get_chart_data)):
