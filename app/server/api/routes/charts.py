@@ -165,6 +165,8 @@ async def handle_resumo(lang: str = 'pt', card_resume: str = '', query_result: d
         return query_result.get('coverage_comparison_rl', [])
     elif card_resume == 'coverage_comparison_mfa':
         return query_result.get('coverage_comparison_mfa', [])
+    elif card_resume == 'vegetation_evolution':
+        return query_result.get('vegetation_evolution', [])
     else:
         return {"data": "Invalid argument"}
 

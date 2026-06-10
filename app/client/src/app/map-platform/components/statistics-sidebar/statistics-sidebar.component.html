@@ -116,6 +116,21 @@
           </p-tabView>
         </p-accordionTab>
 
+        <!-- Section: Vegetation Evolution (Line Chart) -->
+        <p-accordionTab
+            [header]="vegetationEvolutionTitle"
+            *ngIf="vegetationEvolutionChartData">
+          <div class="chart-section">
+            <div class="chart-container" style="height: 260px; padding: 10px;">
+              <p-chart type="bar"
+                       [data]="vegetationEvolutionChartData"
+                       [options]="vegetationBarOptions"
+                       height="240px">
+              </p-chart>
+            </div>
+          </div>
+        </p-accordionTab>
+
       </p-accordion>
 
     </div>

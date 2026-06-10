@@ -385,6 +385,10 @@
       "pasture_quality_comparison": "Comparativo Regional: Vigor",
       "coverage_natural_title_country": "Distribuição de Áreas Naturais no Brasil (2024)",
       "coverage_natural_title_region": "Distribuição de Áreas Naturais em {{region}} (2024)",
+      "vegetation_evolution_title_country": "Evolução da Vegetação Natural no Brasil",
+      "vegetation_evolution_title_region": "Evolução da Vegetação Natural em {{region}}",
+      "vegetation_evolution_x_axis": "Ano",
+      "vegetation_evolution_y_axis": "% Vegetação Natural",
       "coverage_comparison_title": "Cobertura por Região",
       "coverage_comparison_app_title": "Cobertura por Região: APP",
       "coverage_comparison_rl_title": "Cobertura por Região: Reserva Legal",
@@ -399,7 +403,8 @@
         "Reserva_Legal": "Reserva Legal",
         "Áreas de Preservação Permanente": "APP",
         "Malha Fundiária": "Malha Fundiária",
-        "Não Natural": "Não Natural"
+        "Não Natural": "Não Natural",
+        "vegetation_pct": "% Vegetação Natural"
       },
       "complement_text_pasture_quality": "da área de Pastagem do(a)",
       "obs_text": "*A diferença entre a área de pastagem aqui apresentada e a área mapeada, é explicada pelo ajuste de área a partir da análise de acurácia, detalhada em Parente et al. 2019 (<a target='_blank' class='link-details' href='https://doi.org/10.1016/j.rse.2019.111301'> https://doi.org/10.1016/j.rse.2019.111301</a>)",

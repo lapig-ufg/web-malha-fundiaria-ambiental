@@ -41,6 +41,7 @@ class StatisticsSidebarComponent implements OnDestroy {
     'coverage_comparison_app',
     'coverage_comparison_rl',
     'coverage_comparison_mfa',
+    'vegetation_evolution',
   ];
 
   public summaryData: Map<string, any> = new Map<string, any>();
@@ -51,6 +52,13 @@ class StatisticsSidebarComponent implements OnDestroy {
   public coverageComparisonAppChartData: any = null;
   public coverageComparisonRlChartData: any = null;
   public coverageComparisonMfaChartData: any = null;
+
+  /**
+   * Vegetation evolution line chart data (region-level):
+   * x = year, y = percentage of natural vegetation (class_1 / (class_1 + class_2) * 100).
+   * Populated via the /service/charts/resumo?card_resume=vegetation_evolution endpoint.
+   */
+  public vegetationEvolutionChartData: any = null;
 
   /**
    * Per-property vegetation chart (bar): x = year, y = % of the property
@@ -87,6 +95,39 @@ class StatisticsSidebarComponent implements OnDestroy {
         max: 100,
         ticks: {
           callback: (value: any) => value + '%',
+        },
+      },
+    },
+    maintainAspectRatio: false,
+  };
+
+  public vegetationBarOptions: any = {
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (context: any) =>
+            `${Number(context.parsed.y).toFixed(2)}%`,
+        },
+      },
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Ano',
+        },
+      },
+      y: {
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          stepSize: 20,
+          callback: (value: any) => value + '%',
+        },
+        title: {
+          display: true,
+          text: '% Vegetação Natural',
         },
       },
     },
@@ -230,6 +271,23 @@ class StatisticsSidebarComponent implements OnDestroy {
     }
     return this.localizationService.translate(
       'right_sidebar.resumo_card.coverage_natural_title_region',
+      { region: this.regionFilter.text },
+    );
+  }
+
+  /**
+   * Dynamic title for the vegetation evolution accordion tab.
+   * Shows a country-specific string when the region is Brazil,
+   * otherwise interpolates the current region name.
+   */
+  public get vegetationEvolutionTitle(): string {
+    if (this.regionFilter.type === 'country') {
+      return this.localizationService.translate(
+        'right_sidebar.resumo_card.vegetation_evolution_title_country',
+      );
+    }
+    return this.localizationService.translate(
+      'right_sidebar.resumo_card.vegetation_evolution_title_region',
       { region: this.regionFilter.text },
     );
   }
@@ -569,6 +627,37 @@ class StatisticsSidebarComponent implements OnDestroy {
       if (key === 'coverage_comparison_app') this.coverageComparisonAppChartData = chartData;
       else if (key === 'coverage_comparison_rl') this.coverageComparisonRlChartData = chartData;
       else this.coverageComparisonMfaChartData = chartData;
+    } else if (key === 'vegetation_evolution') {
+      const summary = this.summaryData.get('vegetation_evolution');
+      if (!summary || !summary.data || !Array.isArray(summary.data)) {
+        this.vegetationEvolutionChartData = null;
+        return;
+      }
+
+      const rawData = summary.data;
+      const labels = rawData.map((item: any) => String(item.label));
+      const data = rawData.map((item: any) => Number(Number(item.value).toFixed(2)));
+      const color = rawData.length > 0 ? rawData[0].color : '#228B22';
+
+      this.vegetationEvolutionChartData = {
+        labels,
+        datasets: [
+          {
+            label: this.localizationService.translate(
+              'right_sidebar.resumo_card.chart_labels.vegetation_pct',
+            ),
+            data,
+            backgroundColor: color,
+            borderColor: '#1f5e3a',
+            borderWidth: 1,
+          },
+        ],
+      };
+
+      this.vegetationBarOptions.scales.x.title.text =
+        this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_x_axis') || 'Ano';
+      this.vegetationBarOptions.scales.y.title.text =
+        this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_y_axis') || '% Vegetação Natural';
     }
   }
 
