@@ -72,6 +72,24 @@ class StatisticsService {
       .pipe(catchError(this.errorHandler));
   }
 
+  /**
+   * Get vegetation evolution chart data (year vs % natural vegetation).
+   * Uses a separate endpoint so failures don't affect other summary data.
+   * @param regionFilter
+   * @returns
+   */
+  public getVegetationEvolution(regionFilter: RegionFilter): Observable<any> {
+    let params =
+      `lang=${this.localizationService.currentLang()}` +
+      `&typeRegion=${regionFilter.type}` +
+      `&valueRegion=${regionFilter.value}` +
+      `&textRegion=${regionFilter.text}`;
+
+    return this.httpClient
+      .get<any>(`${this.apiURL}/vegetation-evolution?${params}`, this.httpOptions)
+      .pipe(catchError(this.errorHandler));
+  }
+
   private errorHandler(error: any) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {

@@ -142,6 +142,25 @@ def get_queries(params: dict = None):
                 """,
                 'mantain': True
             }
+        ],
+        'vegetation_evolution': lambda p: [
+            {
+                'source': 'lapig',
+                'id': 'vegetation_evolution',
+                'sql': f"""
+                    SELECT
+                        year as label,
+                        '#228B22' as color,
+                        CAST(COALESCE(SUM(class_1), 0) AS double precision)
+                          / NULLIF(CAST(COALESCE(SUM(class_1), 0) + COALESCE(SUM(class_2), 0) AS double precision), 0)
+                          * 100 as value
+                    FROM natural_vegetation_regions
+                    WHERE {region_filter_coverage}
+                    GROUP BY year
+                    ORDER BY year
+                """,
+                'mantain': True
+            }
         ]
     }
     return queries

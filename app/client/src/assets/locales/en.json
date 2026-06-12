@@ -385,6 +385,10 @@
       "pasture_quality_comparison": "Regional Vigor Comparison",
       "coverage_natural_title_country": "Natural Areas Distribution in Brazil (2024)",
       "coverage_natural_title_region": "Natural Areas Distribution in {{region}} (2024)",
+      "vegetation_evolution_title_country": "Natural Vegetation Evolution in Brazil",
+      "vegetation_evolution_title_region": "Natural Vegetation Evolution in {{region}}",
+      "vegetation_evolution_x_axis": "Year",
+      "vegetation_evolution_y_axis": "% Natural Vegetation",
       "coverage_comparison_title": "Regional Coverage",
       "coverage_comparison_app_title": "Regional Coverage: APP",
       "coverage_comparison_rl_title": "Regional Coverage: Legal Reserve",
@@ -399,7 +403,8 @@
         "Reserva_Legal": "Legal Reserve",
         "Áreas de Preservação Permanente": "APP",
         "Malha Fundiária": "Environmental Land Tenure",
-        "Não Natural": "Non-Natural"
+        "Não Natural": "Non-Natural",
+        "vegetation_pct": "% Natural Vegetation"
       },
       "complement_text_pasture_quality": "in Pasture Area of",
       "obs_text": "*The difference between the pasture area presented here and the mapped area is explained by the area adjustment from the accuracy analysis, detailed in Parente et al. 2019 (<a target='_blank' class='link-details' href='https://doi.org/10.1016/j.rse.2019.111301'> https://doi.org/10.1016/j.rse.2019.111301</a>)",
