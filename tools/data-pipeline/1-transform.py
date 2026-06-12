@@ -5,10 +5,10 @@ import pathlib
 
 def transform():
     # Caminhos dos arquivos
-    data_dir = pathlib.Path(__file__).parent.parent.parent / 'data'
-    parquet_path = data_dir / 'balanco_passivo_ambiental_br_v3.parquet'
+    data_dir = pathlib.Path(__file__).parent.parent / 'data'
+    parquet_path = data_dir / 'balanco_passivo_ambiental_br_v4.parquet'
     excel_path = data_dir / 'RELATORIO_DTB_BRASIL_2024_MUNICIPIOS.xls'
-    output_path = data_dir / 'balanco_passivo_ambiental_br_v3_transformed.parquet'
+    output_path = data_dir / 'balanco_passivo_ambiental_br_v4_transformed.parquet'
 
     print(f"Lendo arquivo Parquet: {parquet_path.name}...")
     # Lendo o parquet com geopandas
@@ -47,6 +47,11 @@ def transform():
     gdf = gdf.rename(columns={'geometry': 'geom'})
     # Geopandas precisa saber qual é a nova coluna de geometria ativa
     gdf = gdf.set_geometry('geom')
+
+    # Removendo colunas desnecessárias
+    if 'geometry_bbox' in gdf.columns:
+        print("Removendo coluna 'geometry_bbox'...")
+        gdf = gdf.drop(columns=['geometry_bbox'])
 
     print(f"Salvando resultado em: {output_path.name}...")
     gdf.to_parquet(output_path)
