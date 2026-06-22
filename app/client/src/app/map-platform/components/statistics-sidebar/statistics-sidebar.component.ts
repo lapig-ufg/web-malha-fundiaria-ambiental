@@ -61,6 +61,18 @@ class StatisticsSidebarComponent implements OnDestroy {
   public vegetationEvolutionChartData: any = null;
 
   /**
+   * Vegetation evolution per categoria (region-level): same shape as
+   * vegetationEvolutionChartData, but scoped to rows where
+   * categoria = 'Área de preservação permanente' (APP) / 'Reserva Legal' (RL),
+   * sourced from natural_vegetation_regions_app_rl_1985_2024 via the
+   * /service/charts/vegetation-evolution-by-categoria endpoint.
+   */
+  public vegetationEvolutionAppChartData: any = null;
+  public vegetationEvolutionRlChartData: any = null;
+  public vegetationEvolutionAppLoading = false;
+  public vegetationEvolutionRlLoading = false;
+
+  /**
    * Per-property vegetation chart (bar): x = year, y = % of the property
    * area classified as natural vegetation. Populated by polling the
    * /service/zonal/jobs endpoint whenever a malha_fundiaria feature is
@@ -500,6 +512,8 @@ class StatisticsSidebarComponent implements OnDestroy {
       this.getLayerSummaryData(key);
     });
     this.getVegetationEvolutionData();
+    this.getVegetationEvolutionAppData();
+    this.getVegetationEvolutionRlData();
   }
 
   /**
@@ -526,6 +540,65 @@ class StatisticsSidebarComponent implements OnDestroy {
           this.vegetationEvolutionChartData = null;
         },
       });
+  }
+
+  /**
+   * Fetch vegetation evolution scoped to a categoria (APP / RL) from the
+   * by-categoria endpoint. Same resilient pattern as the total evolution.
+   */
+  private getVegetationEvolutionByCategoriaData(
+    categoria: string,
+    summaryKey: 'vegetation_evolution_app' | 'vegetation_evolution_rl',
+  ): void {
+    const isApp = summaryKey === 'vegetation_evolution_app';
+    if (isApp) {
+      this.vegetationEvolutionAppLoading = true;
+    } else {
+      this.vegetationEvolutionRlLoading = true;
+    }
+
+    this.chartService
+      .getVegetationEvolutionByCategoria(this.regionFilter, categoria)
+      .subscribe({
+        next: (data: any) => {
+          if (isApp) {
+            this.vegetationEvolutionAppLoading = false;
+          } else {
+            this.vegetationEvolutionRlLoading = false;
+          }
+          if (Array.isArray(data) && data.length > 0) {
+            this.summaryData.set(summaryKey, { data: data, year: null });
+            this.updateChartData(summaryKey);
+          } else {
+            if (isApp) {
+              this.vegetationEvolutionAppChartData = null;
+            } else {
+              this.vegetationEvolutionRlChartData = null;
+            }
+          }
+        },
+        error: (error) => {
+          console.error(`Vegetation evolution (${summaryKey}) data unavailable:`, error);
+          if (isApp) {
+            this.vegetationEvolutionAppLoading = false;
+            this.vegetationEvolutionAppChartData = null;
+          } else {
+            this.vegetationEvolutionRlLoading = false;
+            this.vegetationEvolutionRlChartData = null;
+          }
+        },
+      });
+  }
+
+  private getVegetationEvolutionAppData(): void {
+    this.getVegetationEvolutionByCategoriaData(
+      'Área de preservação permanente',
+      'vegetation_evolution_app',
+    );
+  }
+
+  private getVegetationEvolutionRlData(): void {
+    this.getVegetationEvolutionByCategoriaData('Reserva Legal', 'vegetation_evolution_rl');
   }
 
   private getLayerSummaryData(summaryKey: string): void {
@@ -681,6 +754,49 @@ class StatisticsSidebarComponent implements OnDestroy {
         ],
       };
 
+      this.vegetationBarOptions.scales.x.title.text =
+        this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_x_axis') || 'Ano';
+      this.vegetationBarOptions.scales.y.title.text =
+        this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_y_axis') || '% Vegetação Natural';
+    } else if (key === 'vegetation_evolution_app' || key === 'vegetation_evolution_rl') {
+      const summary = this.summaryData.get(key);
+      const isApp = key === 'vegetation_evolution_app';
+      if (!summary || !summary.data || !Array.isArray(summary.data)) {
+        if (isApp) {
+          this.vegetationEvolutionAppChartData = null;
+        } else {
+          this.vegetationEvolutionRlChartData = null;
+        }
+        return;
+      }
+
+      const rawData = summary.data;
+      const labels = rawData.map((item: any) => String(item.label));
+      const data = rawData.map((item: any) => Number(Number(item.value ?? 0).toFixed(2)));
+      const color = rawData.length > 0 ? rawData[0].color : '#228B22';
+
+      const chartData = {
+        labels,
+        datasets: [
+          {
+            label: this.localizationService.translate(
+              'right_sidebar.resumo_card.chart_labels.vegetation_pct',
+            ),
+            data,
+            backgroundColor: color,
+            borderColor: '#1f5e3a',
+            borderWidth: 1,
+          },
+        ],
+      };
+
+      if (isApp) {
+        this.vegetationEvolutionAppChartData = chartData;
+      } else {
+        this.vegetationEvolutionRlChartData = chartData;
+      }
+
+      // Reuse the same axis titles as the total vegetation graph.
       this.vegetationBarOptions.scales.x.title.text =
         this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_x_axis') || 'Ano';
       this.vegetationBarOptions.scales.y.title.text =

@@ -90,6 +90,27 @@ class StatisticsService {
       .pipe(catchError(this.errorHandler));
   }
 
+  /**
+   * Get vegetation evolution chart data (year vs % natural vegetation)
+   * scoped to a given categoria ('Área de preservação permanente' or
+   * 'Reserva Legal'), sourced from natural_vegetation_regions_app_rl_1985_2024.
+   * @param regionFilter
+   * @param categoria
+   * @returns
+   */
+  public getVegetationEvolutionByCategoria(regionFilter: RegionFilter, categoria: string): Observable<any> {
+    const params =
+      `lang=${this.localizationService.currentLang()}` +
+      `&typeRegion=${regionFilter.type}` +
+      `&valueRegion=${regionFilter.value}` +
+      `&textRegion=${regionFilter.text}` +
+      `&categoria=${encodeURIComponent(categoria)}`;
+
+    return this.httpClient
+      .get<any>(`${this.apiURL}/vegetation-evolution-by-categoria?${params}`, this.httpOptions)
+      .pipe(catchError(this.errorHandler));
+  }
+
   private errorHandler(error: any) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {

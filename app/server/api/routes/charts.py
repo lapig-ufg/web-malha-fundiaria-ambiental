@@ -182,6 +182,28 @@ async def handle_vegetation_evolution(lang: str = 'pt', typeRegion: str = '', va
     except Exception:
         return []
 
+# Allowlist of valid categoria values. Guards the naive (non-escaping)
+# ${categoria} substitution done by prepare_query, so only these two
+# hardcoded Portuguese strings ever reach the SQL.
+ALLOWED_CATEGORIAS = {'Área de preservação permanente', 'Reserva Legal'}
+
+@router.get("/vegetation-evolution-by-categoria")
+async def handle_vegetation_evolution_by_categoria(lang: str = 'pt', typeRegion: str = '', valueRegion: str = '', textRegion: str = '', categoria: str = ''):
+    if categoria not in ALLOWED_CATEGORIAS:
+        return []
+    params = {
+        'lang': lang,
+        'typeRegion': typeRegion,
+        'valueRegion': valueRegion,
+        'textRegion': textRegion,
+        'categoria': categoria,
+    }
+    try:
+        query_result = await execute_queries("charts", "vegetation_evolution_by_categoria", params)
+        return query_result.get('vegetation_evolution_by_categoria', [])
+    except Exception:
+        return []
+
 @router.get("/pastureGraph")
 async def handle_pasture_graph(lang: str = 'pt', typeRegion: str = '', textRegion: str = '', query_result: dict = Depends(get_chart_data)):
     lang_data = lang_util.get_lang(lang)

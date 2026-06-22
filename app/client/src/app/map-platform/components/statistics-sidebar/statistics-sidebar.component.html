@@ -116,19 +116,65 @@
           </p-tabView>
         </p-accordionTab>
 
-        <!-- Section: Vegetation Evolution (Line Chart) -->
+        <!-- Section: Vegetation Evolution (Total / APP / RL tabs) -->
         <p-accordionTab
             [header]="vegetationEvolutionTitle"
-            *ngIf="vegetationEvolutionChartData">
-          <div class="chart-section">
-            <div class="chart-container" style="height: 260px; padding: 10px;">
-              <p-chart type="bar"
-                       [data]="vegetationEvolutionChartData"
-                       [options]="vegetationBarOptions"
-                       height="240px">
-              </p-chart>
-            </div>
-          </div>
+            *ngIf="vegetationEvolutionChartData || vegetationEvolutionAppChartData || vegetationEvolutionRlChartData || vegetationEvolutionAppLoading || vegetationEvolutionRlLoading">
+          <p-tabView>
+            <p-tabPanel
+                [header]="'right_sidebar.resumo_card.chart_labels.vegetation_total' | translate"
+                *ngIf="vegetationEvolutionChartData">
+              <div class="chart-section">
+                <div class="chart-container" style="height: 260px; padding: 10px;">
+                  <p-chart type="bar"
+                           [data]="vegetationEvolutionChartData"
+                           [options]="vegetationBarOptions"
+                           height="240px">
+                  </p-chart>
+                </div>
+              </div>
+            </p-tabPanel>
+            <p-tabPanel
+                [header]="'right_sidebar.resumo_card.chart_labels.app' | translate"
+                *ngIf="vegetationEvolutionAppChartData || vegetationEvolutionAppLoading">
+              <div class="chart-section">
+                <ng-container *ngIf="vegetationEvolutionAppChartData; else vegAppLoading">
+                  <div class="chart-container" style="height: 260px; padding: 10px;">
+                    <p-chart type="bar"
+                             [data]="vegetationEvolutionAppChartData"
+                             [options]="vegetationBarOptions"
+                             height="240px">
+                    </p-chart>
+                  </div>
+                </ng-container>
+                <ng-template #vegAppLoading>
+                  <div class="loader-container">
+                    <app-loading-spinner></app-loading-spinner>
+                  </div>
+                </ng-template>
+              </div>
+            </p-tabPanel>
+            <p-tabPanel
+                [header]="'right_sidebar.resumo_card.chart_labels.rl' | translate"
+                *ngIf="vegetationEvolutionRlChartData || vegetationEvolutionRlLoading">
+              <div class="chart-section">
+                <ng-container *ngIf="vegetationEvolutionRlChartData; else vegRlLoading">
+                  <div class="chart-container" style="height: 260px; padding: 10px;">
+                    <p-chart type="bar"
+                             [data]="vegetationEvolutionRlChartData"
+                             [options]="vegetationBarOptions"
+                             height="240px">
+                    </p-chart>
+                  </div>
+                </ng-container>
+                <ng-template #vegRlLoading>
+                  <div class="loader-container">
+                    <app-loading-spinner></app-loading-spinner>
+                  </div>
+                </ng-template>
+              </div>
+            </p-tabPanel>
+          </p-tabView>
         </p-accordionTab>
 
       </p-accordion>
