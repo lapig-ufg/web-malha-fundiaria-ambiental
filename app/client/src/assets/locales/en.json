@@ -426,7 +426,10 @@
       "title_rl": "Natural Vegetation Evolution — Legal Reserve",
       "loading_app": "Calculating vegetation evolution in APP…",
       "loading_rl": "Calculating vegetation evolution in Legal Reserve…",
-      "label_pct_natural": "% Natural Vegetation"
+      "label_pct_natural": "% Natural Vegetation",
+      "tab_propriedade": "Property",
+      "tab_app": "APP",
+      "tab_rl": "Legal Reserve"
     },
     "region_description": "Select a state, municipality or biome to see regional statistics for vegetation cover, permanent preservation areas (APP), legal reserve (RL) and environmental land tenure (MFA)."
   },

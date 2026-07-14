@@ -426,7 +426,10 @@
       "title_rl": "Evolução da Vegetação Natural — Reserva Legal",
       "loading_app": "Calculando a evolução da vegetação na APP…",
       "loading_rl": "Calculando a evolução da vegetação na Reserva Legal…",
-      "label_pct_natural": "% Vegetação Natural"
+      "label_pct_natural": "% Vegetação Natural",
+      "tab_propriedade": "Propriedade",
+      "tab_app": "APP",
+      "tab_rl": "Reserva Legal"
     },
     "region_description": "Selecione um estado, município ou bioma para visualizar estatísticas regionais de cobertura vegetal, áreas de preservação permanente (APP), reserva legal (RL) e malha fundiária ambiental (MFA)."
   },
