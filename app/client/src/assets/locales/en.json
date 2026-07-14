@@ -421,7 +421,12 @@
       "loading": "Calculating vegetation evolution…",
       "empty": "No property selected.",
       "intro": "Select a property of the land tenure (by clicking on the map or by searching for a CAR code) to see its detailed information and the annual evolution of natural vegetation cover between 1985 and 2024.",
-      "attributes_title": "Property Information"
+      "attributes_title": "Property Information",
+      "title_app": "Natural Vegetation Evolution — APP",
+      "title_rl": "Natural Vegetation Evolution — Legal Reserve",
+      "loading_app": "Calculating vegetation evolution in APP…",
+      "loading_rl": "Calculating vegetation evolution in Legal Reserve…",
+      "label_pct_natural": "% Natural Vegetation"
     },
     "region_description": "Select a state, municipality or biome to see regional statistics for vegetation cover, permanent preservation areas (APP), legal reserve (RL) and environmental land tenure (MFA)."
   },

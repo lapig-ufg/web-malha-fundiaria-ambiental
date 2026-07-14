@@ -8,7 +8,7 @@ from loguru import logger
 from multiprocessing import Pool
 
 # Configurações de diretório
-DATA_DIR = "/home/tiago/Documents/Github/web-malha-fundiaria-ambiental/data"
+DATA_DIR = "/home/tiago/Documentos/Github/web-malha-fundiaria-ambiental/data"
 BUCKET_NAME = "malha-fundiaria"
 PREFIX = "vegetation/"
 
@@ -23,8 +23,8 @@ def get_minio_client():
     """
     return Minio(
         "s3.lapig.iesa.ufg.br",
-        access_key="gbZ7OMvjHQrUjl5JJ7Xx",
-        secret_key="oZCt7EpM33wtnMCsuBRXkAS8OMD3pUOBa7umMZzx",
+        access_key="",
+        secret_key="",
         secure=True
     )
 

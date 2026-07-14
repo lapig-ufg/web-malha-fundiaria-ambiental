@@ -79,6 +79,8 @@ class StatisticsSidebarComponent implements OnDestroy {
    * selected on the map.
    */
   public malhaVegetationChartData: any = null;
+  public malhaAppChartData: any = null;
+  public malhaRlChartData: any = null;
   public malhaVegetationLoading: boolean = false;
   public currentJobId: string | null = null;
   private selectedFeatureSubscription: Subscription = new Subscription();
@@ -406,6 +408,8 @@ class StatisticsSidebarComponent implements OnDestroy {
 
   private clearMalhaChart(): void {
     this.malhaVegetationChartData = null;
+    this.malhaAppChartData = null;
+    this.malhaRlChartData = null;
     this.malhaVegetationLoading = false;
     this.currentJobId = null;
   }
@@ -413,6 +417,8 @@ class StatisticsSidebarComponent implements OnDestroy {
   private loadMalhaChart(feature: SelectedFeature): void {
     this.malhaVegetationLoading = true;
     this.malhaVegetationChartData = null;
+    this.malhaAppChartData = null;
+    this.malhaRlChartData = null;
     this.currentJobId = null;
 
     this.zonalService.startZonalJob(feature.geometry).subscribe({
@@ -446,9 +452,7 @@ class StatisticsSidebarComponent implements OnDestroy {
             this.malhaVegetationLoading = false;
             return;
           }
-          this.malhaVegetationChartData = this.buildMalhaChartData(
-            resp.result || [],
-          );
+          this.buildAllMalhaCharts(resp.result || {});
           this.malhaVegetationLoading = false;
         },
         error: (err) => {
@@ -460,21 +464,27 @@ class StatisticsSidebarComponent implements OnDestroy {
     setTimeout(tick, 800);
   }
 
-  private buildMalhaChartData(rows: any[]): any {
+  /**
+   * Build a Chart.js bar-chart dataset from an array of per-year rows.
+   * Each row must have `ano` and the given valueKey.
+   */
+  private buildZoneBarChartData(rows: any[], valueKey: string): any {
     const sorted = [...rows].sort(
       (a, b) => (a.ano ?? 0) - (b.ano ?? 0),
     );
     const labels = sorted.map((r) =>
-      r.ano != null ? String(r.ano) : r.ano_arquivo,
+      r.ano != null ? String(r.ano) : '',
     );
     const data = sorted.map((r) =>
-      Number(Number(r.percent_vegetacao ?? 0).toFixed(2)),
+      Number(Number(r[valueKey] ?? 0).toFixed(2)),
     );
     return {
       labels,
       datasets: [
         {
-          label: '% vegetação',
+          label: this.localizationService.translate(
+            'right_sidebar.malha_chart.label_pct_natural',
+          ),
           data,
           backgroundColor: '#2e8b57',
           borderColor: '#1f5e3a',
@@ -482,6 +492,37 @@ class StatisticsSidebarComponent implements OnDestroy {
         },
       ],
     };
+  }
+
+  /**
+   * Build all three malha-mode charts from the v2 zonal result dict.
+   * The result has keys propriedade, app, rl — each an array of per-year rows
+   * with fields ano, pct_natural, area_natural_ha, etc.
+   */
+  private buildAllMalhaCharts(result: any): void {
+    // Propriedade (whole property) — always present
+    if (result.propriedade && Array.isArray(result.propriedade)) {
+      this.malhaVegetationChartData = this.buildZoneBarChartData(
+        result.propriedade,
+        'pct_natural',
+      );
+    }
+
+    // APP zone
+    if (result.app && Array.isArray(result.app)) {
+      this.malhaAppChartData = this.buildZoneBarChartData(
+        result.app,
+        'pct_natural',
+      );
+    }
+
+    // RL zone
+    if (result.rl && Array.isArray(result.rl)) {
+      this.malhaRlChartData = this.buildZoneBarChartData(
+        result.rl,
+        'pct_natural',
+      );
+    }
   }
 
   private updateLayersForStatistics(descriptor: Descriptor): void {

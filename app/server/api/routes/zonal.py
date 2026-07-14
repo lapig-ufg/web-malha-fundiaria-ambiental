@@ -54,12 +54,21 @@ def _run_job(
     classe: int,
     input_crs: str,
 ) -> None:
+    # Parse comma-separated classes_naturais from config string
+    classes_naturais = tuple(
+        int(c.strip())
+        for c in settings.ZONAL_STATISTICS_CLASSES_NATURAIS.split(",")
+        if c.strip()
+    )
     try:
         result = compute_zonal_history(
             geometry=geometry,
             raster_dir=settings.ZONAL_STATISTICS_RASTER_DIR,
             classe_vegetacao=classe,
             input_crs=input_crs,
+            path_app=settings.ZONAL_STATISTICS_RASTER_APP,
+            path_rl=settings.ZONAL_STATISTICS_RASTER_RL,
+            classes_naturais=classes_naturais,
         )
         with _lock:
             _jobs[job_id]["status"] = "done"
