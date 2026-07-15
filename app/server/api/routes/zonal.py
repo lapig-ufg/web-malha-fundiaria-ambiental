@@ -56,7 +56,7 @@ def _run_job(
 ) -> None:
     # Parse comma-separated classes_naturais from config string
     classes_naturais = tuple(
-        int(c.strip())
+        int(c.strip().strip('"').strip("'"))
         for c in settings.ZONAL_STATISTICS_CLASSES_NATURAIS.split(",")
         if c.strip()
     )
