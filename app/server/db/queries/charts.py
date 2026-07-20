@@ -172,6 +172,7 @@ def get_queries(params: dict = None):
                         year as label,
                         '#228B22' as color,
                         CAST(COALESCE(SUM(class_1), 0) AS double precision) as area_ha,
+                        CAST(COALESCE(SUM(class_2), 0) AS double precision) as deficit_area_ha,
                         CAST(COALESCE(SUM(class_1), 0) AS double precision)
                           / NULLIF(CAST(COALESCE(SUM(class_1), 0) + COALESCE(SUM(class_2), 0) AS double precision), 0)
                           * 100 as value

@@ -65,8 +65,8 @@
                 *ngIf="malhaAppChartData || malhaVegetationLoading">
               <div class="chart-section">
                 <ng-container *ngIf="malhaAppChartData; else appLoadingTpl">
-                  <div class="chart-container" style="height: 380px; padding: 10px;">
-                    <p-chart type="bar" [data]="malhaAppChartData" [options]="malhaBarOptions" height="360px">
+                  <div class="chart-container" style="height: 420px; padding: 10px;">
+                    <p-chart type="bar" [data]="malhaAppChartData" [options]="vegetationDeficitBarOptions" height="400px">
                     </p-chart>
                   </div>
                 </ng-container>
@@ -85,8 +85,8 @@
                 *ngIf="malhaRlChartData || malhaVegetationLoading">
               <div class="chart-section">
                 <ng-container *ngIf="malhaRlChartData; else rlLoadingTpl">
-                  <div class="chart-container" style="height: 380px; padding: 10px;">
-                    <p-chart type="bar" [data]="malhaRlChartData" [options]="malhaBarOptions" height="360px">
+                  <div class="chart-container" style="height: 420px; padding: 10px;">
+                    <p-chart type="bar" [data]="malhaRlChartData" [options]="vegetationDeficitBarOptions" height="400px">
                     </p-chart>
                   </div>
                 </ng-container>
@@ -214,11 +214,11 @@
                 *ngIf="vegetationEvolutionAppChartData || vegetationEvolutionAppLoading">
               <div class="chart-section">
                 <ng-container *ngIf="vegetationEvolutionAppChartData; else vegAppLoading">
-                  <div class="chart-container" style="height: 260px; padding: 10px;">
+                  <div class="chart-container" style="height: 300px; padding: 10px;">
                     <p-chart type="bar"
                              [data]="vegetationEvolutionAppChartData"
-                             [options]="vegetationBarOptions"
-                             height="240px">
+                             [options]="vegetationDeficitBarOptions"
+                             height="280px">
                     </p-chart>
                   </div>
                 </ng-container>
@@ -234,11 +234,11 @@
                 *ngIf="vegetationEvolutionRlChartData || vegetationEvolutionRlLoading">
               <div class="chart-section">
                 <ng-container *ngIf="vegetationEvolutionRlChartData; else vegRlLoading">
-                  <div class="chart-container" style="height: 260px; padding: 10px;">
+                  <div class="chart-container" style="height: 300px; padding: 10px;">
                     <p-chart type="bar"
                              [data]="vegetationEvolutionRlChartData"
-                             [options]="vegetationBarOptions"
-                             height="240px">
+                             [options]="vegetationDeficitBarOptions"
+                             height="280px">
                     </p-chart>
                   </div>
                 </ng-container>

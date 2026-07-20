@@ -139,13 +139,7 @@ class StatisticsSidebarComponent implements OnDestroy {
       legend: { display: false },
       tooltip: {
         callbacks: {
-          label: (context: any) => {
-            const pct = `${Number(context.parsed.y).toFixed(2)}%`;
-            const areaHa = context.dataset.areaHa?.[context.dataIndex];
-            if (areaHa === undefined || areaHa === null) return pct;
-            const ha = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(areaHa);
-            return `${pct} (${ha} ha)`;
-          },
+          label: (context: any) => this.vegetationTooltipLabel(context),
         },
       },
     },
@@ -157,6 +151,55 @@ class StatisticsSidebarComponent implements OnDestroy {
         },
       },
       y: {
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          stepSize: 20,
+          callback: (value: any) => value + '%',
+        },
+        title: {
+          display: true,
+          text: '% Vegetação Natural',
+        },
+      },
+    },
+    maintainAspectRatio: false,
+  };
+
+  /**
+   * APP / Reserva Legal vegetation evolution: stacked bar with two series —
+   * Natural (green) and Déficit (red, the % of the APP/RL area that is NOT
+   * natural vegetation). Stacking the two series to 100% makes the deficit
+   * visually obvious as the "missing" red slice on top of the green bar.
+   */
+  public vegetationDeficitBarOptions: any = {
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: {
+          usePointStyle: true,
+          pointStyle: 'circle',
+          padding: 15,
+          font: { size: 11 },
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: (context: any) => this.vegetationTooltipLabel(context),
+        },
+      },
+    },
+    scales: {
+      x: {
+        stacked: true,
+        title: {
+          display: true,
+          text: 'Ano',
+        },
+      },
+      y: {
+        stacked: true,
         beginAtZero: true,
         max: 100,
         ticks: {
@@ -430,6 +473,25 @@ class StatisticsSidebarComponent implements OnDestroy {
     }
   }
 
+  /**
+   * Shared tooltip label for the vegetation evolution charts (Total, APP,
+   * Reserva Legal, Excedente Florestal): shows the percentage plus the
+   * area in hectares (via the dataset's `areaHa` array). When the chart has
+   * more than one series (APP/RL's Natural + Déficit), the series label is
+   * prefixed so each stacked segment is identified in the tooltip.
+   */
+  private vegetationTooltipLabel(context: any): string {
+    const pct = `${Number(context.parsed.y).toFixed(2)}%`;
+    const areaHa = context.dataset.areaHa?.[context.dataIndex];
+    const value =
+      areaHa === undefined || areaHa === null
+        ? pct
+        : `${pct} (${new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(areaHa)} ha)`;
+
+    const multiSeries = (context.chart?.data?.datasets?.length ?? 1) > 1;
+    return multiSeries ? `${context.dataset.label}: ${value}` : value;
+  }
+
   private clearMalhaChart(): void {
     this.malhaVegetationChartData = null;
     this.malhaAppChartData = null;
@@ -532,6 +594,47 @@ class StatisticsSidebarComponent implements OnDestroy {
   }
 
   /**
+   * Build a Chart.js stacked bar-chart dataset with Natural + Déficit series
+   * from an array of per-year zone rows (APP / Reserva Legal), mirroring the
+   * region-level deficit visualization: Déficit is the % of the zone that is
+   * NOT natural vegetation (area_nao_natural_ha / area_total_ha).
+   */
+  private buildZoneDeficitBarChartData(rows: any[]): any {
+    const sorted = [...rows].sort((a, b) => (a.ano ?? 0) - (b.ano ?? 0));
+    const labels = sorted.map((r) => (r.ano != null ? String(r.ano) : ''));
+    const naturalPct = sorted.map((r) => Number(Number(r.pct_natural ?? 0).toFixed(2)));
+    const naturalHa = sorted.map((r) => Number(r.area_natural_ha ?? 0));
+    const deficitPct = naturalPct.map((pct) => Number((100 - pct).toFixed(2)));
+    const deficitHa = sorted.map((r) => Number(r.area_nao_natural_ha ?? 0));
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: this.localizationService.translate(
+            'right_sidebar.resumo_card.chart_labels.natural',
+          ),
+          data: naturalPct,
+          areaHa: naturalHa,
+          backgroundColor: '#2e8b57',
+          borderColor: '#1f5e3a',
+          borderWidth: 1,
+        },
+        {
+          label: this.localizationService.translate(
+            'right_sidebar.resumo_card.chart_labels.deficit',
+          ),
+          data: deficitPct,
+          areaHa: deficitHa,
+          backgroundColor: '#c0392b',
+          borderColor: '#8b291d',
+          borderWidth: 1,
+        },
+      ],
+    };
+  }
+
+  /**
    * Build all three malha-mode charts from the v2 zonal result dict.
    * The result has keys propriedade, app, rl — each an array of per-year rows
    * with fields ano, pct_natural, area_natural_ha, etc.
@@ -545,20 +648,14 @@ class StatisticsSidebarComponent implements OnDestroy {
       );
     }
 
-    // APP zone
+    // APP zone — Natural + Déficit (% not natural within the APP)
     if (result.app && Array.isArray(result.app)) {
-      this.malhaAppChartData = this.buildZoneBarChartData(
-        result.app,
-        'pct_natural',
-      );
+      this.malhaAppChartData = this.buildZoneDeficitBarChartData(result.app);
     }
 
-    // RL zone
+    // RL zone — Natural + Déficit (% not natural within the Reserva Legal)
     if (result.rl && Array.isArray(result.rl)) {
-      this.malhaRlChartData = this.buildZoneBarChartData(
-        result.rl,
-        'pct_natural',
-      );
+      this.malhaRlChartData = this.buildZoneDeficitBarChartData(result.rl);
     }
 
     // Excedente Florestal: propriedade.area_natural_ha - (app + rl area_natural_ha),
@@ -942,6 +1039,8 @@ class StatisticsSidebarComponent implements OnDestroy {
       const labels = rawData.map((item: any) => String(item.label));
       const data = rawData.map((item: any) => Number(Number(item.value ?? 0).toFixed(2)));
       const areaHa = rawData.map((item: any) => Number(item.area_ha ?? 0));
+      const deficitAreaHa = rawData.map((item: any) => Number(item.deficit_area_ha ?? 0));
+      const deficitData = data.map((pctNatural: number) => Number((100 - pctNatural).toFixed(2)));
       const color = rawData.length > 0 ? rawData[0].color : '#228B22';
 
       const chartData = {
@@ -949,12 +1048,22 @@ class StatisticsSidebarComponent implements OnDestroy {
         datasets: [
           {
             label: this.localizationService.translate(
-              'right_sidebar.resumo_card.chart_labels.vegetation_pct',
+              'right_sidebar.resumo_card.chart_labels.natural',
             ),
             data,
             areaHa,
             backgroundColor: color,
             borderColor: '#1f5e3a',
+            borderWidth: 1,
+          },
+          {
+            label: this.localizationService.translate(
+              'right_sidebar.resumo_card.chart_labels.deficit',
+            ),
+            data: deficitData,
+            areaHa: deficitAreaHa,
+            backgroundColor: '#c0392b',
+            borderColor: '#8b291d',
             borderWidth: 1,
           },
         ],
@@ -967,9 +1076,9 @@ class StatisticsSidebarComponent implements OnDestroy {
       }
 
       // Reuse the same axis titles as the total vegetation graph.
-      this.vegetationBarOptions.scales.x.title.text =
+      this.vegetationDeficitBarOptions.scales.x.title.text =
         this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_x_axis') || 'Ano';
-      this.vegetationBarOptions.scales.y.title.text =
+      this.vegetationDeficitBarOptions.scales.y.title.text =
         this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_y_axis') || '% Vegetação Natural';
     } else if (key === 'forest_surplus') {
       const summary = this.summaryData.get('forest_surplus');
