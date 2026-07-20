@@ -90,6 +90,15 @@ class StatisticsSidebarComponent implements OnDestroy {
   public malhaVegetationChartData: any = null;
   public malhaAppChartData: any = null;
   public malhaRlChartData: any = null;
+
+  /**
+   * Forest surplus for the selected property (bar): x = year, y = % of the
+   * property area classified as natural vegetation outside APP + Reserva
+   * Legal (propriedade.area_natural_ha - app.area_natural_ha - rl.area_natural_ha,
+   * as a % of the property's total area). Derived client-side from the same
+   * zonal job result used to build the other three malha-mode charts.
+   */
+  public malhaForestSurplusChartData: any = null;
   public malhaVegetationLoading: boolean = false;
   public malhaVegetationError: string | null = null;
   public currentJobId: string | null = null;
@@ -425,6 +434,7 @@ class StatisticsSidebarComponent implements OnDestroy {
     this.malhaVegetationChartData = null;
     this.malhaAppChartData = null;
     this.malhaRlChartData = null;
+    this.malhaForestSurplusChartData = null;
     this.malhaVegetationLoading = false;
     this.malhaVegetationError = null;
     this.currentJobId = null;
@@ -435,6 +445,7 @@ class StatisticsSidebarComponent implements OnDestroy {
     this.malhaVegetationChartData = null;
     this.malhaAppChartData = null;
     this.malhaRlChartData = null;
+    this.malhaForestSurplusChartData = null;
     this.malhaVegetationError = null;
     this.currentJobId = null;
 
@@ -549,6 +560,66 @@ class StatisticsSidebarComponent implements OnDestroy {
         'pct_natural',
       );
     }
+
+    // Excedente Florestal: propriedade.area_natural_ha - (app + rl area_natural_ha),
+    // as a % of the property's total area. Missing APP/RL zones count as 0,
+    // matching the region-level forest-surplus calculation.
+    this.malhaForestSurplusChartData = this.buildMalhaForestSurplusChartData(
+      result.propriedade,
+      result.app,
+      result.rl,
+    );
+  }
+
+  /**
+   * Build the property-level forest surplus chart from the propriedade/app/rl
+   * rows returned by the zonal job (matched by `ano`).
+   */
+  private buildMalhaForestSurplusChartData(
+    propRows: any[] | null | undefined,
+    appRows: any[] | null | undefined,
+    rlRows: any[] | null | undefined,
+  ): any {
+    if (!propRows || !Array.isArray(propRows) || propRows.length === 0) {
+      return null;
+    }
+
+    const naturalHaByYear = (rows: any[] | null | undefined): Map<number, number> => {
+      const map = new Map<number, number>();
+      (rows || []).forEach((r: any) => map.set(r.ano, Number(r.area_natural_ha ?? 0)));
+      return map;
+    };
+    const appByYear = naturalHaByYear(appRows);
+    const rlByYear = naturalHaByYear(rlRows);
+
+    const sorted = [...propRows].sort((a, b) => (a.ano ?? 0) - (b.ano ?? 0));
+    const labels = sorted.map((r) => (r.ano != null ? String(r.ano) : ''));
+    const areaHa = sorted.map((r) => {
+      const propNatural = Number(r.area_natural_ha ?? 0);
+      const appNatural = appByYear.get(r.ano) ?? 0;
+      const rlNatural = rlByYear.get(r.ano) ?? 0;
+      return propNatural - appNatural - rlNatural;
+    });
+    const data = sorted.map((r, i) => {
+      const totalHa = Number(r.area_total_ha ?? 0);
+      return totalHa > 0 ? Number(((areaHa[i] / totalHa) * 100).toFixed(2)) : 0;
+    });
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: this.localizationService.translate(
+            'right_sidebar.resumo_card.chart_labels.forest_surplus',
+          ),
+          data,
+          areaHa,
+          backgroundColor: '#228B22',
+          borderColor: '#1f5e3a',
+          borderWidth: 1,
+        },
+      ],
+    };
   }
 
   private updateLayersForStatistics(descriptor: Descriptor): void {

@@ -37,8 +37,8 @@
       <!-- Vegetation evolution charts (Propriedade / APP / RL tabs) -->
       <p-accordionTab
           [header]="'right_sidebar.malha_chart.title' | translate"
-          *ngIf="malhaVegetationChartData || malhaAppChartData || malhaRlChartData || malhaVegetationLoading || malhaVegetationError">
-        <ng-container *ngIf="malhaVegetationChartData || malhaAppChartData || malhaRlChartData || malhaVegetationLoading; else malhaErrorTpl">
+          *ngIf="malhaVegetationChartData || malhaAppChartData || malhaRlChartData || malhaForestSurplusChartData || malhaVegetationLoading || malhaVegetationError">
+        <ng-container *ngIf="malhaVegetationChartData || malhaAppChartData || malhaRlChartData || malhaForestSurplusChartData || malhaVegetationLoading; else malhaErrorTpl">
           <p-tabView>
             <p-tabPanel
                 [header]="'right_sidebar.malha_chart.tab_propriedade' | translate"
@@ -95,6 +95,26 @@
                     <app-loading-spinner></app-loading-spinner>
                     <p style="text-align: center; color: #666; margin-top: 8px;">
                       {{ 'right_sidebar.malha_chart.loading_rl' | translate }}
+                    </p>
+                  </div>
+                </ng-template>
+              </div>
+            </p-tabPanel>
+            <p-tabPanel
+                [header]="'right_sidebar.resumo_card.chart_labels.forest_surplus' | translate"
+                *ngIf="malhaForestSurplusChartData || malhaVegetationLoading">
+              <div class="chart-section">
+                <ng-container *ngIf="malhaForestSurplusChartData; else forestSurplusLoadingTpl">
+                  <div class="chart-container" style="height: 380px; padding: 10px;">
+                    <p-chart type="bar" [data]="malhaForestSurplusChartData" [options]="vegetationBarOptions" height="360px">
+                    </p-chart>
+                  </div>
+                </ng-container>
+                <ng-template #forestSurplusLoadingTpl>
+                  <div class="loader-container">
+                    <app-loading-spinner></app-loading-spinner>
+                    <p style="text-align: center; color: #666; margin-top: 8px;">
+                      {{ 'right_sidebar.malha_chart.loading' | translate }}
                     </p>
                   </div>
                 </ng-template>
