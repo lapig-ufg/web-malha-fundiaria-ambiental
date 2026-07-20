@@ -181,12 +181,21 @@ def compute_zonal_history(
     Compute per-year natural-vegetation statistics for a property, optionally
     restricted to APP and Reserva Legal zones.
 
-    Returns a dict with keys ``propriedade``, ``app``, ``rl``. Each value is
-    a list of per-year dicts with fields:
+    Returns a dict with keys ``propriedade``, ``app``, ``rl``, ``app_rl_uniao``.
+    Each value is a list of per-year dicts with fields:
         ano, pct_natural, area_natural_ha, area_nao_natural_ha, area_total_ha
 
+    ``app_rl_uniao`` is the union of the APP and RL zone masks (not their
+    sum) — APP and RL commonly overlap in practice (the Reserva Legal
+    requirement can be met using APP area, per Art. 15 of Law 12.651/2012),
+    so naively summing ``area_natural_ha`` from ``app`` and ``rl`` would
+    double-count the overlapping natural vegetation. Consumers computing a
+    "forest surplus" (propriedade natural minus legally-protected natural)
+    must subtract ``app_rl_uniao``, not ``app`` + ``rl``.
+
     If ``path_app`` or ``path_rl`` is None (or the file does not exist), the
-    corresponding key is set to None.
+    corresponding key is set to None. ``app_rl_uniao`` is None only when
+    both are unavailable.
 
     ``classes_naturais`` is a tuple of integer class codes considered "natural"
     (default (1,)). When only ``classe_vegetacao`` is provided, it is used as
@@ -327,6 +336,20 @@ def compute_zonal_history(
         mask_rl = rl_bool
         area_total_rl_ha = float(mask_rl.sum()) * pixel_area_ha
 
+    # ---- 5b. Union of APP + RL masks ----
+    # APP and RL commonly overlap (see docstring). Summing area_natural_ha
+    # from the two independent zones double-counts that overlap, so a
+    # separate union zone is computed here for correct "forest surplus"
+    # (protected-area) calculations.
+    mask_union: Optional[np.ndarray] = None
+    area_total_union_ha: Optional[float] = None
+    if mask_app is not None or mask_rl is not None:
+        if mask_app is not None and mask_rl is not None:
+            mask_union = mask_app | mask_rl
+        else:
+            mask_union = mask_app if mask_app is not None else mask_rl
+        area_total_union_ha = float(mask_union.sum()) * pixel_area_ha
+
     # ---- 6. Compute statistics ----
     # Valid pixels: not nodata
     valido_3d = np.ones_like(chunk_3d, dtype=bool)
@@ -380,8 +403,14 @@ def compute_zonal_history(
     # RL zone — area from mask pixel count
     result_rl = _compute_zone(mask_rl, area_total_rl_ha) if mask_rl is not None else None
 
+    # APP ∪ RL zone (deduplicated) — area from mask pixel count
+    result_app_rl_uniao = (
+        _compute_zone(mask_union, area_total_union_ha) if mask_union is not None else None
+    )
+
     return {
         "propriedade": result_propriedade,
         "app": result_app,
         "rl": result_rl,
+        "app_rl_uniao": result_app_rl_uniao,
     }

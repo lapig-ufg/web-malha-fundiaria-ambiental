@@ -622,7 +622,7 @@ class StatisticsSidebarComponent implements OnDestroy {
         },
         {
           label: this.localizationService.translate(
-            'right_sidebar.resumo_card.chart_labels.deficit',
+            'right_sidebar.resumo_card.chart_labels.non_natural',
           ),
           data: deficitPct,
           areaHa: deficitHa,
@@ -635,9 +635,9 @@ class StatisticsSidebarComponent implements OnDestroy {
   }
 
   /**
-   * Build all three malha-mode charts from the v2 zonal result dict.
-   * The result has keys propriedade, app, rl — each an array of per-year rows
-   * with fields ano, pct_natural, area_natural_ha, etc.
+   * Build all four malha-mode charts from the v2 zonal result dict.
+   * The result has keys propriedade, app, rl, app_rl_uniao — each an array
+   * of per-year rows with fields ano, pct_natural, area_natural_ha, etc.
    */
   private buildAllMalhaCharts(result: any): void {
     // Propriedade (whole property) — always present
@@ -658,44 +658,41 @@ class StatisticsSidebarComponent implements OnDestroy {
       this.malhaRlChartData = this.buildZoneDeficitBarChartData(result.rl);
     }
 
-    // Excedente Florestal: propriedade.area_natural_ha - (app + rl area_natural_ha),
-    // as a % of the property's total area. Missing APP/RL zones count as 0,
-    // matching the region-level forest-surplus calculation.
+    // Excedente Florestal: propriedade.area_natural_ha - (APP ∪ RL area_natural_ha),
+    // as a % of the property's total area. Using the union (not app + rl
+    // summed independently) avoids double-counting natural vegetation in the
+    // (very common) overlap between APP and RL — see compute_zonal_history's
+    // docstring. Missing APP/RL zones count as 0.
     this.malhaForestSurplusChartData = this.buildMalhaForestSurplusChartData(
       result.propriedade,
-      result.app,
-      result.rl,
+      result.app_rl_uniao,
     );
   }
 
   /**
-   * Build the property-level forest surplus chart from the propriedade/app/rl
-   * rows returned by the zonal job (matched by `ano`).
+   * Build the property-level forest surplus chart from the propriedade rows
+   * and the APP ∪ RL union zone rows returned by the zonal job (matched by
+   * `ano`).
    */
   private buildMalhaForestSurplusChartData(
     propRows: any[] | null | undefined,
-    appRows: any[] | null | undefined,
-    rlRows: any[] | null | undefined,
+    appRlUniaoRows: any[] | null | undefined,
   ): any {
     if (!propRows || !Array.isArray(propRows) || propRows.length === 0) {
       return null;
     }
 
-    const naturalHaByYear = (rows: any[] | null | undefined): Map<number, number> => {
-      const map = new Map<number, number>();
-      (rows || []).forEach((r: any) => map.set(r.ano, Number(r.area_natural_ha ?? 0)));
-      return map;
-    };
-    const appByYear = naturalHaByYear(appRows);
-    const rlByYear = naturalHaByYear(rlRows);
+    const protectedHaByYear = new Map<number, number>();
+    (appRlUniaoRows || []).forEach((r: any) =>
+      protectedHaByYear.set(r.ano, Number(r.area_natural_ha ?? 0)),
+    );
 
     const sorted = [...propRows].sort((a, b) => (a.ano ?? 0) - (b.ano ?? 0));
     const labels = sorted.map((r) => (r.ano != null ? String(r.ano) : ''));
     const areaHa = sorted.map((r) => {
       const propNatural = Number(r.area_natural_ha ?? 0);
-      const appNatural = appByYear.get(r.ano) ?? 0;
-      const rlNatural = rlByYear.get(r.ano) ?? 0;
-      return propNatural - appNatural - rlNatural;
+      const protectedNatural = protectedHaByYear.get(r.ano) ?? 0;
+      return propNatural - protectedNatural;
     });
     const data = sorted.map((r, i) => {
       const totalHa = Number(r.area_total_ha ?? 0);
@@ -1058,7 +1055,7 @@ class StatisticsSidebarComponent implements OnDestroy {
           },
           {
             label: this.localizationService.translate(
-              'right_sidebar.resumo_card.chart_labels.deficit',
+              'right_sidebar.resumo_card.chart_labels.non_natural',
             ),
             data: deficitData,
             areaHa: deficitAreaHa,
