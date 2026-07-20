@@ -50,6 +50,9 @@ class Settings(BaseSettings):
     ZONAL_STATISTICS_CLASS_VEGETACAO: int = 1
     ZONAL_STATISTICS_JOB_TTL_SECONDS: int = 900
     ZONAL_STATISTICS_MAX_PROPERTY_AREA_HA: float = 200_000.0
+    ZONAL_STATISTICS_RASTER_APP: str = "/app/data/aux/img_area_preservacao_permanente.tif"
+    ZONAL_STATISTICS_RASTER_RL: str = "/app/data/aux/img_reserva_legal.tif"
+    ZONAL_STATISTICS_CLASSES_NATURAIS: str = "1"
 
     APP_PRODUCAO: str = ""
     

@@ -11,8 +11,8 @@ TARGET_FILENAME = "balanco_passivo_ambiental_br_v3.parquet"
 # Configuração do cliente MinIO
 client = Minio(
     "s3.lapig.iesa.ufg.br",
-    access_key="gbZ7OMvjHQrUjl5JJ7Xx",  # Substitua pelas credenciais reais se necessário
-    secret_key="oZCt7EpM33wtnMCsuBRXkAS8OMD3pUOBa7umMZzx",  # Substitua pelas credenciais reais se necessário
+    access_key="",  # Substitua pelas credenciais reais se necessário
+    secret_key="",  # Substitua pelas credenciais reais se necessário
     secure=True
 )
 

@@ -423,7 +423,15 @@
       "empty": "Nenhuma propriedade selecionada.",
       "error": "Não foi possível calcular a evolução da vegetação para esta propriedade no momento. Tente novamente mais tarde.",
       "intro": "Selecione uma propriedade da malha fundiária (clicando no mapa ou usando a busca por CAR) para visualizar suas informações detalhadas e a evolução anual da cobertura de vegetação natural entre 1985 e 2024.",
-      "attributes_title": "Informações da Propriedade"
+      "attributes_title": "Informações da Propriedade",
+      "title_app": "Evolução da Vegetação Natural — APP",
+      "title_rl": "Evolução da Vegetação Natural — Reserva Legal",
+      "loading_app": "Calculando a evolução da vegetação na APP…",
+      "loading_rl": "Calculando a evolução da vegetação na Reserva Legal…",
+      "label_pct_natural": "% Vegetação Natural",
+      "tab_propriedade": "Propriedade",
+      "tab_app": "APP",
+      "tab_rl": "Reserva Legal"
     },
     "region_description": "Selecione um estado, município ou bioma para visualizar estatísticas regionais de cobertura vegetal, áreas de preservação permanente (APP), reserva legal (RL) e malha fundiária ambiental (MFA)."
   },
