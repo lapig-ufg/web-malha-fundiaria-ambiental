@@ -73,6 +73,15 @@ class StatisticsSidebarComponent implements OnDestroy {
   public vegetationEvolutionRlLoading = false;
 
   /**
+   * Forest surplus chart data (region-level): x = year, y = area (ha) of
+   * natural vegetation in the analysis area minus the natural vegetation
+   * area within APP + Reserva Legal. Populated via the
+   * /service/charts/forest-surplus endpoint.
+   */
+  public forestSurplusChartData: any = null;
+  public forestSurplusLoading = false;
+
+  /**
    * Per-property vegetation chart (bar): x = year, y = % of the property
    * area classified as natural vegetation. Populated by polling the
    * /service/zonal/jobs endpoint whenever a malha_fundiaria feature is
@@ -80,6 +89,7 @@ class StatisticsSidebarComponent implements OnDestroy {
    */
   public malhaVegetationChartData: any = null;
   public malhaVegetationLoading: boolean = false;
+  public malhaVegetationError: string | null = null;
   public currentJobId: string | null = null;
   private selectedFeatureSubscription: Subscription = new Subscription();
 
@@ -118,8 +128,13 @@ class StatisticsSidebarComponent implements OnDestroy {
       legend: { display: false },
       tooltip: {
         callbacks: {
-          label: (context: any) =>
-            `${Number(context.parsed.y).toFixed(2)}%`,
+          label: (context: any) => {
+            const pct = `${Number(context.parsed.y).toFixed(2)}%`;
+            const areaHa = context.dataset.areaHa?.[context.dataIndex];
+            if (areaHa === undefined || areaHa === null) return pct;
+            const ha = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(areaHa);
+            return `${pct} (${ha} ha)`;
+          },
         },
       },
     },
@@ -407,12 +422,14 @@ class StatisticsSidebarComponent implements OnDestroy {
   private clearMalhaChart(): void {
     this.malhaVegetationChartData = null;
     this.malhaVegetationLoading = false;
+    this.malhaVegetationError = null;
     this.currentJobId = null;
   }
 
   private loadMalhaChart(feature: SelectedFeature): void {
     this.malhaVegetationLoading = true;
     this.malhaVegetationChartData = null;
+    this.malhaVegetationError = null;
     this.currentJobId = null;
 
     this.zonalService.startZonalJob(feature.geometry).subscribe({
@@ -423,6 +440,9 @@ class StatisticsSidebarComponent implements OnDestroy {
       error: (err) => {
         console.error('startZonalJob failed', err);
         this.malhaVegetationLoading = false;
+        this.malhaVegetationError = this.localizationService.translate(
+          'right_sidebar.malha_chart.error',
+        );
       },
     });
   }
@@ -444,6 +464,9 @@ class StatisticsSidebarComponent implements OnDestroy {
           if (resp.status === 'error') {
             console.error('zonal job error', resp.error);
             this.malhaVegetationLoading = false;
+            this.malhaVegetationError = this.localizationService.translate(
+              'right_sidebar.malha_chart.error',
+            );
             return;
           }
           this.malhaVegetationChartData = this.buildMalhaChartData(
@@ -454,6 +477,9 @@ class StatisticsSidebarComponent implements OnDestroy {
         error: (err) => {
           console.error('poll failed', err);
           this.malhaVegetationLoading = false;
+          this.malhaVegetationError = this.localizationService.translate(
+            'right_sidebar.malha_chart.error',
+          );
         },
       });
     };
@@ -514,6 +540,7 @@ class StatisticsSidebarComponent implements OnDestroy {
     this.getVegetationEvolutionData();
     this.getVegetationEvolutionAppData();
     this.getVegetationEvolutionRlData();
+    this.getForestSurplusData();
   }
 
   /**
@@ -599,6 +626,33 @@ class StatisticsSidebarComponent implements OnDestroy {
 
   private getVegetationEvolutionRlData(): void {
     this.getVegetationEvolutionByCategoriaData('Reserva Legal', 'vegetation_evolution_rl');
+  }
+
+  /**
+   * Fetch forest surplus data (area, ha) from the dedicated endpoint.
+   * Same resilient pattern as the other vegetation evolution charts.
+   */
+  private getForestSurplusData(): void {
+    this.forestSurplusLoading = true;
+
+    this.chartService
+      .getForestSurplus(this.regionFilter)
+      .subscribe({
+        next: (data: any) => {
+          this.forestSurplusLoading = false;
+          if (Array.isArray(data) && data.length > 0) {
+            this.summaryData.set('forest_surplus', { data: data, year: null });
+            this.updateChartData('forest_surplus');
+          } else {
+            this.forestSurplusChartData = null;
+          }
+        },
+        error: (error) => {
+          console.error('Forest surplus data unavailable:', error);
+          this.forestSurplusLoading = false;
+          this.forestSurplusChartData = null;
+        },
+      });
   }
 
   private getLayerSummaryData(summaryKey: string): void {
@@ -737,6 +791,7 @@ class StatisticsSidebarComponent implements OnDestroy {
       const rawData = summary.data;
       const labels = rawData.map((item: any) => String(item.label));
       const data = rawData.map((item: any) => Number(Number(item.value).toFixed(2)));
+      const areaHa = rawData.map((item: any) => Number(item.area_ha ?? 0));
       const color = rawData.length > 0 ? rawData[0].color : '#228B22';
 
       this.vegetationEvolutionChartData = {
@@ -747,6 +802,7 @@ class StatisticsSidebarComponent implements OnDestroy {
               'right_sidebar.resumo_card.chart_labels.vegetation_pct',
             ),
             data,
+            areaHa,
             backgroundColor: color,
             borderColor: '#1f5e3a',
             borderWidth: 1,
@@ -773,6 +829,7 @@ class StatisticsSidebarComponent implements OnDestroy {
       const rawData = summary.data;
       const labels = rawData.map((item: any) => String(item.label));
       const data = rawData.map((item: any) => Number(Number(item.value ?? 0).toFixed(2)));
+      const areaHa = rawData.map((item: any) => Number(item.area_ha ?? 0));
       const color = rawData.length > 0 ? rawData[0].color : '#228B22';
 
       const chartData = {
@@ -783,6 +840,7 @@ class StatisticsSidebarComponent implements OnDestroy {
               'right_sidebar.resumo_card.chart_labels.vegetation_pct',
             ),
             data,
+            areaHa,
             backgroundColor: color,
             borderColor: '#1f5e3a',
             borderWidth: 1,
@@ -797,6 +855,40 @@ class StatisticsSidebarComponent implements OnDestroy {
       }
 
       // Reuse the same axis titles as the total vegetation graph.
+      this.vegetationBarOptions.scales.x.title.text =
+        this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_x_axis') || 'Ano';
+      this.vegetationBarOptions.scales.y.title.text =
+        this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_y_axis') || '% Vegetação Natural';
+    } else if (key === 'forest_surplus') {
+      const summary = this.summaryData.get('forest_surplus');
+      if (!summary || !summary.data || !Array.isArray(summary.data)) {
+        this.forestSurplusChartData = null;
+        return;
+      }
+
+      const rawData = summary.data;
+      const labels = rawData.map((item: any) => String(item.label));
+      const data = rawData.map((item: any) => Number(Number(item.value ?? 0).toFixed(2)));
+      const areaHa = rawData.map((item: any) => Number(item.area_ha ?? 0));
+      const color = rawData.length > 0 ? rawData[0].color : '#228B22';
+
+      this.forestSurplusChartData = {
+        labels,
+        datasets: [
+          {
+            label: this.localizationService.translate(
+              'right_sidebar.resumo_card.chart_labels.forest_surplus',
+            ),
+            data,
+            areaHa,
+            backgroundColor: color,
+            borderColor: '#1f5e3a',
+            borderWidth: 1,
+          },
+        ],
+      };
+
+      // Reuse the same percentage axis titles as the other vegetation graphs.
       this.vegetationBarOptions.scales.x.title.text =
         this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_x_axis') || 'Ano';
       this.vegetationBarOptions.scales.y.title.text =

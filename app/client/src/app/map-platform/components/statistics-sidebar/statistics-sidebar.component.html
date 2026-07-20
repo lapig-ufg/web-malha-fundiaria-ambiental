@@ -37,7 +37,7 @@
       <!-- Vegetation evolution chart -->
       <p-accordionTab
           [header]="'right_sidebar.malha_chart.title' | translate"
-          *ngIf="malhaVegetationChartData || malhaVegetationLoading">
+          *ngIf="malhaVegetationChartData || malhaVegetationLoading || malhaVegetationError">
         <div class="chart-section">
           <ng-container *ngIf="malhaVegetationChartData; else malhaLoadingTpl">
             <div class="chart-container" style="height: 380px; padding: 10px;">
@@ -46,12 +46,19 @@
             </div>
           </ng-container>
           <ng-template #malhaLoadingTpl>
-            <div class="loader-container">
-              <app-loading-spinner></app-loading-spinner>
-              <p style="text-align: center; color: #666; margin-top: 8px;">
-                {{ 'right_sidebar.malha_chart.loading' | translate }}
-              </p>
-            </div>
+            <ng-container *ngIf="malhaVegetationLoading; else malhaErrorTpl">
+              <div class="loader-container">
+                <app-loading-spinner></app-loading-spinner>
+                <p style="text-align: center; color: #666; margin-top: 8px;">
+                  {{ 'right_sidebar.malha_chart.loading' | translate }}
+                </p>
+              </div>
+            </ng-container>
+          </ng-template>
+          <ng-template #malhaErrorTpl>
+            <p class="malha-chart-error" style="text-align: center; color: #b02a2a; margin: 8px 0;">
+              {{ malhaVegetationError }}
+            </p>
           </ng-template>
         </div>
       </p-accordionTab>
@@ -119,7 +126,7 @@
         <!-- Section: Vegetation Evolution (Total / APP / RL tabs) -->
         <p-accordionTab
             [header]="vegetationEvolutionTitle"
-            *ngIf="vegetationEvolutionChartData || vegetationEvolutionAppChartData || vegetationEvolutionRlChartData || vegetationEvolutionAppLoading || vegetationEvolutionRlLoading">
+            *ngIf="vegetationEvolutionChartData || vegetationEvolutionAppChartData || vegetationEvolutionRlChartData || vegetationEvolutionAppLoading || vegetationEvolutionRlLoading || forestSurplusChartData || forestSurplusLoading">
           <p-tabView>
             <p-tabPanel
                 [header]="'right_sidebar.resumo_card.chart_labels.vegetation_total' | translate"
@@ -168,6 +175,26 @@
                   </div>
                 </ng-container>
                 <ng-template #vegRlLoading>
+                  <div class="loader-container">
+                    <app-loading-spinner></app-loading-spinner>
+                  </div>
+                </ng-template>
+              </div>
+            </p-tabPanel>
+            <p-tabPanel
+                [header]="'right_sidebar.resumo_card.chart_labels.forest_surplus' | translate"
+                *ngIf="forestSurplusChartData || forestSurplusLoading">
+              <div class="chart-section">
+                <ng-container *ngIf="forestSurplusChartData; else forestSurplusLoadingTpl">
+                  <div class="chart-container" style="height: 260px; padding: 10px;">
+                    <p-chart type="bar"
+                             [data]="forestSurplusChartData"
+                             [options]="vegetationBarOptions"
+                             height="240px">
+                    </p-chart>
+                  </div>
+                </ng-container>
+                <ng-template #forestSurplusLoadingTpl>
                   <div class="loader-container">
                     <app-loading-spinner></app-loading-spinner>
                   </div>

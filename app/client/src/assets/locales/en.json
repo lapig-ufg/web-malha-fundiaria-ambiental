@@ -405,7 +405,8 @@
         "Malha Fundiária": "Environmental Land Tenure",
         "Não Natural": "Non-Natural",
         "vegetation_pct": "% Natural Vegetation",
-        "vegetation_total": "Total"
+        "vegetation_total": "Total",
+        "forest_surplus": "Forest Surplus"
       },
       "complement_text_pasture_quality": "in Pasture Area of",
       "obs_text": "*The difference between the pasture area presented here and the mapped area is explained by the area adjustment from the accuracy analysis, detailed in Parente et al. 2019 (<a target='_blank' class='link-details' href='https://doi.org/10.1016/j.rse.2019.111301'> https://doi.org/10.1016/j.rse.2019.111301</a>)",
@@ -420,6 +421,7 @@
       "title": "Natural Vegetation Evolution",
       "loading": "Calculating vegetation evolution…",
       "empty": "No property selected.",
+      "error": "Could not calculate the vegetation evolution for this property right now. Please try again later.",
       "intro": "Select a property of the land tenure (by clicking on the map or by searching for a CAR code) to see its detailed information and the annual evolution of natural vegetation cover between 1985 and 2024.",
       "attributes_title": "Property Information"
     },

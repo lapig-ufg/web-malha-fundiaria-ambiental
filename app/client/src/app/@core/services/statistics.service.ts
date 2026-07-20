@@ -111,6 +111,26 @@ class StatisticsService {
       .pipe(catchError(this.errorHandler));
   }
 
+  /**
+   * Get forest surplus chart data (year vs area, ha): natural vegetation
+   * area of the analysis area (natural_vegetation_regions.class_1) minus
+   * the natural vegetation area within APP + Reserva Legal
+   * (natural_vegetation_regions_app_rl_1985_2024.class_1).
+   * @param regionFilter
+   * @returns
+   */
+  public getForestSurplus(regionFilter: RegionFilter): Observable<any> {
+    let params =
+      `lang=${this.localizationService.currentLang()}` +
+      `&typeRegion=${regionFilter.type}` +
+      `&valueRegion=${regionFilter.value}` +
+      `&textRegion=${regionFilter.text}`;
+
+    return this.httpClient
+      .get<any>(`${this.apiURL}/forest-surplus?${params}`, this.httpOptions)
+      .pipe(catchError(this.errorHandler));
+  }
+
   private errorHandler(error: any) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {

@@ -1,0 +1,12 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/local/Dockerfile
+    image: web-malha-fundiaria-ambiental:local
+    container_name: malha-fundiaria-ambiental
+    ports:
+      - "${PORT:-3000}:3000"
+    env_file:
+      - app/server/.env
+    restart: unless-stopped

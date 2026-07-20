@@ -151,6 +151,7 @@ def get_queries(params: dict = None):
                     SELECT
                         year as label,
                         '#228B22' as color,
+                        CAST(COALESCE(SUM(class_1), 0) AS double precision) as area_ha,
                         CAST(COALESCE(SUM(class_1), 0) AS double precision)
                           / NULLIF(CAST(COALESCE(SUM(class_1), 0) + COALESCE(SUM(class_2), 0) AS double precision), 0)
                           * 100 as value
@@ -170,6 +171,7 @@ def get_queries(params: dict = None):
                     SELECT
                         year as label,
                         '#228B22' as color,
+                        CAST(COALESCE(SUM(class_1), 0) AS double precision) as area_ha,
                         CAST(COALESCE(SUM(class_1), 0) AS double precision)
                           / NULLIF(CAST(COALESCE(SUM(class_1), 0) + COALESCE(SUM(class_2), 0) AS double precision), 0)
                           * 100 as value
@@ -177,6 +179,48 @@ def get_queries(params: dict = None):
                     WHERE categoria = ${{categoria}} AND {region_filter_coverage}
                     GROUP BY year
                     ORDER BY year
+                """,
+                'mantain': True
+            }
+        ],
+        # Excedente Florestal: área de vegetação natural da área de análise
+        # (natural_vegetation_regions.class_1) menos a soma da vegetação
+        # natural dentro de APP e Reserva Legal
+        # (natural_vegetation_regions_app_rl_1985_2024.class_1), por ano.
+        # Exibido como % da área total de análise (class_1 + class_2),
+        # mesma base das demais abas; area_ha carrega o valor absoluto
+        # (em hectares) para o tooltip.
+        'forest_surplus': lambda p: [
+            {
+                'source': 'lapig',
+                'id': 'forest_surplus',
+                'sql': f"""
+                    WITH total AS (
+                        SELECT
+                            year,
+                            CAST(COALESCE(SUM(class_1), 0) AS double precision) as total_class_1,
+                            CAST(COALESCE(SUM(class_1), 0) + COALESCE(SUM(class_2), 0) AS double precision) as total_area
+                        FROM natural_vegetation_regions
+                        WHERE {region_filter_coverage}
+                        GROUP BY year
+                    ), app_rl AS (
+                        SELECT
+                            year,
+                            CAST(COALESCE(SUM(class_1), 0) AS double precision) as app_rl_class_1
+                        FROM natural_vegetation_regions_app_rl_1985_2024
+                        WHERE categoria IN ('Área de preservação permanente', 'Reserva Legal')
+                          AND {region_filter_coverage}
+                        GROUP BY year
+                    )
+                    SELECT
+                        total.year as label,
+                        '#228B22' as color,
+                        (total.total_class_1 - COALESCE(app_rl.app_rl_class_1, 0)) as area_ha,
+                        (total.total_class_1 - COALESCE(app_rl.app_rl_class_1, 0))
+                          / NULLIF(total.total_area, 0) * 100 as value
+                    FROM total
+                    LEFT JOIN app_rl ON app_rl.year = total.year
+                    ORDER BY total.year
                 """,
                 'mantain': True
             }

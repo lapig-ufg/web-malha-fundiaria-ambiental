@@ -405,7 +405,8 @@
         "Malha Fundiária": "Malha Fundiária",
         "Não Natural": "Não Natural",
         "vegetation_pct": "% Vegetação Natural",
-        "vegetation_total": "Total"
+        "vegetation_total": "Total",
+        "forest_surplus": "Excedente Florestal"
       },
       "complement_text_pasture_quality": "da área de Pastagem do(a)",
       "obs_text": "*A diferença entre a área de pastagem aqui apresentada e a área mapeada, é explicada pelo ajuste de área a partir da análise de acurácia, detalhada em Parente et al. 2019 (<a target='_blank' class='link-details' href='https://doi.org/10.1016/j.rse.2019.111301'> https://doi.org/10.1016/j.rse.2019.111301</a>)",
@@ -420,6 +421,7 @@
       "title": "Evolução da Vegetação Natural",
       "loading": "Calculando a evolução da vegetação…",
       "empty": "Nenhuma propriedade selecionada.",
+      "error": "Não foi possível calcular a evolução da vegetação para esta propriedade no momento. Tente novamente mais tarde.",
       "intro": "Selecione uma propriedade da malha fundiária (clicando no mapa ou usando a busca por CAR) para visualizar suas informações detalhadas e a evolução anual da cobertura de vegetação natural entre 1985 e 2024.",
       "attributes_title": "Informações da Propriedade"
     },
