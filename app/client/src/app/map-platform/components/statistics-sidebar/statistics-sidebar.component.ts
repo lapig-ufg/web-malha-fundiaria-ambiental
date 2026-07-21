@@ -112,28 +112,6 @@ class StatisticsSidebarComponent implements OnDestroy {
   public malhaMode: boolean = false;
   public malhaFeature: SelectedFeature | null = null;
 
-  public malhaBarOptions: any = {
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        callbacks: {
-          label: (context: any) =>
-            `${Number(context.parsed.y).toFixed(2)}%`,
-        },
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 100,
-        ticks: {
-          callback: (value: any) => value + '%',
-        },
-      },
-    },
-    maintainAspectRatio: false,
-  };
-
   public vegetationBarOptions: any = {
     plugins: {
       legend: { display: false },
@@ -565,7 +543,9 @@ class StatisticsSidebarComponent implements OnDestroy {
 
   /**
    * Build a Chart.js bar-chart dataset from an array of per-year rows.
-   * Each row must have `ano` and the given valueKey.
+   * Each row must have `ano` and the given valueKey. `areaHa` (from
+   * `area_natural_ha`) is attached so the shared vegetationTooltipLabel
+   * callback can show the hectares alongside the percentage.
    */
   private buildZoneBarChartData(rows: any[], valueKey: string): any {
     const sorted = [...rows].sort(
@@ -577,6 +557,7 @@ class StatisticsSidebarComponent implements OnDestroy {
     const data = sorted.map((r) =>
       Number(Number(r[valueKey] ?? 0).toFixed(2)),
     );
+    const areaHa = sorted.map((r) => Number(r.area_natural_ha ?? 0));
     return {
       labels,
       datasets: [
@@ -585,6 +566,7 @@ class StatisticsSidebarComponent implements OnDestroy {
             'right_sidebar.malha_chart.label_pct_natural',
           ),
           data,
+          areaHa,
           backgroundColor: '#2e8b57',
           borderColor: '#1f5e3a',
           borderWidth: 1,

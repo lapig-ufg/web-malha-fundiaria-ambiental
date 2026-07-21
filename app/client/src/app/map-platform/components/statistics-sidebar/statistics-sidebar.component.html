@@ -46,7 +46,7 @@
               <div class="chart-section">
                 <ng-container *ngIf="malhaVegetationChartData; else malhaLoadingTpl">
                   <div class="chart-container" style="height: 380px; padding: 10px;">
-                    <p-chart type="bar" [data]="malhaVegetationChartData" [options]="malhaBarOptions" height="360px">
+                    <p-chart type="bar" [data]="malhaVegetationChartData" [options]="vegetationBarOptions" height="360px">
                     </p-chart>
                   </div>
                 </ng-container>
