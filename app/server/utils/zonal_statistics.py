@@ -412,5 +412,6 @@ def compute_zonal_history(
         "propriedade": result_propriedade,
         "app": result_app,
         "rl": result_rl,
-        "app_rl_uniao": result_app_rl_uniao,
+        "app_rl_uniao": result_app_rl_uniao
+      
     }
