@@ -33,15 +33,20 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import rasterio
-from pyproj import Transformer
+from pyproj import CRS, Geod, Transformer
 from rasterio.mask import mask
 from rasterio.vrt import WarpedVRT
 from rasterio.warp import reproject as warp_reproject, Resampling
-from shapely.geometry import shape as shapely_shape
+from shapely.geometry import box as shapely_box, shape as shapely_shape
 from shapely.ops import transform as shapely_transform
 
 # Regex to extract a 4-digit year (19xx or 20xx) from a filename.
 _REGEX_ANO = re.compile(r"(19|20)\d{2}")
+
+# Used for geodesic area calculations when a CRS is geographic (degrees,
+# e.g. EPSG:4326) — a planar shapely `.area` on lon/lat coordinates is in
+# square degrees, not a real unit of area, and silently rounds to ~0 ha.
+_GEOD = Geod(ellps="WGS84")
 
 
 # -------- Geometry helpers --------
@@ -74,19 +79,54 @@ def _reproject_geometry(
     geom_geojson: Dict[str, Any],
     src_crs: str,
     dst_crs: str,
-) -> Tuple[Dict[str, Any], float]:
-    """Reproject a GeoJSON geometry dict from src_crs to dst_crs.
-
-    Returns (reprojected_geojson, area_ha) where area_ha is the geometry
-    area in hectares computed from the reprojected shapely geometry.
-    """
+) -> Dict[str, Any]:
+    """Reproject a GeoJSON geometry dict from src_crs to dst_crs."""
     if src_crs == dst_crs:
-        geom = shapely_shape(geom_geojson)
-        return geom_geojson, geom.area / 10_000.0
+        return geom_geojson
     transformer = Transformer.from_crs(src_crs, dst_crs, always_xy=True)
     geom = shapely_shape(geom_geojson)
     reproj = shapely_transform(lambda x, y, z=None: transformer.transform(x, y), geom)
-    return reproj.__geo_interface__, reproj.area / 10_000.0
+    return reproj.__geo_interface__
+
+
+def _is_geographic(crs: str) -> bool:
+    # Uses pyproj's own CRS (bundled PROJ data), not rasterio/GDAL's, to
+    # avoid picking up a conflicting system-wide PROJ install.
+    return CRS.from_user_input(crs).is_geographic
+
+
+def _area_ha(geom_geojson: Dict[str, Any], crs: str) -> float:
+    """
+    Area (hectares) of a GeoJSON geometry, computed correctly regardless of
+    whether ``crs`` is geographic (e.g. EPSG:4326, lon/lat degrees — a
+    planar shapely ``.area`` there is in square degrees, not hectares, and
+    rounds to ~0 for any real property) or projected (meters — planar
+    ``.area / 10_000`` is valid).
+    """
+    geom = shapely_shape(geom_geojson)
+    if _is_geographic(crs):
+        area_m2, _ = _GEOD.geometry_area_perimeter(geom)
+        return abs(area_m2) / 10_000.0
+    return geom.area / 10_000.0
+
+
+def _pixel_area_ha(transform: rasterio.Affine, crs: str, row: int, col: int) -> float:
+    """
+    Area (hectares) of one raster pixel at grid position (row, col).
+
+    Uses geodesic calculation when ``crs`` is geographic — ground pixel
+    area varies with latitude there, and ``pixel_width * pixel_height``
+    (in degrees) is not a unit of area at all — otherwise falls back to
+    the planar ``width * height / 10_000`` (valid for projected/meter CRSs).
+    """
+    if not _is_geographic(crs):
+        return (abs(transform[0]) * abs(transform[4])) / 10_000.0
+
+    x0, y0 = transform * (col, row)
+    x1, y1 = transform * (col + 1, row + 1)
+    pixel_box = shapely_box(min(x0, x1), min(y0, y1), max(x0, x1), max(y0, y1))
+    area_m2, _ = _GEOD.geometry_area_perimeter(pixel_box)
+    return abs(area_m2) / 10_000.0
 
 
 # -------- Year extraction --------
@@ -294,8 +334,8 @@ def compute_zonal_history(
         nodata_ref = src_ref.nodata
 
     bare_geom = _normalize_geometry(geometry)
-    reproj_geom, area_geom_ha = _reproject_geometry(bare_geom, input_crs, raster_crs)
-    geom_geojson = reproj_geom
+    area_geom_ha = _area_ha(bare_geom, input_crs)
+    geom_geojson = _reproject_geometry(bare_geom, input_crs, raster_crs)
 
     # ---- 3. Clip APP and RL rasters (reprojecting if needed) ----
     app_available = path_app is not None and os.path.isfile(path_app)
@@ -324,7 +364,9 @@ def compute_zonal_history(
         if shape_ref is None:
             shape_ref = banda.shape
             transform_ref = transform_mb
-            pixel_area_ha = (abs(transform_mb[0]) * abs(transform_mb[4])) / 10_000.0
+            pixel_area_ha = _pixel_area_ha(
+                transform_mb, raster_crs, banda.shape[0] // 2, banda.shape[1] // 2
+            )
         else:
             if banda.shape != shape_ref or not transform_mb.almost_equals(transform_ref, precision=1e-6):
                 raise ValueError(
