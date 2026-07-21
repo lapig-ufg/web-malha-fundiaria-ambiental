@@ -547,7 +547,12 @@ class StatisticsSidebarComponent implements OnDestroy {
    * `area_natural_ha`) is attached so the shared vegetationTooltipLabel
    * callback can show the hectares alongside the percentage.
    */
-  private buildZoneBarChartData(rows: any[], valueKey: string): any {
+  private buildZoneBarChartData(
+    rows: any[],
+    valueKey: string,
+    labelKey: string = 'right_sidebar.malha_chart.label_pct_natural',
+    color: string = '#2e8b57',
+  ): any {
     const sorted = [...rows].sort(
       (a, b) => (a.ano ?? 0) - (b.ano ?? 0),
     );
@@ -562,12 +567,10 @@ class StatisticsSidebarComponent implements OnDestroy {
       labels,
       datasets: [
         {
-          label: this.localizationService.translate(
-            'right_sidebar.malha_chart.label_pct_natural',
-          ),
+          label: this.localizationService.translate(labelKey),
           data,
           areaHa,
-          backgroundColor: '#2e8b57',
+          backgroundColor: color,
           borderColor: '#1f5e3a',
           borderWidth: 1,
         },
@@ -618,8 +621,12 @@ class StatisticsSidebarComponent implements OnDestroy {
 
   /**
    * Build all four malha-mode charts from the v2 zonal result dict.
-   * The result has keys propriedade, app, rl, app_rl_uniao — each an array
-   * of per-year rows with fields ano, pct_natural, area_natural_ha, etc.
+   * The result has keys propriedade, app, rl, app_rl_uniao,
+   * excedente_florestal — each an array of per-year rows with fields ano,
+   * pct_natural, area_natural_ha, etc. The forest-surplus subtraction
+   * itself (propriedade natural - APP ∪ RL natural) is computed server-side
+   * in compute_zonal_history / _compute_excedente_florestal, so the client
+   * just renders excedente_florestal like any other zone.
    */
   private buildAllMalhaCharts(result: any): void {
     // Propriedade (whole property) — always present
@@ -640,62 +647,15 @@ class StatisticsSidebarComponent implements OnDestroy {
       this.malhaRlChartData = this.buildZoneDeficitBarChartData(result.rl);
     }
 
-    // Excedente Florestal: propriedade.area_natural_ha - (APP ∪ RL area_natural_ha),
-    // as a % of the property's total area. Using the union (not app + rl
-    // summed independently) avoids double-counting natural vegetation in the
-    // (very common) overlap between APP and RL — see compute_zonal_history's
-    // docstring. Missing APP/RL zones count as 0.
-    this.malhaForestSurplusChartData = this.buildMalhaForestSurplusChartData(
-      result.propriedade,
-      result.app_rl_uniao,
-    );
-  }
-
-  /**
-   * Build the property-level forest surplus chart from the propriedade rows
-   * and the APP ∪ RL union zone rows returned by the zonal job (matched by
-   * `ano`).
-   */
-  private buildMalhaForestSurplusChartData(
-    propRows: any[] | null | undefined,
-    appRlUniaoRows: any[] | null | undefined,
-  ): any {
-    if (!propRows || !Array.isArray(propRows) || propRows.length === 0) {
-      return null;
+    // Excedente Florestal — already computed server-side
+    if (result.excedente_florestal && Array.isArray(result.excedente_florestal)) {
+      this.malhaForestSurplusChartData = this.buildZoneBarChartData(
+        result.excedente_florestal,
+        'pct_natural',
+        'right_sidebar.resumo_card.chart_labels.forest_surplus',
+        '#228B22',
+      );
     }
-
-    const protectedHaByYear = new Map<number, number>();
-    (appRlUniaoRows || []).forEach((r: any) =>
-      protectedHaByYear.set(r.ano, Number(r.area_natural_ha ?? 0)),
-    );
-
-    const sorted = [...propRows].sort((a, b) => (a.ano ?? 0) - (b.ano ?? 0));
-    const labels = sorted.map((r) => (r.ano != null ? String(r.ano) : ''));
-    const areaHa = sorted.map((r) => {
-      const propNatural = Number(r.area_natural_ha ?? 0);
-      const protectedNatural = protectedHaByYear.get(r.ano) ?? 0;
-      return propNatural - protectedNatural;
-    });
-    const data = sorted.map((r, i) => {
-      const totalHa = Number(r.area_total_ha ?? 0);
-      return totalHa > 0 ? Number(((areaHa[i] / totalHa) * 100).toFixed(2)) : 0;
-    });
-
-    return {
-      labels,
-      datasets: [
-        {
-          label: this.localizationService.translate(
-            'right_sidebar.resumo_card.chart_labels.forest_surplus',
-          ),
-          data,
-          areaHa,
-          backgroundColor: '#228B22',
-          borderColor: '#1f5e3a',
-          borderWidth: 1,
-        },
-      ],
-    };
   }
 
   private updateLayersForStatistics(descriptor: Descriptor): void {

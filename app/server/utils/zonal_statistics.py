@@ -2,10 +2,12 @@
 Per-property vegetation zonal statistics.
 
 Ported from scripts/zonal_statistics_v3.py. Computes natural vegetation
-area per year for three zones — Propriedade (whole property), APP (Permanent
-Preservation Area), and Reserva Legal (Legal Reserve) — by clipping the
-vegetation time-series rasters and two binary zone masks against the
-property geometry.
+area per year for three raster zones — Propriedade (whole property), APP
+(Permanent Preservation Area), and Reserva Legal (Legal Reserve) — by
+clipping the vegetation time-series rasters and two binary zone masks
+against the property geometry. Two derived zones are computed on top of
+those: the APP ∪ RL union (deduplicating their overlap) and the Excedente
+Florestal (forest surplus) — see ``compute_zonal_history``'s docstring.
 
 The geometry is received from the client (not read from a parquet file).
 
@@ -165,6 +167,49 @@ def _resample_mask_to_grid(
     return dst_data
 
 
+# -------- Excedente Florestal --------
+
+
+def _compute_excedente_florestal(
+    propriedade_rows: List[Dict[str, Any]],
+    uniao_rows: Optional[List[Dict[str, Any]]],
+) -> List[Dict[str, Any]]:
+    """
+    Per-year "Excedente Florestal": natural vegetation area in the whole
+    property that exceeds the legally-protected APP ∪ RL area
+    (propriedade.area_natural_ha - app_rl_uniao.area_natural_ha). The union
+    (not APP + RL summed) is used so overlapping APP/RL natural vegetation
+    isn't subtracted twice — see the module docstring.
+
+    Rows share the same shape as the other zones (ano, area_natural_ha,
+    area_nao_natural_ha, area_total_ha, pct_natural) so the client can reuse
+    the same chart-building code: here "area_natural_ha" holds the surplus
+    area and "pct_natural" the surplus as a % of the property's total area.
+
+    Missing APP/RL data (``uniao_rows`` is None) is treated as 0 protected
+    area, so the surplus falls back to the property's full natural area.
+    """
+    uniao_natural_by_year = {
+        r["ano"]: r["area_natural_ha"] for r in (uniao_rows or [])
+    }
+
+    rows = []
+    for r in propriedade_rows:
+        total_ha = r["area_total_ha"]
+        protegido_ha = uniao_natural_by_year.get(r["ano"], 0.0)
+        excedente_ha = r["area_natural_ha"] - protegido_ha
+        pct_excedente = (100 * excedente_ha / total_ha) if total_ha > 0 else None
+
+        rows.append({
+            "ano": r["ano"],
+            "area_natural_ha": round(excedente_ha, 4),
+            "area_nao_natural_ha": round(total_ha - excedente_ha, 4),
+            "area_total_ha": total_ha,
+            "pct_natural": round(pct_excedente, 4) if pct_excedente is not None else None,
+        })
+    return rows
+
+
 # -------- Core algorithm --------
 
 
@@ -181,21 +226,24 @@ def compute_zonal_history(
     Compute per-year natural-vegetation statistics for a property, optionally
     restricted to APP and Reserva Legal zones.
 
-    Returns a dict with keys ``propriedade``, ``app``, ``rl``, ``app_rl_uniao``.
-    Each value is a list of per-year dicts with fields:
+    Returns a dict with keys ``propriedade``, ``app``, ``rl``, ``app_rl_uniao``,
+    ``excedente_florestal``. Each value is a list of per-year dicts with fields:
         ano, pct_natural, area_natural_ha, area_nao_natural_ha, area_total_ha
 
     ``app_rl_uniao`` is the union of the APP and RL zone masks (not their
     sum) — APP and RL commonly overlap in practice (the Reserva Legal
     requirement can be met using APP area, per Art. 15 of Law 12.651/2012),
     so naively summing ``area_natural_ha`` from ``app`` and ``rl`` would
-    double-count the overlapping natural vegetation. Consumers computing a
-    "forest surplus" (propriedade natural minus legally-protected natural)
-    must subtract ``app_rl_uniao``, not ``app`` + ``rl``.
+    double-count the overlapping natural vegetation.
+
+    ``excedente_florestal`` is the "forest surplus": propriedade natural
+    vegetation minus the legally-protected (``app_rl_uniao``) natural
+    vegetation, per year — see ``_compute_excedente_florestal``.
 
     If ``path_app`` or ``path_rl`` is None (or the file does not exist), the
     corresponding key is set to None. ``app_rl_uniao`` is None only when
-    both are unavailable.
+    both are unavailable, in which case ``excedente_florestal`` falls back to
+    the property's full natural area (0 protected area assumed).
 
     ``classes_naturais`` is a tuple of integer class codes considered "natural"
     (default (1,)). When only ``classe_vegetacao`` is provided, it is used as
@@ -408,10 +456,16 @@ def compute_zonal_history(
         _compute_zone(mask_union, area_total_union_ha) if mask_union is not None else None
     )
 
+    # Excedente Florestal — propriedade natural minus the legally-protected
+    # (APP ∪ RL) natural area, per year
+    result_excedente_florestal = _compute_excedente_florestal(
+        result_propriedade, result_app_rl_uniao
+    )
+
     return {
         "propriedade": result_propriedade,
         "app": result_app,
         "rl": result_rl,
-        "app_rl_uniao": result_app_rl_uniao
-      
+        "app_rl_uniao": result_app_rl_uniao,
+        "excedente_florestal": result_excedente_florestal,
     }
