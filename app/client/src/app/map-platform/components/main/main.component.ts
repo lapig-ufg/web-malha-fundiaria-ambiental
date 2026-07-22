@@ -18,11 +18,17 @@ export class MainComponent {
 
   public lang: string = 'pt';
 
+  /**
+   * Startup disclaimer explaining that downloads are per-state (UF) and how
+   * to trigger one. Shown once each time the map app loads.
+   */
+  public showDownloadDisclaimer: boolean = true;
+
   public menus: Array<Menu> = [
     {
       key: 'layers',
       icon: 'fg-layers',
-      show: false,
+      show: true,
     },
     {
       key: 'statistics',

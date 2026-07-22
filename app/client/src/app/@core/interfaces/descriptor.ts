@@ -84,6 +84,8 @@ export interface DescriptorType {
   cogStyle?: any;
   projection?: string;
   legend?: any[];
+  /** Feature property read by the 'geojson' choropleth layer to pick a color from `legend` (each entry: {min, max, color, label}). */
+  choroplethField?: string;
 }
 
 /*

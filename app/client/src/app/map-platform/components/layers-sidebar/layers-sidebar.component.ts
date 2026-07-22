@@ -3,18 +3,19 @@ import { Component, OnDestroy } from '@angular/core';
 /**
  * Services imports.
  */
-import { DescriptorService, DownloadService } from '../../../@core/services';
+import { DescriptorService, DownloadService, RegionFilterService } from '../../../@core/services';
 import { Subscription } from 'rxjs';
 
 /**
  * Interface imports.
  */
-import { Descriptor, DescriptorLayer, DescriptorMetadata, DescriptorType } from '@core/interfaces';
+import { Descriptor, DescriptorLayer, DescriptorMetadata, DescriptorType, RegionFilter } from '@core/interfaces';
 import { DropdownChangeEvent } from 'primeng/dropdown';
 import { AccordionTabCloseEvent, AccordionTabOpenEvent } from 'primeng/accordion';
 import { SliderChangeEvent } from 'primeng/slider';
 import { MessageService } from 'primeng/api';
 import { LocalizationService } from '@core/internationalization/localization.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   standalone: false,
@@ -26,9 +27,21 @@ import { LocalizationService } from '@core/internationalization/localization.ser
 class LayersSidebarComponent implements OnDestroy {
   private static _accordionTabExpanded: number[] = [0];
 
+  public env: any = environment;
+
   public descriptor: Descriptor | null = null;
 
   public descriptorSubscription: Subscription = new Subscription();
+  private regionFilterSubscription: Subscription = new Subscription();
+
+  /**
+   * Downloads are generated per state (see the startup disclaimer) — with
+   * no state/city/biome selected (region filter still at country level,
+   * "Brasil"), download buttons are locked until the user clicks a region
+   * of interest on the map. The RASTER format is nationwide, so it's
+   * exempt from this lock — see onDownload() and the template.
+   */
+  public isCountryRegion: boolean = true;
 
   public downloadFormats: Array<string> = ['shp', 'gpkg', 'csv', 'raster', 'parquet'];
   public downloadFormatsLabels: object = {
@@ -43,7 +56,13 @@ class LayersSidebarComponent implements OnDestroy {
   public selectedLayerTitle: string = '';
   public selectedLayerMetadata: Array<DescriptorMetadata> = [];
 
-  constructor(private descriptorService: DescriptorService, private downloadService: DownloadService, private messageService: MessageService, private localizationService: LocalizationService) {
+  constructor(
+    private descriptorService: DescriptorService,
+    private downloadService: DownloadService,
+    private messageService: MessageService,
+    private localizationService: LocalizationService,
+    private regionFilterService: RegionFilterService,
+  ) {
     this.descriptorSubscription.add(
       this.descriptorService
         .getDescriptor()
@@ -51,10 +70,19 @@ class LayersSidebarComponent implements OnDestroy {
           this.descriptor = descriptor;
         })
     );
+
+    this.regionFilterSubscription.add(
+      this.regionFilterService
+        .getRegionFilter()
+        .subscribe((regionFilter: RegionFilter) => {
+          this.isCountryRegion = regionFilter.type === 'country';
+        })
+    );
   }
 
   ngOnDestroy(): void {
     this.descriptorSubscription.unsubscribe();
+    this.regionFilterSubscription.unsubscribe();
   }
 
   get accordionTabExpanded() {
@@ -86,6 +114,8 @@ class LayersSidebarComponent implements OnDestroy {
   }
 
   public onDownload(fileFormat: string, type: DescriptorType): void {
+    if (this.isCountryRegion && fileFormat !== 'raster') return;
+
     this.downloadService.downloadGeoFile(type, fileFormat).subscribe(response => {
       if (response.status === 'success') return;
 

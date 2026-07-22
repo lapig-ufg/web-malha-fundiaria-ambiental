@@ -24,6 +24,33 @@
             "parquet": "https://s3.lapig.iesa.ufg.br/malha-fundiaria/brasil_malhafundiaria_ambiental_10m_v3b_{region}.parquet"
           }
         }
+      },
+      {
+        "idLayer": "excedente_florestal_municipios",
+        "labelLayer": "translate",
+        "visible": false,
+        "selectedType": "excedente_florestal_municipios",
+        "types": [
+          "excedente_florestal_municipios"
+        ]
+      },
+      {
+        "idLayer": "deficit_app_municipios",
+        "labelLayer": "translate",
+        "visible": false,
+        "selectedType": "deficit_app_municipios",
+        "types": [
+          "deficit_app_municipios"
+        ]
+      },
+      {
+        "idLayer": "deficit_rl_municipios",
+        "labelLayer": "translate",
+        "visible": false,
+        "selectedType": "deficit_rl_municipios",
+        "types": [
+          "deficit_rl_municipios"
+        ]
       }
     ]
   }

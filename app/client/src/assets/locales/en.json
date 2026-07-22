@@ -18,6 +18,14 @@
         "title": "Error Processing Analysis",
         "message": "It was not possible to process the submitted analysis. Please check the data and try again."
       }
+    },
+    "download_disclaimer": {
+      "title": "🗺️ Download notice",
+      "intro": "Downloads are generated individually per state (UF).",
+      "steps_title": "To download:",
+      "step_1": "Select the desired state by clicking directly on it on the map.",
+      "step_2": "In the Environmental Land Tenure layer, click the Vector (map format) button to save the file to your computer.",
+      "accept": "Got it"
     }
   },
   "controls": {
@@ -73,6 +81,7 @@
       "down_parquet": "Download VECTOR",
       "down_error_title": "Error",
       "down_error_msg": "It was not possible to download the file {{name}}, please try again.",
+      "down_locked": "Select a state on the map to unlock the download (downloads are generated per state).",
       "s3_file_empty": "There is no data for the selected filter.",
       "s3_unable_filter_layer": "This layer cannot be filtered.",
       "s3_file_not_found": "Please try again later, we are processing this file."
@@ -243,6 +252,15 @@
         "layers": {
           "malha_fundiaria_cog": {
             "labelLayer": "Environmental Land Tenure"
+          },
+          "excedente_florestal_municipios": {
+            "labelLayer": "Excess Vegetation by Municipality"
+          },
+          "deficit_app_municipios": {
+            "labelLayer": "APP Deficit"
+          },
+          "deficit_rl_municipios": {
+            "labelLayer": "Legal Reserve Deficit"
           }
         }
       },
@@ -406,7 +424,7 @@
         "Não Natural": "Non-Natural",
         "vegetation_pct": "% Natural Vegetation",
         "vegetation_total": "Total",
-        "forest_surplus": "Forest Surplus"
+        "forest_surplus": "Excess Vegetation"
       },
       "complement_text_pasture_quality": "in Pasture Area of",
       "obs_text": "*The difference between the pasture area presented here and the mapped area is explained by the area adjustment from the accuracy analysis, detailed in Parente et al. 2019 (<a target='_blank' class='link-details' href='https://doi.org/10.1016/j.rse.2019.111301'> https://doi.org/10.1016/j.rse.2019.111301</a>)",

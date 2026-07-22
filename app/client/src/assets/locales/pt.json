@@ -18,6 +18,14 @@
         "title": "Erro ao Processar a Análise",
         "message": "Não foi possível processar a análise submetida. Por favor, verifique os dados e tente novamente."
       }
+    },
+    "download_disclaimer": {
+      "title": "🗺️ Aviso sobre o download",
+      "intro": "Os downloads são feitos de forma individual para cada Estado (UF).",
+      "steps_title": "Para baixar:",
+      "step_1": "Selecione o estado desejado clicando diretamente nele no mapa.",
+      "step_2": "Na Camada Malha Fundiária Ambiental, clique no botão Vector (formato do mapa) para salvar o arquivo no seu computador.",
+      "accept": "Entendi"
     }
   },
   "controls": {
@@ -73,6 +81,7 @@
       "down_parquet": "Download VECTOR",
       "down_error_title": "Erro",
       "down_error_msg": "Não foi possível baixar o arquivo {{name}}, por favor tente novamente.",
+      "down_locked": "Selecione um estado no mapa para liberar o download (os downloads são feitos por estado).",
       "s3_file_empty": "Não existe dados para o filtro selecionado.",
       "s3_unable_filter_layer": "Esta camada não é possível de ser filtrada.",
       "s3_file_not_found": "Por favor tente mais tarde, estamos processando este arquivo."
@@ -243,6 +252,15 @@
         "layers": {
           "malha_fundiaria_cog": {
             "labelLayer": "Malha Fundiária Ambiental"
+          },
+          "excedente_florestal_municipios": {
+            "labelLayer": "Excedente Florestal por Município"
+          },
+          "deficit_app_municipios": {
+            "labelLayer": "Déficit de APP"
+          },
+          "deficit_rl_municipios": {
+            "labelLayer": "Déficit de Reserva Legal"
           }
         }
       },

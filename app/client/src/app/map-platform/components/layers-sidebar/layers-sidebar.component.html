@@ -54,6 +54,27 @@
                   </div>
                 </div>
 
+                <div class="layer-legend" *ngIf="layer.selectedTypeObject!.legend as legendItems; else wmsLegend">
+                  <div class="custom-legend-item" *ngFor="let item of legendItems">
+                    <span class="custom-legend-color" [style.background-color]="item.color"></span>
+                    <span class="custom-legend-label">{{ item.label }}</span>
+                  </div>
+                </div>
+                <ng-template #wmsLegend>
+                  <div class="layer-legend">
+                    <img
+                      src="{{
+                        env.OWS
+                      }}/ows?EXCEPTIONS=application%2Fvnd.ogc.se_xml&TRANSPARENT=TRUE&VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&layer={{
+                        layer.selectedTypeObject!.filterHandler === 'layername'
+                          ? layer.selectedTypeObject!.filterSelected
+                          : layer.selectedTypeObject!.valueType
+                      }}&format=image%2Fpng"
+                      alt="{{ layer.selectedTypeObject!.valueType }}"
+                    />
+                  </div>
+                </ng-template>
+
                 <div class="layer-transparency">
                   <div class="transparency-header">
                     <span>{{ "left_sidebar.opacity" | translate }}</span>
@@ -64,10 +85,11 @@
                 <div class="layer-exports">
                   <ng-container *ngFor="let download of downloadFormats">
                     <ng-container *ngIf="layer.selectedTypeObject!.download[download] && !layer.selectedTypeObject!.download.loading">
-                    <button 
+                    <button
                       class="p-button-outlined p-button-sm" pButton pRipple type="button"
-                      pTooltip="{{ 'left_sidebar.layer.down_' + download | translate }}"
+                      pTooltip="{{ (isCountryRegion && download !== 'raster') ? ('left_sidebar.layer.down_locked' | translate) : ('left_sidebar.layer.down_' + download | translate) }}"
                       icon="pi pi-download" [label]="downloadFormatsLabels[download]"
+                      [disabled]="isCountryRegion && download !== 'raster'"
                       (click)="onDownload(download, layer.selectedTypeObject!)"
                     ></button>
                     </ng-container>

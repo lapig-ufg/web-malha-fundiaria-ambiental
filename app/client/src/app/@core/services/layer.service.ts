@@ -14,9 +14,13 @@ import { DescriptorType } from '@core/interfaces';
  */
 import { WMTS, XYZ } from 'ol/source';
 import GeoTIFF from 'ol/source/GeoTIFF';
+import VectorSource from 'ol/source/Vector';
 import CanvasTileLayer from 'ol/layer/Tile';
 import TileLayer from 'ol/layer/WebGLTile';
+import VectorLayer from 'ol/layer/Vector';
 import BaseLayer from 'ol/layer/Base';
+import { GeoJSON } from 'ol/format';
+import { Fill, Stroke, Style } from 'ol/style';
 
 import { MapService, ZOOM_LIMIT } from './map.service';
 import { environment } from 'src/environments/environment';
@@ -51,6 +55,8 @@ class LayerService {
         return this.createTileLayerXYZ(descriptorType);
       case 'cog':
         return this.createWebGLTileLayerCOG(descriptorType);
+      case 'geojson':
+        return this.createVectorChoroplethLayer(descriptorType);
       default:
         throw new Error(`Unsupported TMS type: ${descriptorType.origin.typeOfTMS}`);
     }
@@ -95,6 +101,66 @@ class LayerService {
     });
 
     return new Promise<TileLayer>((resolve) => {
+      resolve(layer);
+    });
+  }
+
+  /**
+   * Choropleth vector layer: fetches a GeoJSON FeatureCollection from
+   * `descriptorType.origin.url` (a server endpoint, not an OWS/MapServer
+   * tile source) and colors each feature by binning the value of
+   * `descriptorType.choroplethField` against `descriptorType.legend`
+   * (each entry: {min, max, color, label}).
+   */
+  private createVectorChoroplethLayer(descriptorType: DescriptorType): Promise<VectorLayer<VectorSource>> {
+    const properties = {
+      key: descriptorType.valueType,
+      label: descriptorType.viewValueType,
+      descriptorType: descriptorType,
+      type: descriptorType.type,
+      visible: descriptorType.visible,
+    };
+
+    const field = descriptorType.choroplethField || 'value';
+    const bins: any[] = descriptorType.legend || [];
+
+    const colorForValue = (value: number | null | undefined): string => {
+      if (value === null || value === undefined || isNaN(value)) {
+        return 'rgba(0, 0, 0, 0)';
+      }
+      const bin = bins.find((b) => value >= b.min && value < b.max);
+      return bin ? bin.color : 'rgba(0, 0, 0, 0)';
+    };
+
+    const styleCache = new Map<string, Style>();
+    const styleFunction = (feature: any): Style => {
+      const color = colorForValue(feature.get(field));
+      let style = styleCache.get(color);
+      if (!style) {
+        style = new Style({
+          fill: new Fill({ color }),
+          stroke: new Stroke({ color: '#000000', width: 0.5 }),
+        });
+        styleCache.set(color, style);
+      }
+      return style;
+    };
+
+    const source = new VectorSource({
+      url: descriptorType.origin.url!,
+      format: new GeoJSON(),
+    });
+
+    const layer = new VectorLayer({
+      properties: properties,
+      source: source,
+      style: styleFunction,
+      visible: descriptorType.visible,
+      opacity: descriptorType.opacity,
+      zIndex: this.getLayerZIndex(descriptorType.type),
+    });
+
+    return new Promise<VectorLayer<VectorSource>>((resolve) => {
       resolve(layer);
     });
   }

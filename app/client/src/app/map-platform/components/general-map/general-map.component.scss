@@ -467,8 +467,7 @@
     transform-style: preserve-3d;
   }
 
-  .abstract,
-  .details {
+  .abstract {
     $bg: rgba(white, 1);
     width: 100%;
     position: relative;
@@ -477,8 +476,7 @@
     .group-card:hover & {
       background: darken($bg, 2%);
     }
-  }
-  .abstract {
+
     z-index: 10;
     transition: .6s ease all;
     padding: 8px;
@@ -512,57 +510,6 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-    }
-  }
-  .details {
-    max-height: 0;
-    padding: 0;
-    visibility: hidden;
-    transform: rotateX(-180deg);
-    transform-origin: top center;
-    backface-visibility: hidden;
-    transition: .6s ease all;
-
-    img {
-      max-width: 82%;
-    }
-
-  }
-  
-  .legend-card-active {
-    .details {
-      max-height: none;
-      visibility: visible;
-      transform: rotateX(0deg);
-    }
-  }
-  .details-inner {
-    padding: 8px;
-
-    &.custom-legend {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-
-      .custom-legend-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-
-        .custom-legend-color {
-          width: 16px;
-          height: 16px;
-          border-radius: 2px;
-          border: 1px solid rgba(0, 0, 0, 0.1);
-          flex-shrink: 0;
-        }
-
-        .custom-legend-label {
-          font-size: 0.85em;
-          color: #444;
-          line-height: 1.2;
-        }
-      }
     }
   }
 

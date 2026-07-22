@@ -1,4 +1,26 @@
 <section id="main" class="container">
+  <p-dialog
+    header="{{ 'dialogs.download_disclaimer.title' | translate }}"
+    appendTo="body"
+    [modal]="true"
+    [(visible)]="showDownloadDisclaimer"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{ width: '32vw' }"
+  >
+    <p class="p-text-secondary">{{ 'dialogs.download_disclaimer.intro' | translate }}</p>
+    <p class="p-text-secondary" style="margin-top: 12px;">
+      <b>{{ 'dialogs.download_disclaimer.steps_title' | translate }}</b>
+    </p>
+    <ol class="p-text-secondary" style="padding-left: 20px; margin: 0;">
+      <li>{{ 'dialogs.download_disclaimer.step_1' | translate }}</li>
+      <li>{{ 'dialogs.download_disclaimer.step_2' | translate }}</li>
+    </ol>
+    <div class="action-container" style="display: flex; justify-content: flex-end; margin-top: 16px;">
+      <p-button (click)="showDownloadDisclaimer = false" label="{{ 'dialogs.download_disclaimer.accept' | translate }}" styleClass="p-button-success"></p-button>
+    </div>
+  </p-dialog>
+
   <section class="main-layout desktop">
     <div class="menu-sidebar">
       <div class="logo-menu-header">
