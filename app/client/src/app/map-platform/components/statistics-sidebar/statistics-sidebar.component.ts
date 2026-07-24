@@ -73,15 +73,6 @@ class StatisticsSidebarComponent implements OnDestroy {
   public vegetationEvolutionRlLoading = false;
 
   /**
-   * Forest surplus chart data (region-level): x = year, y = area (ha) of
-   * natural vegetation in the analysis area minus the natural vegetation
-   * area within APP + Reserva Legal. Populated via the
-   * /service/charts/forest-surplus endpoint.
-   */
-  public forestSurplusChartData: any = null;
-  public forestSurplusLoading = false;
-
-  /**
    * Per-property vegetation chart (bar): x = year, y = % of the property
    * area classified as natural vegetation. Populated by polling the
    * /service/zonal/jobs endpoint whenever a malha_fundiaria feature is
@@ -90,15 +81,6 @@ class StatisticsSidebarComponent implements OnDestroy {
   public malhaVegetationChartData: any = null;
   public malhaAppChartData: any = null;
   public malhaRlChartData: any = null;
-
-  /**
-   * Forest surplus for the selected property (bar): x = year, y = % of the
-   * property area classified as natural vegetation outside APP + Reserva
-   * Legal (propriedade.area_natural_ha - app.area_natural_ha - rl.area_natural_ha,
-   * as a % of the property's total area). Derived client-side from the same
-   * zonal job result used to build the other three malha-mode charts.
-   */
-  public malhaForestSurplusChartData: any = null;
   public malhaVegetationLoading: boolean = false;
   public malhaVegetationError: string | null = null;
   public currentJobId: string | null = null;
@@ -474,7 +456,6 @@ class StatisticsSidebarComponent implements OnDestroy {
     this.malhaVegetationChartData = null;
     this.malhaAppChartData = null;
     this.malhaRlChartData = null;
-    this.malhaForestSurplusChartData = null;
     this.malhaVegetationLoading = false;
     this.malhaVegetationError = null;
     this.currentJobId = null;
@@ -485,7 +466,6 @@ class StatisticsSidebarComponent implements OnDestroy {
     this.malhaVegetationChartData = null;
     this.malhaAppChartData = null;
     this.malhaRlChartData = null;
-    this.malhaForestSurplusChartData = null;
     this.malhaVegetationError = null;
     this.currentJobId = null;
 
@@ -620,13 +600,9 @@ class StatisticsSidebarComponent implements OnDestroy {
   }
 
   /**
-   * Build all four malha-mode charts from the v2 zonal result dict.
-   * The result has keys propriedade, app, rl, app_rl_uniao,
-   * excedente_florestal — each an array of per-year rows with fields ano,
-   * pct_natural, area_natural_ha, etc. The forest-surplus subtraction
-   * itself (propriedade natural - APP ∪ RL natural) is computed server-side
-   * in compute_zonal_history / _compute_excedente_florestal, so the client
-   * just renders excedente_florestal like any other zone.
+   * Build the malha-mode charts from the v2 zonal result dict.
+   * The result has keys propriedade, app, rl (each an array of per-year
+   * rows with fields ano, pct_natural, area_natural_ha, etc.).
    */
   private buildAllMalhaCharts(result: any): void {
     // Propriedade (whole property) — always present
@@ -645,16 +621,6 @@ class StatisticsSidebarComponent implements OnDestroy {
     // RL zone — Natural + Déficit (% not natural within the Reserva Legal)
     if (result.rl && Array.isArray(result.rl)) {
       this.malhaRlChartData = this.buildZoneDeficitBarChartData(result.rl);
-    }
-
-    // Excedente Florestal — already computed server-side
-    if (result.excedente_florestal && Array.isArray(result.excedente_florestal)) {
-      this.malhaForestSurplusChartData = this.buildZoneBarChartData(
-        result.excedente_florestal,
-        'pct_natural',
-        'right_sidebar.resumo_card.chart_labels.forest_surplus',
-        '#228B22',
-      );
     }
   }
 
@@ -688,7 +654,6 @@ class StatisticsSidebarComponent implements OnDestroy {
     this.getVegetationEvolutionData();
     this.getVegetationEvolutionAppData();
     this.getVegetationEvolutionRlData();
-    this.getForestSurplusData();
   }
 
   /**
@@ -774,33 +739,6 @@ class StatisticsSidebarComponent implements OnDestroy {
 
   private getVegetationEvolutionRlData(): void {
     this.getVegetationEvolutionByCategoriaData('Reserva Legal', 'vegetation_evolution_rl');
-  }
-
-  /**
-   * Fetch forest surplus data (area, ha) from the dedicated endpoint.
-   * Same resilient pattern as the other vegetation evolution charts.
-   */
-  private getForestSurplusData(): void {
-    this.forestSurplusLoading = true;
-
-    this.chartService
-      .getForestSurplus(this.regionFilter)
-      .subscribe({
-        next: (data: any) => {
-          this.forestSurplusLoading = false;
-          if (Array.isArray(data) && data.length > 0) {
-            this.summaryData.set('forest_surplus', { data: data, year: null });
-            this.updateChartData('forest_surplus');
-          } else {
-            this.forestSurplusChartData = null;
-          }
-        },
-        error: (error) => {
-          console.error('Forest surplus data unavailable:', error);
-          this.forestSurplusLoading = false;
-          this.forestSurplusChartData = null;
-        },
-      });
   }
 
   private getLayerSummaryData(summaryKey: string): void {
@@ -1018,40 +956,6 @@ class StatisticsSidebarComponent implements OnDestroy {
       this.vegetationDeficitBarOptions.scales.x.title.text =
         this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_x_axis') || 'Ano';
       this.vegetationDeficitBarOptions.scales.y.title.text =
-        this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_y_axis') || '% Vegetação Natural';
-    } else if (key === 'forest_surplus') {
-      const summary = this.summaryData.get('forest_surplus');
-      if (!summary || !summary.data || !Array.isArray(summary.data)) {
-        this.forestSurplusChartData = null;
-        return;
-      }
-
-      const rawData = summary.data;
-      const labels = rawData.map((item: any) => String(item.label));
-      const data = rawData.map((item: any) => Number(Number(item.value ?? 0).toFixed(2)));
-      const areaHa = rawData.map((item: any) => Number(item.area_ha ?? 0));
-      const color = rawData.length > 0 ? rawData[0].color : '#228B22';
-
-      this.forestSurplusChartData = {
-        labels,
-        datasets: [
-          {
-            label: this.localizationService.translate(
-              'right_sidebar.resumo_card.chart_labels.forest_surplus',
-            ),
-            data,
-            areaHa,
-            backgroundColor: color,
-            borderColor: '#1f5e3a',
-            borderWidth: 1,
-          },
-        ],
-      };
-
-      // Reuse the same percentage axis titles as the other vegetation graphs.
-      this.vegetationBarOptions.scales.x.title.text =
-        this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_x_axis') || 'Ano';
-      this.vegetationBarOptions.scales.y.title.text =
         this.localizationService.translate('right_sidebar.resumo_card.vegetation_evolution_y_axis') || '% Vegetação Natural';
     }
   }
