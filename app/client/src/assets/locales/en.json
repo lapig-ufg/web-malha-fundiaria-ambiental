@@ -414,16 +414,16 @@
       "chart_labels": {
         "app": "APP",
         "rl": "Legal Reserve",
-        "mfa": "Environmental Land Tenure",
+        "mfa": "Private Rural Property",
         "natural": "Natural",
         "non_natural": "Non-Natural",
         "Reserva Legal": "Legal Reserve",
         "Reserva_Legal": "Legal Reserve",
         "Áreas de Preservação Permanente": "APP",
-        "Malha Fundiária": "Environmental Land Tenure",
+        "Malha Fundiária": "Private Rural Property",
         "Não Natural": "Non-Natural",
         "vegetation_pct": "% Natural Vegetation",
-        "vegetation_total": "Total",
+        "vegetation_total": "Private Rural Property",
         "forest_surplus": "Excess Vegetation"
       },
       "complement_text_pasture_quality": "in Pasture Area of",
@@ -451,7 +451,7 @@
       "tab_app": "APP",
       "tab_rl": "Legal Reserve"
     },
-    "region_description": "Select a state, municipality or biome to see regional statistics for vegetation cover, permanent preservation areas (APP), legal reserve (RL) and environmental land tenure (MFA)."
+    "region_description": "Select a state, municipality or biome to see regional statistics for vegetation cover, permanent preservation areas (APP), legal reserve (RL) and private rural property."
   },
   "popup-info": {
     "title": "Region Information",
