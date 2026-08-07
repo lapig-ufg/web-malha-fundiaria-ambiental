@@ -300,6 +300,43 @@ class StatisticsSidebarComponent implements OnDestroy {
   public regionFilter: RegionFilter = DEFAULT_REGION;
 
   /**
+   * Satellite imagery source behind the "Distribuição de Áreas Naturais",
+   * "Cobertura por Região" and "Variação da Vegetação" charts: Sentinel
+   * reads land_tenure_vegetation_2024 / natural_vegetation_regions* while
+   * Landsat reads the parallel *_landsat tables (see db/queries/charts.py).
+   */
+  public imageSource: 'sentinel' | 'landsat' = 'sentinel';
+
+  /**
+   * Kept as a stable array reference (rebuilt only on language change),
+   * not a getter: PrimeNG's SelectButton *ngFor has no trackBy, so a new
+   * array/objects on every change-detection cycle would make it destroy
+   * and recreate the option buttons constantly, breaking clicks on them.
+   */
+  public imageSourceOptions: { label: string; value: 'sentinel' | 'landsat' }[] = [];
+
+  private updateImageSourceOptions(): void {
+    this.imageSourceOptions = [
+      {
+        label: this.localizationService.translate('right_sidebar.resumo_card.data_source.sentinel'),
+        value: 'sentinel',
+      },
+      {
+        label: this.localizationService.translate('right_sidebar.resumo_card.data_source.landsat'),
+        value: 'landsat',
+      },
+    ];
+  }
+
+  /**
+   * Re-fetch the resumo (coverage) and vegetation evolution charts using
+   * the newly selected satellite source.
+   */
+  public onImageSourceChange(): void {
+    this.getAllSummaryData();
+  }
+
+  /**
    * Dynamic title for the natural-coverage accordion tab. Returns the
    * country-specific string when the region is Brazil, otherwise
    * interpolates the current region name (state, municipality, biome).
@@ -342,6 +379,8 @@ class StatisticsSidebarComponent implements OnDestroy {
     private zonalService: ZonalService,
     private decimalPipe: DecimalPipe,
   ) {
+    this.updateImageSourceOptions();
+
     this.regionFilterSubscription.add(
       this.regionFilterService.getRegionFilter().subscribe({
         next: (regionFilter: RegionFilter) => {
@@ -354,6 +393,7 @@ class StatisticsSidebarComponent implements OnDestroy {
 
     this.regionFilterSubscription.add(
       this.localizationService.translateService.onLangChange.subscribe(() => {
+        this.updateImageSourceOptions();
         this.getAllSummaryData();
       })
     );
@@ -469,7 +509,7 @@ class StatisticsSidebarComponent implements OnDestroy {
     this.malhaVegetationError = null;
     this.currentJobId = null;
 
-    this.zonalService.startZonalJob(feature.geometry).subscribe({
+    this.zonalService.startZonalJob(feature.geometry, 1, 'EPSG:4326', this.imageSource).subscribe({
       next: (resp) => {
         this.currentJobId = resp.job_id;
         this.pollJobUntilDone(resp.job_id);
@@ -662,7 +702,7 @@ class StatisticsSidebarComponent implements OnDestroy {
    */
   private getVegetationEvolutionData(): void {
     this.chartService
-      .getVegetationEvolution(this.regionFilter)
+      .getVegetationEvolution(this.regionFilter, this.imageSource)
       .subscribe({
         next: (data: any) => {
           if (Array.isArray(data) && data.length > 0) {
@@ -698,7 +738,7 @@ class StatisticsSidebarComponent implements OnDestroy {
     }
 
     this.chartService
-      .getVegetationEvolutionByCategoria(this.regionFilter, categoria)
+      .getVegetationEvolutionByCategoria(this.regionFilter, categoria, this.imageSource)
       .subscribe({
         next: (data: any) => {
           if (isApp) {
@@ -749,7 +789,7 @@ class StatisticsSidebarComponent implements OnDestroy {
     }
 
     this.chartService
-      .getSummary(summaryKey, this.regionFilter, year)
+      .getSummary(summaryKey, this.regionFilter, year, this.imageSource)
       .subscribe({
         next: (summary: any) => {
           this.summaryData.set(summaryKey, {
@@ -916,8 +956,6 @@ class StatisticsSidebarComponent implements OnDestroy {
       const labels = rawData.map((item: any) => String(item.label));
       const data = rawData.map((item: any) => Number(Number(item.value ?? 0).toFixed(2)));
       const areaHa = rawData.map((item: any) => Number(item.area_ha ?? 0));
-      const deficitAreaHa = rawData.map((item: any) => Number(item.deficit_area_ha ?? 0));
-      const deficitData = data.map((pctNatural: number) => Number((100 - pctNatural).toFixed(2)));
       const color = rawData.length > 0 ? rawData[0].color : '#228B22';
 
       const chartData = {
@@ -931,16 +969,6 @@ class StatisticsSidebarComponent implements OnDestroy {
             areaHa,
             backgroundColor: color,
             borderColor: '#1f5e3a',
-            borderWidth: 1,
-          },
-          {
-            label: this.localizationService.translate(
-              'right_sidebar.resumo_card.chart_labels.non_natural',
-            ),
-            data: deficitData,
-            areaHa: deficitAreaHa,
-            backgroundColor: '#c0392b',
-            borderColor: '#8b291d',
             borderWidth: 1,
           },
         ],

@@ -256,11 +256,17 @@
           "excedente_florestal_municipios": {
             "labelLayer": "Excedente Florestal por Município"
           },
-          "deficit_app_municipios": {
-            "labelLayer": "Déficit de APP"
+          "deficit_app_municipios_10m": {
+            "labelLayer": "10m - Área Não Natural na APP"
           },
-          "deficit_rl_municipios": {
-            "labelLayer": "Déficit de Reserva Legal"
+          "deficit_rl_municipios_10m": {
+            "labelLayer": "10m - Área Não Natural na Reserva Legal"
+          },
+          "deficit_app_municipios_30m": {
+            "labelLayer": "30m - Área Não Natural na APP"
+          },
+          "deficit_rl_municipios_30m": {
+            "labelLayer": "30m - Área Não Natural na Reserva Legal"
           }
         }
       },
@@ -401,20 +407,25 @@
       "complement_text": "do(a)",
       "pasture_quality_title": "Vigor da Pastagem",
       "pasture_quality_comparison": "Comparativo Regional: Vigor",
-      "coverage_natural_title_country": "Distribuição de Áreas Naturais no Brasil (2024)",
-      "coverage_natural_title_region": "Distribuição de Áreas Naturais em {{region}} (2024)",
-      "vegetation_evolution_title_country": "Variação da Vegetação Natural no Brasil",
-      "vegetation_evolution_title_region": "Variação da Vegetação Natural em {{region}}",
+      "coverage_natural_title_country": "Distribuição de remanescentes nos imóveis privados no Brasil (2024)",
+      "coverage_natural_title_region": "Distribuição de remanescentes nos imóveis privados em {{region}} (2024)",
+      "vegetation_evolution_title_country": "Variação da Vegetação dentro dos Imóveis Privados Rurais no Brasil",
+      "vegetation_evolution_title_region": "Variação da Vegetação dentro dos Imóveis Privados Rurais em {{region}}",
       "vegetation_evolution_x_axis": "Ano",
       "vegetation_evolution_y_axis": "% Vegetação Natural",
-      "coverage_comparison_title": "Cobertura por Região",
+      "coverage_comparison_title": "Categorização da área dos imóveis rurais privados",
       "coverage_comparison_app_title": "Cobertura por Região: APP",
       "coverage_comparison_rl_title": "Cobertura por Região: Reserva Legal",
       "coverage_comparison_mfa_title": "Cobertura por Região: Malha Fundiária",
+      "data_source": {
+        "label": "Fonte de uso e cobertura da terra",
+        "sentinel": "Sentinel",
+        "landsat": "Landsat"
+      },
       "chart_labels": {
         "app": "APP",
         "rl": "Reserva Legal",
-        "mfa": "Imóvel Rural Privado",
+        "mfa": "Fora da Reserva Legal e App",
         "natural": "Natural",
         "non_natural": "Não Natural",
         "Reserva Legal": "Reserva Legal",
@@ -423,7 +434,7 @@
         "Malha Fundiária": "Imóvel Rural Privado",
         "Não Natural": "Não Natural",
         "vegetation_pct": "% Vegetação Natural",
-        "vegetation_total": "Imóvel Rural Privado",
+        "vegetation_total": "Fora da App e Reserva Legal",
         "forest_surplus": "Excedente Florestal"
       },
       "complement_text_pasture_quality": "da área de Pastagem do(a)",
@@ -433,7 +444,7 @@
         "Intermediário": "Intermediário",
         "Ausente": "Ausente"
       },
-      "property_count_label": "Propriedades/Posse na Malha Fundiária Ambiental"
+      "property_count_label": "Quantidade de propriedade/posse na malha fundiária ambiental considerando todas as categorias fundiárias"
     },
     "malha_chart": {
       "title": "Variação da Vegetação Natural",

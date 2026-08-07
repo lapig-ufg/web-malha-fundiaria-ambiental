@@ -169,12 +169,13 @@ async def handle_resumo(lang: str = 'pt', card_resume: str = '', query_result: d
         return {"data": "Invalid argument"}
 
 @router.get("/vegetation-evolution")
-async def handle_vegetation_evolution(lang: str = 'pt', typeRegion: str = '', valueRegion: str = '', textRegion: str = ''):
+async def handle_vegetation_evolution(lang: str = 'pt', typeRegion: str = '', valueRegion: str = '', textRegion: str = '', source: str = 'sentinel'):
     params = {
         'lang': lang,
         'typeRegion': typeRegion,
         'valueRegion': valueRegion,
         'textRegion': textRegion,
+        'source': source,
     }
     try:
         query_result = await execute_queries("charts", "vegetation_evolution", params)
@@ -188,7 +189,7 @@ async def handle_vegetation_evolution(lang: str = 'pt', typeRegion: str = '', va
 ALLOWED_CATEGORIAS = {'Área de preservação permanente', 'Reserva Legal'}
 
 @router.get("/vegetation-evolution-by-categoria")
-async def handle_vegetation_evolution_by_categoria(lang: str = 'pt', typeRegion: str = '', valueRegion: str = '', textRegion: str = '', categoria: str = ''):
+async def handle_vegetation_evolution_by_categoria(lang: str = 'pt', typeRegion: str = '', valueRegion: str = '', textRegion: str = '', categoria: str = '', source: str = 'sentinel'):
     if categoria not in ALLOWED_CATEGORIAS:
         return []
     params = {
@@ -197,6 +198,7 @@ async def handle_vegetation_evolution_by_categoria(lang: str = 'pt', typeRegion:
         'valueRegion': valueRegion,
         'textRegion': textRegion,
         'categoria': categoria,
+        'source': source,
     }
     try:
         query_result = await execute_queries("charts", "vegetation_evolution_by_categoria", params)

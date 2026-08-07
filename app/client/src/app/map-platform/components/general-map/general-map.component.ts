@@ -131,8 +131,18 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
 
   @ViewChild('video') video!: ElementRef;
   @ViewChild('wfsCard') wfsCard!: ElementRef;
+  @ViewChild('hoverTooltip') hoverTooltip!: ElementRef;
 
   @ViewChild(OlMapComponent) olMap!: OlMapComponent;
+
+  /**
+   * Populated on pointermove with one entry per *active* choropleth vector
+   * layer (e.g. the 10m/30m APP/RL deficit layers) under the cursor, so
+   * hovering shows every visible layer's value at once, not just the
+   * topmost one. Null hides the tooltip.
+   */
+  public hoverTooltipData: { municipio: string; items: { label: string; value: number }[] } | null = null;
+  private hoverOverlay: Overlay | null = null;
 
   /**
    * Emitted when a malha_fundiaria feature is selected on the map (level-2
@@ -445,6 +455,10 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     this.mapService.addEvent('singleclick', (event: MapEvent) =>
       this.onDisplayFeatureInfo(event)
     );
+
+    this.mapService.addEvent('pointermove', (event: any) =>
+      this.onMapHover(event)
+    );
   }
 
   public ngOnInit(): void {
@@ -471,6 +485,62 @@ export class GeneralMapComponent implements OnInit, OnDestroy {
     }
 
     this.refreshLayersVisibilityByZoom(zoom);
+  }
+
+  /**
+   * Shows municipality name + value for every *active* choropleth vector
+   * layer (e.g. the 10m/30m APP/RL deficit layers) under the cursor — not
+   * just the topmost one, since several of these layers can be visible at
+   * once. Any layer with a `choroplethField` on its descriptorType is
+   * treated as a hoverable choropleth, so this covers future layers of the
+   * same kind without changes here.
+   */
+  private onMapHover(event: any): void {
+    if (this.drawing || !this.hoverTooltip) return;
+
+    const map = this.mapService.map;
+    const items: { label: string; value: number }[] = [];
+    let municipio: string | null = null;
+
+    map.forEachFeatureAtPixel(
+      event.pixel,
+      (feature: any, layer: any) => {
+        const descriptorType: DescriptorType | undefined = layer?.get?.('descriptorType');
+
+        if (descriptorType?.choroplethField && layer.getVisible()) {
+          if (municipio === null) {
+            municipio = feature.get('municipio');
+          }
+          items.push({
+            label: descriptorType.viewValueType,
+            value: feature.get(descriptorType.choroplethField),
+          });
+        }
+
+        return false; // keep iterating so every active choropleth layer under the cursor is checked
+      },
+      { layerFilter: (layer: any) => !!layer.get('descriptorType')?.choroplethField }
+    );
+
+    if (items.length > 0) {
+      this.hoverTooltipData = { municipio: municipio ?? '', items };
+
+      if (!this.hoverOverlay) {
+        this.hoverOverlay = new Overlay({
+          element: this.hoverTooltip.nativeElement,
+          offset: [15, 15],
+          positioning: 'top-left',
+          stopEvent: false,
+        });
+        map.addOverlay(this.hoverOverlay);
+      }
+      this.hoverOverlay.setPosition(event.coordinate);
+      map.getTargetElement().style.cursor = 'pointer';
+    } else {
+      this.hoverTooltipData = null;
+      this.hoverOverlay?.setPosition(undefined);
+      map.getTargetElement().style.cursor = '';
+    }
   }
 
   public resetDrillDown() {

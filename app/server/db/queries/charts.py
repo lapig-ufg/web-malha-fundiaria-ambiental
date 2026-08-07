@@ -57,6 +57,22 @@ def get_year_filter(year):
         return f"year = {year}"
     return "year = 2020"
 
+# Tables are picked from a fixed allowlist keyed by satellite source, never
+# built by string concatenation from the request, since they are
+# interpolated directly into the SQL below.
+LAND_TENURE_VEGETATION_TABLE = {
+    'sentinel': 'land_tenure_vegetation_2024',
+    'landsat': 'land_tenure_vegetation_2024_landsat',
+}
+NATURAL_VEGETATION_REGIONS_TABLE = {
+    'sentinel': 'natural_vegetation_regions',
+    'landsat': 'natural_vegetation_regions_landsat',
+}
+NATURAL_VEGETATION_REGIONS_APP_RL_TABLE = {
+    'sentinel': 'natural_vegetation_regions_app_rl_1985_2024',
+    'landsat': 'natural_vegetation_regions_landsat_app_rl_1985_2024',
+}
+
 def get_queries(params: dict = None):
     if params is None:
         params = {}
@@ -65,6 +81,11 @@ def get_queries(params: dict = None):
     region_filter_coverage = get_region_filter_coverage(params.get('typeRegion'), params.get('valueRegion'))
     region_filter_mfa = get_region_filter_mfa(params.get('typeRegion'), params.get('valueRegion'))
     year_filter = get_year_filter(params.get('year'))
+
+    source = params.get('source') if params.get('source') in LAND_TENURE_VEGETATION_TABLE else 'sentinel'
+    land_tenure_vegetation_table = LAND_TENURE_VEGETATION_TABLE[source]
+    natural_vegetation_regions_table = NATURAL_VEGETATION_REGIONS_TABLE[source]
+    natural_vegetation_regions_app_rl_table = NATURAL_VEGETATION_REGIONS_APP_RL_TABLE[source]
 
     type_region = params.get('typeRegion')
     comparison_col = 'uf' if type_region == 'country' else 'municipio'
@@ -90,21 +111,21 @@ def get_queries(params: dict = None):
                         'app' as label,
                         '#228B22' as color,
                         COALESCE(SUM(app_class_1), 0) as value
-                    FROM land_tenure_vegetation_2024
+                    FROM {land_tenure_vegetation_table}
                     WHERE {region_filter_coverage}
                     UNION ALL
                     SELECT
                         'rl' as label,
                         '#006400' as color,
                         COALESCE(SUM(rl_class_1), 0) as value
-                    FROM land_tenure_vegetation_2024
+                    FROM {land_tenure_vegetation_table}
                     WHERE {region_filter_coverage}
                     UNION ALL
                     SELECT
                         'mfa' as label,
                         '#4169E1' as color,
                         COALESCE(SUM(mfa_class_1), 0) as value
-                    FROM land_tenure_vegetation_2024
+                    FROM {land_tenure_vegetation_table}
                     WHERE {region_filter_coverage}
                 """,
                 'mantain': True
@@ -113,9 +134,9 @@ def get_queries(params: dict = None):
                 'source': 'lapig',
                 'id': 'coverage_comparison_app',
                 'sql': f"""
-                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM(app_class_1) as value FROM land_tenure_vegetation_2024 WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM(app_class_1) as value FROM {land_tenure_vegetation_table} WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     UNION ALL
-                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM(app_class_2) as value FROM land_tenure_vegetation_2024 WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM(app_class_2) as value FROM {land_tenure_vegetation_table} WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     ORDER BY 1, 2
                 """,
                 'mantain': True
@@ -124,9 +145,9 @@ def get_queries(params: dict = None):
                 'source': 'lapig',
                 'id': 'coverage_comparison_rl',
                 'sql': f"""
-                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM(rl_class_1) as value FROM land_tenure_vegetation_2024 WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM(rl_class_1) as value FROM {land_tenure_vegetation_table} WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     UNION ALL
-                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM(rl_class_2) as value FROM land_tenure_vegetation_2024 WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM(rl_class_2) as value FROM {land_tenure_vegetation_table} WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     ORDER BY 1, 2
                 """,
                 'mantain': True
@@ -135,9 +156,9 @@ def get_queries(params: dict = None):
                 'source': 'lapig',
                 'id': 'coverage_comparison_mfa',
                 'sql': f"""
-                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM(mfa_class_1) as value FROM land_tenure_vegetation_2024 WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'natural' as classe, '#228B22' as color, SUM(mfa_class_1) as value FROM {land_tenure_vegetation_table} WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     UNION ALL
-                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM(mfa_class_2) as value FROM land_tenure_vegetation_2024 WHERE {region_filter_coverage} GROUP BY 1, 2, 3
+                    SELECT UPPER({comparison_col_coverage}) as label, 'non_natural' as classe, '#8B4513' as color, SUM(mfa_class_2) as value FROM {land_tenure_vegetation_table} WHERE {region_filter_coverage} GROUP BY 1, 2, 3
                     ORDER BY 1, 2
                 """,
                 'mantain': True
@@ -155,7 +176,7 @@ def get_queries(params: dict = None):
                         CAST(COALESCE(SUM(class_1), 0) AS double precision)
                           / NULLIF(CAST(COALESCE(SUM(class_1), 0) + COALESCE(SUM(class_2), 0) AS double precision), 0)
                           * 100 as value
-                    FROM natural_vegetation_regions
+                    FROM {natural_vegetation_regions_table}
                     WHERE {region_filter_coverage}
                     GROUP BY year
                     ORDER BY year
@@ -176,7 +197,7 @@ def get_queries(params: dict = None):
                         CAST(COALESCE(SUM(class_1), 0) AS double precision)
                           / NULLIF(CAST(COALESCE(SUM(class_1), 0) + COALESCE(SUM(class_2), 0) AS double precision), 0)
                           * 100 as value
-                    FROM natural_vegetation_regions_app_rl_1985_2024
+                    FROM {natural_vegetation_regions_app_rl_table}
                     WHERE categoria = ${{categoria}} AND {region_filter_coverage}
                     GROUP BY year
                     ORDER BY year

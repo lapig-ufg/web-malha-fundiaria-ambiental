@@ -32,11 +32,12 @@ class ZonalService {
     geometry: any,
     classeVegetacao: number = 1,
     inputCrs: string = 'EPSG:4326',
+    source: 'sentinel' | 'landsat' = 'sentinel',
   ): Observable<{ job_id: string }> {
     return this.httpClient
       .post<{ job_id: string }>(
         `${API_URL}/jobs`,
-        { geometry, classe_vegetacao: classeVegetacao, input_crs: inputCrs },
+        { geometry, classe_vegetacao: classeVegetacao, input_crs: inputCrs, source },
         this.httpOptions,
       )
       .pipe(map((response) => response))

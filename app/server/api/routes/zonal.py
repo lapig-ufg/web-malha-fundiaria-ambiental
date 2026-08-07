@@ -9,6 +9,7 @@ loop is never blocked. Job state is held in an in-memory dict, guarded
 by a threading.Lock; entries older than ``ZONAL_STATISTICS_JOB_TTL_SECONDS``
 are purged on every POST.
 """
+import os
 import threading
 import time
 import uuid
@@ -23,12 +24,44 @@ from utils.zonal_statistics import compute_zonal_history
 router = APIRouter()
 
 
+# Same sentinel/landsat toggle as the "Fonte de uso e cobertura da terra"
+# selector (imageSource) driving the resumo_card charts — here it picks
+# which folder the APP/RL zone-mask rasters, and the Propriedade time-series
+# rasters, are read from. Fixed allowlist, never built from request input
+# beyond a sentinel/landsat lookup.
+AUX_DIR_BY_SOURCE = {
+    'sentinel': lambda: settings.ZONAL_STATISTICS_AUX_DIR_SENTINEL,
+    'landsat': lambda: settings.ZONAL_STATISTICS_AUX_DIR_LANDSAT,
+}
+
+# Propriedade tab: subfolder of ZONAL_STATISTICS_RASTER_DIR holding that
+# source's yearly vegetation rasters.
+RASTER_DIR_SUFFIX_BY_SOURCE = {
+    'sentinel': 's2',
+    'landsat': 'l8',
+}
+
+
+def _app_rl_raster_paths(source: str) -> tuple:
+    aux_dir = AUX_DIR_BY_SOURCE.get(source, AUX_DIR_BY_SOURCE['sentinel'])()
+    return (
+        os.path.join(aux_dir, settings.ZONAL_STATISTICS_RASTER_APP_FILENAME),
+        os.path.join(aux_dir, settings.ZONAL_STATISTICS_RASTER_RL_FILENAME),
+    )
+
+
+def _raster_dir_for_source(source: str) -> str:
+    suffix = RASTER_DIR_SUFFIX_BY_SOURCE.get(source, RASTER_DIR_SUFFIX_BY_SOURCE['sentinel'])
+    return os.path.join(settings.ZONAL_STATISTICS_RASTER_DIR, suffix)
+
+
 # -------- Pydantic models --------
 
 class StartJobRequest(BaseModel):
     geometry: Dict[str, Any] = Field(..., description="GeoJSON Feature / FeatureCollection / Geometry")
     classe_vegetacao: Optional[int] = None
     input_crs: Optional[str] = "EPSG:4326"
+    source: Optional[str] = "sentinel"
 
 
 class StartJobResponse(BaseModel):
@@ -53,6 +86,7 @@ def _run_job(
     geometry: Dict[str, Any],
     classe: int,
     input_crs: str,
+    source: str,
 ) -> None:
     # Parse comma-separated classes_naturais from config string
     classes_naturais = tuple(
@@ -60,14 +94,16 @@ def _run_job(
         for c in settings.ZONAL_STATISTICS_CLASSES_NATURAIS.split(",")
         if c.strip()
     )
+    path_app, path_rl = _app_rl_raster_paths(source)
+    raster_dir = _raster_dir_for_source(source)
     try:
         result = compute_zonal_history(
             geometry=geometry,
-            raster_dir=settings.ZONAL_STATISTICS_RASTER_DIR,
+            raster_dir=raster_dir,
             classe_vegetacao=classe,
             input_crs=input_crs,
-            path_app=settings.ZONAL_STATISTICS_RASTER_APP,
-            path_rl=settings.ZONAL_STATISTICS_RASTER_RL,
+            path_app=path_app,
+            path_rl=path_rl,
             classes_naturais=classes_naturais,
         )
         with _lock:
@@ -101,7 +137,7 @@ async def start_zonal_job(payload: StartJobRequest = Body(...)):
     # stays free and the POST returns 202 in <50ms regardless of job length.
     thread = threading.Thread(
         target=_run_job,
-        args=(job_id, payload.geometry, classe, payload.input_crs or "EPSG:4326"),
+        args=(job_id, payload.geometry, classe, payload.input_crs or "EPSG:4326", payload.source or "sentinel"),
         daemon=True,
     )
     thread.start()

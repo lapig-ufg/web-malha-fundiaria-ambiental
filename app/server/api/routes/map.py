@@ -272,7 +272,7 @@ async def get_descriptor(lang: str = 'pt-br'):
         {"min": lo, "max": hi, "color": color, "label": label}
         for lo, hi, color, label in deficit_bins
     ]
-    deficit_type_label = "Deficit Percentage" if is_en else "Porcentagem de Déficit"
+    deficit_type_label = "Percentage of Non-Natural Area" if is_en else "Porcentagem de Área Não Natural"
 
     def _build_deficit_layer(value_type: str, url: str, title_pt: str, title_en: str, description_pt: str, description_en: str, extra_metadata: list = None) -> dict:
         return {
@@ -312,34 +312,68 @@ async def get_descriptor(lang: str = 'pt-br'):
             "legend": deficit_legend,
         }
 
-    deficit_app_layer = _build_deficit_layer(
-        "deficit_app_municipios",
-        "/service/map/deficit-app-municipios",
-        "Déficit de APP por Município",
-        "APP Deficit by Municipality",
-        "Área dentro da Área de Preservação Permanente (APP) que não é vegetação natural, como % da área total de APP de cada município (ano mais recente).",
-        "Area within the Permanent Preservation Area (APP) that is not natural vegetation, as a % of each municipality's total APP area (most recent year).",
+    deficit_app_layer_10m = _build_deficit_layer(
+        "deficit_app_municipios_10m",
+        "/service/map/deficit-app-municipios-10m",
+        "10m - Área Não Natural na APP",
+        "10m - Non-Natural Area within APP",
+        "Área dentro da Área de Preservação Permanente (APP) que não é vegetação natural (base Sentinel, 10m), como % da área total de APP de cada município (ano mais recente).",
+        "Area within the Permanent Preservation Area (APP) that is not natural vegetation (Sentinel, 10m), as a % of each municipality's total APP area (most recent year).",
         extra_metadata=[
-            {"title": "Descrição", "description": "Déficit de APP"},
+            {"title": "Descrição", "description": "10m - Área Não Natural na APP"},
             {"title": "Região", "description": "Todo o território nacional do Brasil"},
-            {"title": "Período", "description": "Abril/2024"},
+            {"title": "Período", "description": "2024"},
             {"title": "Base do Cálculo", "description": "Diferença entre a área de vegetação natural e as áreas de não vegetação natural na APP"},
             {"title": "Fonte", "description": ""},
             {"title": "URL", "description": "<a class='link-details' target='_blank' href='https://malhafundiaria.lapig.iesa.ufg.br'>https://malhafundiaria.lapig.iesa.ufg.br</a>"},
         ],
     )
 
-    deficit_rl_layer = _build_deficit_layer(
-        "deficit_rl_municipios",
-        "/service/map/deficit-rl-municipios",
-        "Déficit de Reserva Legal por Município",
-        "Legal Reserve Deficit by Municipality",
-        "Área dentro da Reserva Legal que não é vegetação natural, como % da área total de Reserva Legal de cada município (ano mais recente).",
-        "Area within the Legal Reserve that is not natural vegetation, as a % of each municipality's total Legal Reserve area (most recent year).",
+    deficit_rl_layer_10m = _build_deficit_layer(
+        "deficit_rl_municipios_10m",
+        "/service/map/deficit-rl-municipios-10m",
+        "10m - Área Não Natural na Reserva Legal",
+        "10m - Non-Natural Area within Legal Reserve",
+        "Área dentro da Reserva Legal que não é vegetação natural (base Sentinel, 10m), como % da área total de Reserva Legal de cada município (ano mais recente).",
+        "Area within the Legal Reserve that is not natural vegetation (Sentinel, 10m), as a % of each municipality's total Legal Reserve area (most recent year).",
         extra_metadata=[
-            {"title": "Descrição", "description": "Déficit de Reserva Legal"},
+            {"title": "Descrição", "description": "10m - Área Não Natural na Reserva Legal"},
             {"title": "Região", "description": "Todo o território nacional do Brasil"},
-            {"title": "Período", "description": "Abril/2024"},
+            {"title": "Período", "description": "2024"},
+            {"title": "Base do Cálculo", "description": "Diferença entre a área de vegetação natural e as áreas de não vegetação natural na Reserva Legal"},
+            {"title": "Fonte", "description": ""},
+            {"title": "URL", "description": "<a class='link-details' target='_blank' href='https://malhafundiaria.lapig.iesa.ufg.br'>https://malhafundiaria.lapig.iesa.ufg.br</a>"},
+        ],
+    )
+
+    deficit_app_layer_30m = _build_deficit_layer(
+        "deficit_app_municipios_30m",
+        "/service/map/deficit-app-municipios-30m",
+        "30m - Área Não Natural na APP",
+        "30m - Non-Natural Area within APP",
+        "Área dentro da Área de Preservação Permanente (APP) que não é vegetação natural (base Landsat, 30m), como % da área total de APP de cada município (ano mais recente).",
+        "Area within the Permanent Preservation Area (APP) that is not natural vegetation (Landsat, 30m), as a % of each municipality's total APP area (most recent year).",
+        extra_metadata=[
+            {"title": "Descrição", "description": "30m - Área Não Natural na APP"},
+            {"title": "Região", "description": "Todo o território nacional do Brasil"},
+            {"title": "Período", "description": "2024"},
+            {"title": "Base do Cálculo", "description": "Diferença entre a área de vegetação natural e as áreas de não vegetação natural na APP"},
+            {"title": "Fonte", "description": ""},
+            {"title": "URL", "description": "<a class='link-details' target='_blank' href='https://malhafundiaria.lapig.iesa.ufg.br'>https://malhafundiaria.lapig.iesa.ufg.br</a>"},
+        ],
+    )
+
+    deficit_rl_layer_30m = _build_deficit_layer(
+        "deficit_rl_municipios_30m",
+        "/service/map/deficit-rl-municipios-30m",
+        "30m - Área Não Natural na Reserva Legal",
+        "30m - Non-Natural Area within Legal Reserve",
+        "Área dentro da Reserva Legal que não é vegetação natural (base Landsat, 30m), como % da área total de Reserva Legal de cada município (ano mais recente).",
+        "Area within the Legal Reserve that is not natural vegetation (Landsat, 30m), as a % of each municipality's total Legal Reserve area (most recent year).",
+        extra_metadata=[
+            {"title": "Descrição", "description": "30m - Área Não Natural na Reserva Legal"},
+            {"title": "Região", "description": "Todo o território nacional do Brasil"},
+            {"title": "Período", "description": "2024"},
             {"title": "Base do Cálculo", "description": "Diferença entre a área de vegetação natural e as áreas de não vegetação natural na Reserva Legal"},
             {"title": "Fonte", "description": ""},
             {"title": "URL", "description": "<a class='link-details' target='_blank' href='https://malhafundiaria.lapig.iesa.ufg.br'>https://malhafundiaria.lapig.iesa.ufg.br</a>"},
@@ -348,7 +382,14 @@ async def get_descriptor(lang: str = 'pt-br'):
 
     # layertypes is a dict organized by thematic keys. Let's add ours.
     if isinstance(layertypes, dict):
-        layertypes['malha_fundiaria'] = [cog_layer, forest_surplus_layer, deficit_app_layer, deficit_rl_layer]
+        layertypes['malha_fundiaria'] = [
+            cog_layer,
+            forest_surplus_layer,
+            deficit_app_layer_10m,
+            deficit_rl_layer_10m,
+            deficit_app_layer_30m,
+            deficit_rl_layer_30m,
+        ]
 
     result = {
         "groups": descriptor_builder.get_layers(lang, layertypes),
@@ -388,16 +429,28 @@ async def get_forest_surplus_municipios(query_result: dict = Depends(get_map_dat
     rows = query_result.get('forest_surplus_municipios', [])
     return _municipio_rows_to_geojson(rows, ['excedente_ha', 'excedente_pct'])
 
-@router.get("/deficit-app-municipios")
-async def get_deficit_app_municipios(query_result: dict = Depends(get_map_data)):
-    """Déficit de APP por município (% da área de APP que não é vegetação natural), como GeoJSON."""
-    rows = query_result.get('deficit_app_municipios', [])
+@router.get("/deficit-app-municipios-10m")
+async def get_deficit_app_municipios_10m(query_result: dict = Depends(get_map_data)):
+    """Déficit de APP por município, base Sentinel 10m (% da área de APP que não é vegetação natural), como GeoJSON."""
+    rows = query_result.get('deficit_app_municipios_10m', [])
     return _municipio_rows_to_geojson(rows, ['deficit_ha', 'deficit_pct'])
 
-@router.get("/deficit-rl-municipios")
-async def get_deficit_rl_municipios(query_result: dict = Depends(get_map_data)):
-    """Déficit de Reserva Legal por município (% da área de RL que não é vegetação natural), como GeoJSON."""
-    rows = query_result.get('deficit_rl_municipios', [])
+@router.get("/deficit-rl-municipios-10m")
+async def get_deficit_rl_municipios_10m(query_result: dict = Depends(get_map_data)):
+    """Déficit de Reserva Legal por município, base Sentinel 10m (% da área de RL que não é vegetação natural), como GeoJSON."""
+    rows = query_result.get('deficit_rl_municipios_10m', [])
+    return _municipio_rows_to_geojson(rows, ['deficit_ha', 'deficit_pct'])
+
+@router.get("/deficit-app-municipios-30m")
+async def get_deficit_app_municipios_30m(query_result: dict = Depends(get_map_data)):
+    """Déficit de APP por município, base Landsat 30m (% da área de APP que não é vegetação natural), como GeoJSON."""
+    rows = query_result.get('deficit_app_municipios_30m', [])
+    return _municipio_rows_to_geojson(rows, ['deficit_ha', 'deficit_pct'])
+
+@router.get("/deficit-rl-municipios-30m")
+async def get_deficit_rl_municipios_30m(query_result: dict = Depends(get_map_data)):
+    """Déficit de Reserva Legal por município, base Landsat 30m (% da área de RL que não é vegetação natural), como GeoJSON."""
+    rows = query_result.get('deficit_rl_municipios_30m', [])
     return _municipio_rows_to_geojson(rows, ['deficit_ha', 'deficit_pct'])
 
 @router.get("/extent")

@@ -1,7 +1,47 @@
+# Same two tables as db/queries/charts.py's NATURAL_VEGETATION_REGIONS_APP_RL_TABLE:
+# 'sentinel' is the 10m product, 'landsat' the 30m one. Picked from this fixed
+# allowlist, never built from request input, since the name is interpolated
+# directly into the SQL below.
+DEFICIT_APP_RL_TABLE = {
+    '10m': 'natural_vegetation_regions_app_rl_1985_2024',
+    '30m': 'natural_vegetation_regions_landsat_app_rl_1985_2024',
+}
+
+
+def _deficit_municipios_query(query_id: str, table: str, categoria_filter: str) -> dict:
+    """
+    % da área da categoria (APP ou RL) que NÃO é vegetação natural
+    (deficit = class_2 / (class_1 + class_2)), por município, no ano mais
+    recente da tabela — mesma fórmula usada nas abas APP/RL de "Evolução da
+    Vegetação Natural" e compartilhada pelas variantes 10m/30m.
+    """
+    return {
+        'source': 'lapig',
+        'id': query_id,
+        'sql': f"""
+            SELECT
+                m.cd_geocmu as cd_mun,
+                m.municipio,
+                ST_AsGeoJSON(ST_SimplifyPreserveTopology(m.geom, 0.005)) as geojson,
+                ROUND(CAST(COALESCE(SUM(v.class_2), 0) AS numeric), 4) as deficit_ha,
+                ROUND(CAST(
+                    COALESCE(SUM(v.class_2), 0)
+                      / NULLIF(COALESCE(SUM(v.class_1), 0) + COALESCE(SUM(v.class_2), 0), 0) * 100
+                AS numeric), 4) as deficit_pct
+            FROM municipios m
+            JOIN {table} v ON v.cd_mun = m.cd_geocmu
+            WHERE {categoria_filter}
+              AND v.year = (SELECT MAX(year) FROM {table})
+            GROUP BY m.cd_geocmu, m.municipio, m.geom
+        """,
+        'mantain': True,
+    }
+
+
 def get_queries(params: dict = None):
     if params is None:
         params = {}
-    
+
     key = params.get('key', '')
     type_param = params.get('type', 'bioma')
 
@@ -137,55 +177,39 @@ def get_queries(params: dict = None):
                 'mantain': True
             }
         ],
-        # Déficit de APP / Reserva Legal por município (nacional, ano mais
-        # recente): % da área da categoria (APP ou RL) que NÃO é vegetação
-        # natural (class_2), mesma fórmula usada nas abas APP/RL de
-        # "Evolução da Vegetação Natural" (deficit = class_2 / (class_1 + class_2)).
-        'deficit-app-municipios': lambda p: [
-            {
-                'source': 'lapig',
-                'id': 'deficit_app_municipios',
-                'sql': """
-                    SELECT
-                        m.cd_geocmu as cd_mun,
-                        m.municipio,
-                        ST_AsGeoJSON(ST_SimplifyPreserveTopology(m.geom, 0.005)) as geojson,
-                        ROUND(CAST(COALESCE(SUM(v.class_2), 0) AS numeric), 4) as deficit_ha,
-                        ROUND(CAST(
-                            COALESCE(SUM(v.class_2), 0)
-                              / NULLIF(COALESCE(SUM(v.class_1), 0) + COALESCE(SUM(v.class_2), 0), 0) * 100
-                        AS numeric), 4) as deficit_pct
-                    FROM municipios m
-                    JOIN natural_vegetation_regions_app_rl_1985_2024 v ON v.cd_mun = m.cd_geocmu
-                    WHERE v.categoria = 'Área de preservação permanente'
-                      AND v.year = (SELECT MAX(year) FROM natural_vegetation_regions_app_rl_1985_2024)
-                    GROUP BY m.cd_geocmu, m.municipio, m.geom
-                """,
-                'mantain': True
-            }
+        # Déficit de APP / Reserva Legal por município, em duas resoluções
+        # (10m/Sentinel e 30m/Landsat). categoria's "Área de preservação
+        # permanente" value is stored mojibake'd in both tables (bad encoding
+        # on ingest), so an exact string match never hits any row — only two
+        # categoria values exist per table, so excluding 'Reserva Legal'
+        # reliably selects the APP rows instead.
+        'deficit-app-municipios-10m': lambda p: [
+            _deficit_municipios_query(
+                'deficit_app_municipios_10m',
+                DEFICIT_APP_RL_TABLE['10m'],
+                "v.categoria <> 'Reserva Legal'",
+            )
         ],
-        'deficit-rl-municipios': lambda p: [
-            {
-                'source': 'lapig',
-                'id': 'deficit_rl_municipios',
-                'sql': """
-                    SELECT
-                        m.cd_geocmu as cd_mun,
-                        m.municipio,
-                        ST_AsGeoJSON(ST_SimplifyPreserveTopology(m.geom, 0.005)) as geojson,
-                        ROUND(CAST(COALESCE(SUM(v.class_2), 0) AS numeric), 4) as deficit_ha,
-                        ROUND(CAST(
-                            COALESCE(SUM(v.class_2), 0)
-                              / NULLIF(COALESCE(SUM(v.class_1), 0) + COALESCE(SUM(v.class_2), 0), 0) * 100
-                        AS numeric), 4) as deficit_pct
-                    FROM municipios m
-                    JOIN natural_vegetation_regions_app_rl_1985_2024 v ON v.cd_mun = m.cd_geocmu
-                    WHERE v.categoria = 'Reserva Legal'
-                      AND v.year = (SELECT MAX(year) FROM natural_vegetation_regions_app_rl_1985_2024)
-                    GROUP BY m.cd_geocmu, m.municipio, m.geom
-                """,
-                'mantain': True
-            }
+        'deficit-rl-municipios-10m': lambda p: [
+            _deficit_municipios_query(
+                'deficit_rl_municipios_10m',
+                DEFICIT_APP_RL_TABLE['10m'],
+                "v.categoria = 'Reserva Legal'",
+            )
+        ],
+        'deficit-app-municipios-30m': lambda p: [
+            _deficit_municipios_query(
+                'deficit_app_municipios_30m',
+                DEFICIT_APP_RL_TABLE['30m'],
+                "v.categoria <> 'Reserva Legal'",
+            )
+        ],
+        'deficit-rl-municipios-30m': lambda p: [
+            _deficit_municipios_query(
+                'deficit_rl_municipios_30m',
+                DEFICIT_APP_RL_TABLE['30m'],
+                "v.categoria = 'Reserva Legal'",
+            )
         ]
     }
     return queries

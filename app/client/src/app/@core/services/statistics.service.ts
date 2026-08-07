@@ -40,14 +40,15 @@ class StatisticsService {
    * @param year
    * @returns
    */
-  public getSummary(chart: string, regionFilter: RegionFilter, year: string): Observable<any> {
+  public getSummary(chart: string, regionFilter: RegionFilter, year: string, source: string = 'sentinel'): Observable<any> {
     let params: string =
       `lang=${this.localizationService.currentLang()}` +
       `&typeRegion=${regionFilter.type}` +
       `&valueRegion=${regionFilter.value}` +
       `&textRegion=${regionFilter.text}` +
       `&card_resume=${chart}` +
-      `&year=${year}`;
+      `&year=${year}` +
+      `&source=${source}`;
 
     return this.httpClient
       .get<any>(`${this.apiURL}/resumo?${params}`, this.httpOptions)
@@ -78,12 +79,13 @@ class StatisticsService {
    * @param regionFilter
    * @returns
    */
-  public getVegetationEvolution(regionFilter: RegionFilter): Observable<any> {
+  public getVegetationEvolution(regionFilter: RegionFilter, source: string = 'sentinel'): Observable<any> {
     let params =
       `lang=${this.localizationService.currentLang()}` +
       `&typeRegion=${regionFilter.type}` +
       `&valueRegion=${regionFilter.value}` +
-      `&textRegion=${regionFilter.text}`;
+      `&textRegion=${regionFilter.text}` +
+      `&source=${source}`;
 
     return this.httpClient
       .get<any>(`${this.apiURL}/vegetation-evolution?${params}`, this.httpOptions)
@@ -98,13 +100,14 @@ class StatisticsService {
    * @param categoria
    * @returns
    */
-  public getVegetationEvolutionByCategoria(regionFilter: RegionFilter, categoria: string): Observable<any> {
+  public getVegetationEvolutionByCategoria(regionFilter: RegionFilter, categoria: string, source: string = 'sentinel'): Observable<any> {
     const params =
       `lang=${this.localizationService.currentLang()}` +
       `&typeRegion=${regionFilter.type}` +
       `&valueRegion=${regionFilter.value}` +
       `&textRegion=${regionFilter.text}` +
-      `&categoria=${encodeURIComponent(categoria)}`;
+      `&categoria=${encodeURIComponent(categoria)}` +
+      `&source=${source}`;
 
     return this.httpClient
       .get<any>(`${this.apiURL}/vegetation-evolution-by-categoria?${params}`, this.httpOptions)

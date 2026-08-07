@@ -20,6 +20,25 @@
     z-index: 1000;
   }
 
+  .map-hover-tooltip {
+    pointer-events: none;
+    position: absolute;
+    color: $dark;
+    background: #fff;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 6px 10px;
+    font-size: 12px;
+    line-height: 1.4;
+    white-space: nowrap;
+    z-index: 1002;
+
+    strong {
+      display: block;
+    }
+  }
+
   :host {
     position: relative;
 

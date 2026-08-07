@@ -256,11 +256,17 @@
           "excedente_florestal_municipios": {
             "labelLayer": "Excess Vegetation by Municipality"
           },
-          "deficit_app_municipios": {
-            "labelLayer": "APP Deficit"
+          "deficit_app_municipios_10m": {
+            "labelLayer": "10m - Non-Natural Area within APP"
           },
-          "deficit_rl_municipios": {
-            "labelLayer": "Legal Reserve Deficit"
+          "deficit_rl_municipios_10m": {
+            "labelLayer": "10m - Non-Natural Area within Legal Reserve"
+          },
+          "deficit_app_municipios_30m": {
+            "labelLayer": "30m - Non-Natural Area within APP"
+          },
+          "deficit_rl_municipios_30m": {
+            "labelLayer": "30m - Non-Natural Area within Legal Reserve"
           }
         }
       },
@@ -401,20 +407,25 @@
       "complement_text": "of",
       "pasture_quality_title": "Pasture Vigor",
       "pasture_quality_comparison": "Regional Vigor Comparison",
-      "coverage_natural_title_country": "Natural Areas Distribution in Brazil (2024)",
-      "coverage_natural_title_region": "Natural Areas Distribution in {{region}} (2024)",
-      "vegetation_evolution_title_country": "Natural Vegetation Variation Brazil",
-      "vegetation_evolution_title_region": "Natural Vegetation Variation in {{region}}",
+      "coverage_natural_title_country": "Distribution of Remnants on Private Properties in Brazil (2024)",
+      "coverage_natural_title_region": "Distribution of Remnants on Private Properties in {{region}} (2024)",
+      "vegetation_evolution_title_country": "Vegetation Variation within Private Rural Properties in Brazil",
+      "vegetation_evolution_title_region": "Vegetation Variation within Private Rural Properties in {{region}}",
       "vegetation_evolution_x_axis": "Year",
       "vegetation_evolution_y_axis": "% Natural Vegetation",
-      "coverage_comparison_title": "Regional Coverage",
+      "coverage_comparison_title": "Categorization of Private Rural Property Area",
       "coverage_comparison_app_title": "Regional Coverage: APP",
       "coverage_comparison_rl_title": "Regional Coverage: Legal Reserve",
       "coverage_comparison_mfa_title": "Regional Coverage: Environmental Land Tenure",
+      "data_source": {
+        "label": "Land use and land cover source",
+        "sentinel": "Sentinel",
+        "landsat": "Landsat"
+      },
       "chart_labels": {
         "app": "APP",
         "rl": "Legal Reserve",
-        "mfa": "Private Rural Property",
+        "mfa": "Outside Legal Reserve and APP",
         "natural": "Natural",
         "non_natural": "Non-Natural",
         "Reserva Legal": "Legal Reserve",
@@ -423,7 +434,7 @@
         "Malha Fundiária": "Private Rural Property",
         "Não Natural": "Non-Natural",
         "vegetation_pct": "% Natural Vegetation",
-        "vegetation_total": "Private Rural Property",
+        "vegetation_total": "Outside APP and Legal Reserve",
         "forest_surplus": "Excess Vegetation"
       },
       "complement_text_pasture_quality": "in Pasture Area of",
@@ -433,7 +444,7 @@
         "class_2": "Intermediary",
         "class_3": "Absent"
       },
-      "property_count_label": "Properties in Environmental Land Tenure"
+      "property_count_label": "Number of properties/holdings in the Environmental Land Tenure considering all land tenure categories"
     },
     "malha_chart": {
       "title": "Variation in Natural Vegetation",

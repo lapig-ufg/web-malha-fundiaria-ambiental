@@ -50,9 +50,15 @@ class Settings(BaseSettings):
     ZONAL_STATISTICS_CLASS_VEGETACAO: int = 1
     ZONAL_STATISTICS_JOB_TTL_SECONDS: int = 900
     ZONAL_STATISTICS_MAX_PROPERTY_AREA_HA: float = 200_000.0
-    ZONAL_STATISTICS_RASTER_APP: str = "/app/data/aux/img_area_preservacao_permanente.tif"
-    ZONAL_STATISTICS_RASTER_RL: str = "/app/data/aux/img_reserva_legal.tif"
     ZONAL_STATISTICS_CLASSES_NATURAIS: str = "1"
+
+    # APP/RL zone masks (used by the malha_chart APP/RL tabs) live under a
+    # per-source directory — same file names, different folder — selected by
+    # the "Fonte de uso e cobertura da terra" toggle (imageSource: sentinel/landsat).
+    ZONAL_STATISTICS_AUX_DIR_SENTINEL: str = "/app/data/aux/s2_aux"
+    ZONAL_STATISTICS_AUX_DIR_LANDSAT: str = "/app/data/aux/l8_aux"
+    ZONAL_STATISTICS_RASTER_APP_FILENAME: str = "img_area_preservacao_permanente.tif"
+    ZONAL_STATISTICS_RASTER_RL_FILENAME: str = "img_reserva_legal.tif"
 
     APP_PRODUCAO: str = ""
     

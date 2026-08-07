@@ -13,6 +13,20 @@
         </button>
       </div>
 
+      <!-- Choropleth Hover Tooltip: municipality + value under the cursor for layers like deficit_app_municipios / deficit_rl_municipios -->
+      <div
+        [hidden]="!hoverTooltipData"
+        #hoverTooltip
+        class="map-hover-tooltip"
+      >
+        <ng-container *ngIf="hoverTooltipData">
+          <strong>{{ hoverTooltipData.municipio }}</strong>
+          <div *ngFor="let item of hoverTooltipData.items">
+            {{ item.label }}: {{ item.value | number:'1.1-1' }}%
+          </div>
+        </ng-container>
+      </div>
+
       <!-- Information Popup: Displays details about clicked features (WFS/Identify results) -->
       <div
         [hidden]="popupRegion.coordinate.length == 0"
@@ -71,7 +85,7 @@
     <!-- Malha Fundiaria Search Bar (Positioned outside app-ol-map for better stacking) -->
     <div class="malha-search-container" *ngIf="searchBarVisible">
       <div class="search-category-selector">
-        <p-selectButton style="width: 100%;"
+        <p-selectButton [style]="{ width: '100%' }"
           [options]="searchCategoryOptions"
           [(ngModel)]="searchCategory"
           optionValue="value"
