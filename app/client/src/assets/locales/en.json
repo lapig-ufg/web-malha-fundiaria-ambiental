@@ -419,8 +419,8 @@
       "coverage_comparison_mfa_title": "Regional Coverage: Environmental Land Tenure",
       "data_source": {
         "label": "Land use and land cover source",
-        "sentinel": "Sentinel",
-        "landsat": "Landsat"
+        "sentinel": "Mapbiomas 10m (Col.3)",
+        "landsat": "Mapbiomas 30m (Col.10)"
       },
       "chart_labels": {
         "app": "APP",

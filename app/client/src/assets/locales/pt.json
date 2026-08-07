@@ -419,8 +419,8 @@
       "coverage_comparison_mfa_title": "Cobertura por Região: Malha Fundiária",
       "data_source": {
         "label": "Fonte de uso e cobertura da terra",
-        "sentinel": "Sentinel",
-        "landsat": "Landsat"
+        "sentinel": "Mapbiomas 10m (Col.3)",
+        "landsat": "Mapbiomas 30m (Col.10)"
       },
       "chart_labels": {
         "app": "APP",
