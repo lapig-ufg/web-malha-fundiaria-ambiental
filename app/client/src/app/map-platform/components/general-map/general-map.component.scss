@@ -675,7 +675,7 @@
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   border: 1px solid #ddd;
-  width: 420px;
+  width: 480px;
   max-width: 95vw;
   transition: all 0.2s ease-in-out;
 
@@ -685,12 +685,22 @@
     justify-content: center;
     width: 100%; // Fill available space within padding
 
+    // <p-selectbutton> is a custom element and, as a flex item of this row,
+    // defaults to shrink-to-fit (flex: 0 1 auto) — no amount of width:100%
+    // on the inner .p-selectbutton div fixes that, since the percentage
+    // resolves against this same shrunk box. Forcing the host itself to
+    // block + 100% breaks that circularity.
+    ::ng-deep p-selectbutton {
+      display: block;
+      width: 100%;
+    }
+
     ::ng-deep .p-selectbutton {
       background: #f5f5f5;
       padding: 3px;
       border-radius: 8px;
       display: flex !important;
-      width: stretch !important;
+      width: 100% !important;
       flex-wrap: nowrap !important;
       align-items: stretch !important;
       justify-content: flex-start !important;
@@ -706,11 +716,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center; // Center content vertically when a sibling button (e.g. "Malha Fundiária" wrapping to 2 lines) stretches the row taller
         gap: 4px;
         border-radius: 6px;
         transition: all 0.2s;
         min-width: 0; // Allow shrinking
-        white-space: nowrap;
         margin: 0; // Seamless edge-to-edge buttons
 
         &:first-child {
@@ -725,8 +735,9 @@
 
         span {
           font-weight: 500;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          white-space: normal;
+          text-align: center;
+          line-height: 1.15;
         }
 
         &:hover {

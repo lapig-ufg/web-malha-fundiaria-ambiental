@@ -11,6 +11,16 @@
   }
 }
 
+// "Entendi" button on the download-disclaimer dialog shown on platform start.
+// Not nested under :host ::ng-deep: the dialog uses [appendTo]="body", so its
+// content is detached from the component's host element in the live DOM —
+// a :host-anchored selector would never match it.
+.action-container {
+  ::ng-deep .p-button-success {
+    color: #1976d2 !important;
+  }
+}
+
 @mixin center {
   display: flex;
   justify-content: center;
