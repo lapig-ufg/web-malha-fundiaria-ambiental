@@ -458,7 +458,7 @@
       "loading_app": "Calculando a evolução da vegetação na APP…",
       "loading_rl": "Calculando a evolução da vegetação na Reserva Legal…",
       "label_pct_natural": "% Vegetação Natural",
-      "tab_propriedade": "Propriedade",
+      "tab_propriedade": "Fora da APP e Reserva Legal",
       "tab_app": "APP",
       "tab_rl": "Reserva Legal"
     },

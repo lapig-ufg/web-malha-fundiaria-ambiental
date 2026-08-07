@@ -458,7 +458,7 @@
       "loading_app": "Calculating vegetation Variation in APP…",
       "loading_rl": "Calculating vegetation Variation in Legal Reserve…",
       "label_pct_natural": "% Natural Vegetation",
-      "tab_propriedade": "Property",
+      "tab_propriedade": "Outside APP and Legal Reserve",
       "tab_app": "APP",
       "tab_rl": "Legal Reserve"
     },
