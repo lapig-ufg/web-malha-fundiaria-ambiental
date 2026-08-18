@@ -1,6 +1,9 @@
 import json
+import logging
 import os
 from core.config import settings
+
+logger = logging.getLogger(__name__)
 
 class Language:
     def get_lang(self, lang: str):
@@ -11,7 +14,7 @@ class Language:
             with open(file_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            print(f"Error loading language file {file_path}: {e}")
+            logger.error(f"Erro ao carregar arquivo de idioma {file_path}: {e}", exc_info=True)
             return {}
 
 language = Language()

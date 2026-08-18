@@ -1,8 +1,11 @@
 import httpx
+import logging
 from fastapi import Request, HTTPException, Header, Depends
 from db.session import db
 import importlib
 from core.config import settings
+
+logger = logging.getLogger(__name__)
 
 async def get_keycloak_token():
     payload = {
@@ -26,6 +29,7 @@ async def get_keycloak_token():
         # For development/fallback if AUTH_URL is not configured
         if not settings.AUTH_URL:
             return {"access_token": "mock_token"}
+        logger.error(f"Falha ao obter token do Keycloak ({api_url}): {e}", exc_info=True)
         raise HTTPException(status_code=501, detail=str(e))
 
 async def verify_recaptcha(recaptcha_token: str = Header(None, alias="recaptcha-token")):
@@ -51,6 +55,7 @@ async def verify_recaptcha(recaptcha_token: str = Header(None, alias="recaptcha-
             else:
                 raise HTTPException(status_code=401, detail="You are a robot")
     except Exception as e:
+        logger.error(f"Falha ao verificar recaptcha: {e}", exc_info=True)
         raise HTTPException(status_code=501, detail="Server error during recaptcha verification")
 
 async def execute_queries(controller_name: str, method_name: str, params: dict):
@@ -83,10 +88,14 @@ async def execute_queries(controller_name: str, method_name: str, params: dict):
             results = results[keys[0]]
             
         return results
-    except (ImportError, AttributeError):
+    except (ImportError, AttributeError) as e:
+        logger.warning(f"Nenhum módulo/método de query para {controller_name}.{method_name}: {e}")
         return {}
     except Exception as e:
-        print(f"Query Execution Error: {e}")
+        logger.error(
+            f"Erro ao executar queries de {controller_name}.{method_name} (params={params}): {e}",
+            exc_info=True,
+        )
         raise HTTPException(status_code=500, detail=str(e))
 
 async def get_chart_data(request: Request):

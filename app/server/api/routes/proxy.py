@@ -29,6 +29,8 @@ async def do_request(request: Request, base_url: str):
     # Filter out empty headers
     headers = {k: v for k, v in headers.items() if v}
 
+    logger.info(f"Proxy {request.method} -> {url}")
+
     try:
         client = httpx.AsyncClient()
         # Create a request to stream the response
@@ -52,7 +54,7 @@ async def do_request(request: Request, base_url: str):
         )
 
     except Exception as e:
-        logger.error(f"Proxy error: {e}")
+        logger.error(f"Proxy error ao repassar {request.method} {url}: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/ows")

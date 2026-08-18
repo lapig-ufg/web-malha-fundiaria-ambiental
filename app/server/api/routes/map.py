@@ -5,20 +5,23 @@ from utils.descriptor_builder import DescriptorBuilder
 from api.dependencies import get_map_data
 import os
 import json
+import logging
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 descriptor_builder = DescriptorBuilder(settings.app_root)
 
 async def fetch_layer_types(language: str, type_name: str = 'layers'):
     url = f"{settings.OWS_API}/map/{type_name}?lang={language}"
+    logger.info(f"Buscando '{type_name}' no OWS_API (lang={language}): {url}")
     async with httpx.AsyncClient() as client:
         try:
             response = await client.get(url)
             response.raise_for_status()
             return response.json()
         except Exception as e:
-            print(f"Error fetching layer types: {e}")
+            logger.error(f"Falha ao buscar '{type_name}' no OWS_API ({url}): {e}", exc_info=True)
             return {}
 
 @router.get("/descriptor")
@@ -391,12 +394,14 @@ async def get_descriptor(lang: str = 'pt-br'):
             deficit_rl_layer_30m,
         ]
 
-    result = {
-        "groups": descriptor_builder.get_layers(lang, layertypes),
-        "basemaps": descriptor_builder.get_basemaps(lang, basemaps_types),
-        "limits": descriptor_builder.get_limits(lang, limits_types),
-    }
-    return result
+    groups = descriptor_builder.get_layers(lang, layertypes)
+    basemaps = descriptor_builder.get_basemaps(lang, basemaps_types)
+    limits = descriptor_builder.get_limits(lang, limits_types)
+    logger.info(
+        f"Descriptor montado (lang={lang}): {len(groups)} grupos, "
+        f"{len(basemaps)} basemaps, {len(limits)} limits"
+    )
+    return {"groups": groups, "basemaps": basemaps, "limits": limits}
 
 def _municipio_rows_to_geojson(rows: list, extra_props: list) -> dict:
     """
