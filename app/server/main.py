@@ -5,18 +5,27 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from core.config import settings
+from core.logging_setup import setup_logging, start_system_health_monitor
+
+setup_logging()
 
 from db.session import db
 from api.routes import charts, map, proxy, contact, http, zonal
 
+import asyncio
+import contextlib
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup logic
     await db.connect()
+    health_monitor_task = await start_system_health_monitor()
     yield
     # Shutdown logic
+    health_monitor_task.cancel()
+    with contextlib.suppress(asyncio.CancelledError):
+        await health_monitor_task
     await db.disconnect()
 
 app = FastAPI(title=settings.APP_NAME, lifespan=lifespan)
@@ -61,4 +70,4 @@ async def serve_angular_app(full_path: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=settings.PORT, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=settings.PORT, reload=True, log_config=None)

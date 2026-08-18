@@ -9,6 +9,7 @@ loop is never blocked. Job state is held in an in-memory dict, guarded
 by a threading.Lock; entries older than ``ZONAL_STATISTICS_JOB_TTL_SECONDS``
 are purged on every POST.
 """
+import logging
 import os
 import threading
 import time
@@ -22,6 +23,7 @@ from core.config import settings
 from utils.zonal_statistics import compute_zonal_history
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 # Same sentinel/landsat toggle as the "Fonte de uso e cobertura da terra"
@@ -96,6 +98,8 @@ def _run_job(
     )
     path_app, path_rl = _app_rl_raster_paths(source)
     raster_dir = _raster_dir_for_source(source)
+    started_at = time.time()
+    logger.info(f"Zonal job {job_id} iniciado (source={source}, classe={classe}, raster_dir={raster_dir})")
     try:
         result = compute_zonal_history(
             geometry=geometry,
@@ -109,10 +113,16 @@ def _run_job(
         with _lock:
             _jobs[job_id]["status"] = "done"
             _jobs[job_id]["result"] = result
+        logger.info(f"Zonal job {job_id} concluído em {time.time() - started_at:.2f}s")
     except Exception as exc:  # noqa: BLE001
         with _lock:
             _jobs[job_id]["status"] = "error"
             _jobs[job_id]["error"] = str(exc)
+        logger.error(
+            f"Zonal job {job_id} falhou após {time.time() - started_at:.2f}s "
+            f"(source={source}, classe={classe}): {exc}",
+            exc_info=True,
+        )
 
 
 @router.post("/jobs", status_code=202, response_model=StartJobResponse)
