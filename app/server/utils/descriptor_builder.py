@@ -1,8 +1,11 @@
 import os
 import json
+import logging
 from utils.language import language as lang_util
 from models.group import Group
 from models.layer import Layer
+
+logger = logging.getLogger(__name__)
 
 class DescriptorBuilder:
     def __init__(self, app_path: str):
@@ -39,7 +42,7 @@ class DescriptorBuilder:
                                 group = Group(language_ob, item, layertypes).get_group_instance()
                                 groups.append(group)
                     except Exception as e:
-                        print(f"Error while fetching layers from {file}: {e}")
+                        logger.error(f"Erro ao carregar grupo de camadas de {file}: {e}", exc_info=True)
         return groups
 
     def get_basemaps(self, language, layertypes):
@@ -56,7 +59,7 @@ class DescriptorBuilder:
                         layer = Layer(language_ob, item, None, layertypes).get_layer_instance()
                         basemaps.append(layer)
             except Exception as e:
-                print(f"Error while fetching basemaps from {file}: {e}")
+                logger.error(f"Erro ao carregar basemap de {file}: {e}", exc_info=True)
         return basemaps
 
     def get_limits(self, language, layertypes):
@@ -73,5 +76,5 @@ class DescriptorBuilder:
                         layer = Layer(language_ob, item, None, layertypes).get_layer_instance()
                         limits.append(layer)
             except Exception as e:
-                print(f"Error while fetching limits from {file}: {e}")
+                logger.error(f"Erro ao carregar limit de {file}: {e}", exc_info=True)
         return limits

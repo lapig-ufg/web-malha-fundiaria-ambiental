@@ -1,5 +1,8 @@
+import logging
 from models.layer import Layer
 from utils.auxiliar import remove_null_properties
+
+logger = logging.getLogger(__name__)
 
 class Group:
     def __init__(self, language_ob: dict, params: dict, layertypes: dict):
@@ -23,7 +26,7 @@ class Group:
             if 'layers' in params:
                 self.layers = self.get_layers_array(params['layers'], layertypes)
         except Exception as e:
-            print(f"Error in Group ID {self.id_group}: {e}")
+            logger.error(f"Erro ao montar Group ID {self.id_group}: {e}", exc_info=True)
 
     def get_layers_array(self, layers, layertypes):
         arr = []
@@ -32,7 +35,7 @@ class Group:
                 layer_instance = Layer(self.language_ob, layer_params, self.id_group, layertypes)
                 arr.append(layer_instance.get_layer_instance())
         except Exception as e:
-            print(f"Error while creating group object: {e}")
+            logger.error(f"Erro ao criar camadas do grupo {self.id_group}: {e}", exc_info=True)
         return arr
 
     def get_group_instance(self):

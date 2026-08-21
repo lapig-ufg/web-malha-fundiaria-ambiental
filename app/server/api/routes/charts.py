@@ -1,8 +1,10 @@
+import logging
 from fastapi import APIRouter, Request, Depends
 from api.dependencies import get_chart_data, execute_queries
 from utils.language import language as lang_util
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 def number_format(numero):
     if numero is None:
@@ -125,9 +127,7 @@ def build_graph_result(all_queries_result, chart_description):
             "datasets": array_data
         }
     except Exception as e:
-        import traceback
-        traceback.print_exc()
-        print(f"Build Graph Error: {e}")
+        logger.error(f"Erro ao montar gráfico '{chart_description.get('idOfChart')}': {e}", exc_info=True)
         return None
 
 @router.get("/resumo")
@@ -180,7 +180,8 @@ async def handle_vegetation_evolution(lang: str = 'pt', typeRegion: str = '', va
     try:
         query_result = await execute_queries("charts", "vegetation_evolution", params)
         return query_result.get('vegetation_evolution', [])
-    except Exception:
+    except Exception as e:
+        logger.error(f"Erro em vegetation-evolution (params={params}): {e}", exc_info=True)
         return []
 
 # Allowlist of valid categoria values. Guards the naive (non-escaping)
@@ -203,7 +204,8 @@ async def handle_vegetation_evolution_by_categoria(lang: str = 'pt', typeRegion:
     try:
         query_result = await execute_queries("charts", "vegetation_evolution_by_categoria", params)
         return query_result.get('vegetation_evolution_by_categoria', [])
-    except Exception:
+    except Exception as e:
+        logger.error(f"Erro em vegetation-evolution-by-categoria (params={params}): {e}", exc_info=True)
         return []
 
 @router.get("/forest-surplus")
@@ -217,7 +219,8 @@ async def handle_forest_surplus(lang: str = 'pt', typeRegion: str = '', valueReg
     try:
         query_result = await execute_queries("charts", "forest_surplus", params)
         return query_result.get('forest_surplus', [])
-    except Exception:
+    except Exception as e:
+        logger.error(f"Erro em forest-surplus (params={params}): {e}", exc_info=True)
         return []
 
 @router.get("/pastureGraph")
