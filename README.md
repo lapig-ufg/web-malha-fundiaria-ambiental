@@ -61,9 +61,9 @@ For more details, visit the [Full Methodology Documentation](https://boliveirage
 #### 1. Backend (Server)
 ```bash
 cd app/server
-npm install
+uv sync              # Python 3.14+, deps via pyproject.toml
 cp .env.example .env # Configure your DB credentials
-npm start
+uv run python main.py  # uvicorn on :3000, reload=True
 ```
 
 #### 2. Frontend (Client)
