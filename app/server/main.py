@@ -5,7 +5,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from core.config import settings
-from core.logging_setup import setup_logging, start_system_health_monitor
+from core.logging_setup import setup_logging, start_system_health_monitor, RamDeltaMiddleware
 
 setup_logging()
 
@@ -38,6 +38,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.add_middleware(GZipMiddleware, minimum_size=1000)
+app.add_middleware(RamDeltaMiddleware)
 
 app.include_router(map.router, prefix="/service/map")
 app.include_router(charts.router, prefix="/service/charts")

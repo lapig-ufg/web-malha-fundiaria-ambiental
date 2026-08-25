@@ -6,12 +6,14 @@ from pathlib import Path
 
 import psutil
 from loguru import logger
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from core.config import settings
 
 LOG_DIR = Path(settings.LOG_DIR)
 SYSTEM_HEALTH_CHANNEL = "system_health"
 SYSTEM_HEALTH_WARNING_RAM_PERCENT = 90
+RAM_DELTA_WARNING_MB = 50
 
 
 def _ram_mb() -> float:
@@ -173,3 +175,28 @@ async def start_system_health_monitor(interval_seconds: float = 10.0) -> asyncio
             await asyncio.sleep(interval_seconds)
 
     return asyncio.create_task(_loop())
+
+
+class RamDeltaMiddleware(BaseHTTPMiddleware):
+    """
+    Loga WARNING quando uma requisição termina com o processo consumindo bem
+    mais RAM do que quando ela começou. RSS raramente cai entre requests
+    (o alocador do Python/glibc não costuma devolver memória liberada ao SO),
+    então o delta não isola perfeitamente QUAL request alocou o quê sob
+    concorrência real — mas como RSS só sobe, cada aumento notável ainda
+    aponta pra janela certa de tempo pra investigar, o que já ajuda a achar
+    o request culpado de um crescimento anormal (ver incidente de OOM real
+    em produção que motivou isso).
+    """
+
+    async def dispatch(self, request, call_next):
+        before = _ram_mb()
+        response = await call_next(request)
+        after = _ram_mb()
+        delta = after - before
+        if delta >= RAM_DELTA_WARNING_MB:
+            logger.bind(local="ram_delta_monitor", ram_mb=after, sys_health=_sys_health()).warning(
+                f"Requisição aumentou RAM em {delta:.1f}MB: {request.method} {request.url.path} "
+                f"({before:.1f}MB -> {after:.1f}MB)"
+            )
+        return response
