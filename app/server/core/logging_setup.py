@@ -115,6 +115,7 @@ def setup_logging() -> None:
         LOG_DIR / "errors/{time:YYYY}/{time:MM}/{time:YYYY-MM-DD}.log",
         level="ERROR",
         format=_error_file_format,
+        rotation="00:00",
         enqueue=False,
         backtrace=True,
         diagnose=True,
@@ -126,6 +127,7 @@ def setup_logging() -> None:
         level="INFO",
         filter=_is_system_health,
         format=_plain_line_format,
+        rotation="00:00",
         enqueue=False,
         catch=True,
     )
@@ -135,6 +137,7 @@ def setup_logging() -> None:
         level="INFO",
         filter=lambda record: record["level"].name not in ("ERROR", "CRITICAL") and not _is_system_health(record),
         format=_plain_line_format,
+        rotation="00:00",
         enqueue=False,
         catch=True,
     )
