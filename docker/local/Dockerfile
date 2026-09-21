@@ -45,4 +45,4 @@ RUN uv sync --frozen
 
 EXPOSE 3000
 
-CMD ["uv", "run", "main.py"]
+CMD ["uv", "run", "gunicorn", "-c", "gunicorn_config.py", "main:app"]

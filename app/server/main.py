@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from core.config import settings
 from core.logging_setup import setup_logging, start_system_health_monitor, RamDeltaMiddleware
+from core import request_trace
 
 setup_logging()
 
@@ -19,13 +20,17 @@ from contextlib import asynccontextmanager
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup logic
+    request_trace.recover_orphans()
+    trace_watchdog_task = request_trace.start_watchdog()
     await db.connect()
     health_monitor_task = await start_system_health_monitor()
     yield
     # Shutdown logic
-    health_monitor_task.cancel()
-    with contextlib.suppress(asyncio.CancelledError):
-        await health_monitor_task
+    for task in (health_monitor_task, trace_watchdog_task):
+        task.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await task
+    request_trace.shutdown()
     await db.disconnect()
 
 app = FastAPI(title=settings.APP_NAME, lifespan=lifespan)
@@ -39,6 +44,7 @@ app.add_middleware(
 )
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.add_middleware(RamDeltaMiddleware)
+app.add_middleware(request_trace.RequestTraceMiddleware)
 
 app.include_router(map.router, prefix="/service/map")
 app.include_router(charts.router, prefix="/service/charts")
