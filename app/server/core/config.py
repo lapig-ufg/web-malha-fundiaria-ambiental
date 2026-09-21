@@ -11,6 +11,13 @@ class Settings(BaseSettings):
     LANG_DIR: str = "/lang"
     LOG_DIR: str = "/log/"
     TMP: str = "/tmp/"
+
+    # Rastreio das últimas requisições p/ investigar OOM (0 desativa o gatilho correspondente)
+    REQUEST_TRACE_SIZE: int = 20
+    REQUEST_TRACE_RAM_PERCENT: float = 80
+    REQUEST_TRACE_PROCESS_MB: float = 1024
+    REQUEST_TRACE_MAX_BODY_KB: int = 1024
+    REQUEST_TRACE_WATCHDOG_SECONDS: float = 0.5
     
     MAX_AREA: int = 9500
     
